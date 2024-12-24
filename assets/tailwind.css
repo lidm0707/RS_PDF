@@ -727,6 +727,10 @@ td {
   display: grid;
 }
 
+.contents {
+  display: contents;
+}
+
 .h-5 {
   height: 1.25rem;
 }
@@ -739,8 +743,20 @@ td {
   width: 16rem;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .place-items-center {
   place-items: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .rounded-lg {

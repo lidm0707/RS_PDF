@@ -4945,6 +4945,7 @@ dependencies = [
  "pdfium-render",
  "polars",
  "regex",
+ "web-sys",
 ]
 
 [[package]]

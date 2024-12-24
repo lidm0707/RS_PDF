@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::models::{model_label::SelectLabels, model_raw::SelectRaws};
 
 #[component]
-pub fn Label(table: Signal<Vec<SelectLabels>>) -> Element {
+pub fn LabelTable(data_table: Signal<Vec<SelectLabels>>) -> Element {
     rsx! {
 
         div { class:"table-container",
@@ -16,7 +16,7 @@ pub fn Label(table: Signal<Vec<SelectLabels>>) -> Element {
                 }
                 tbody {
                     {
-                        &mut table
+                        &mut data_table
                             .iter()
                             .map(|label| {
                                 rsx! {
@@ -34,7 +34,7 @@ pub fn Label(table: Signal<Vec<SelectLabels>>) -> Element {
 }
 
 #[component]
-pub fn Raw(table: Signal<Vec<SelectRaws>>) -> Element {
+pub fn RawTable(data_table: Signal<Vec<SelectRaws>>) -> Element {
     rsx! {
         div {class:"table-container",
             table {
@@ -48,7 +48,7 @@ pub fn Raw(table: Signal<Vec<SelectRaws>>) -> Element {
                 }
                 tbody {
                     {
-                        &mut table
+                        &mut data_table
                             .iter()
                             .map(|raw| {
                                 let r2 = format!("{:.2}",raw.amount);
