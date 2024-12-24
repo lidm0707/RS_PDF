@@ -1,0 +1,34 @@
+[application]
+
+# App (Project) Name
+name = "rust_pdf"
+
+
+# The static resource path
+asset_dir = "./assets"
+
+
+[web.app]
+
+# HTML title tag content
+title = "rust_pdf"
+
+[web.watcher]
+
+# When watcher is triggered, regenerate the `index.html`
+# reload_html = true
+
+# include `assets` in web platform
+[web.resource]
+
+# Additional CSS style files
+style = ["./assets/main.css"]
+
+# Additional JavaScript files
+script = []
+
+[web.resource.dev]
+
+# Javascript code file
+# serve: [dev-server] only
+script = []

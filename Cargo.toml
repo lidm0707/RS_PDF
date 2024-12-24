@@ -1,0 +1,37 @@
+[package]
+name = "rust_pdf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dotenv = "0.15"
+anyhow = "1.0.94"
+pdfium-render = "0.8.26"
+regex = "1.11.1"
+polars = { version = "0.45.1", features = ["lazy"]}
+diesel = { version = "2.2.0", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+# build libsqlite3 as part of the build process
+# uncomment this line if you run into setup issues
+libsqlite3-sys = { version = "0.30", features = ["bundled"] }
+dotenvy = "0.15"
+dioxus = { version = "0.6.0", features = [] }
+manganis = "0.6.1"
+# tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["desktop"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

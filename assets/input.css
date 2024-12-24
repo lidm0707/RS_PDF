@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .main {
+    @apply flex bg-gray-100 w-screen h-screen overflow-hidden;
+  }
+  .menu {
+    @apply w-1/12 h-full mr-4 rounded-xl text-gray-700 bg-white;
+  }
+  .nav-container {
+    @apply flex w-full p-3 rounded-lg hover:bg-sky-100 hover:text-white;
+  }
+  .content {
+    @apply block w-11/12;
+  }
+
+  .summary {
+    @apply w-full h-1/6 mt-3 mb-6 shadow-xl;
+  }
+  .control{
+    @apply w-full h-auto mt-3 mb-6  bg-yellow-200;
+  }
+  .table-container {
+    @apply h-4/6 overflow-y-scroll ;
+  }
+}
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+  h5 {
+    @apply block font-sans text-xl antialiased font-semibold leading-snug tracking-normal;
+  }
+  nav {
+    @apply flex min-w-[240px] flex-col gap-1 p-2 font-sans text-base font-normal;
+  }
+  table {
+    @apply w-full;
+  }
+  thead {
+    @apply text-xs rounded-r-lg rounded-l-lg text-white bg-black sticky top-0 px-6 py-3;
+  }
+  th {
+    @apply sticky top-0 px-6 py-3 border-x-2  border-stone-400;
+  }
+  tbody tr {
+    @apply odd:bg-white even:bg-gray-100 hover:bg-orange-400;
+  }
+  td {
+    @apply px-12 py-7 border-x-2 border-stone-400;
+  }
+}
