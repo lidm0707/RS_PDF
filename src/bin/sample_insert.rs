@@ -11,7 +11,7 @@ fn main() -> Result<(), anyhow::Error> {
     let password = env::var("password").unwrap();
     let file_path = env::var("PDFNAME").unwrap();
     let mut conn = connect_database();
-    let data = read_pdf::read(&file_path, &password)?;
+    let data = read_pdf::read_credit_kbank(&file_path, &password)?;
     let mut total: f64 = 0.0;
     for (index, item) in data.amount.iter().enumerate() {
         let _ = insert_raws(

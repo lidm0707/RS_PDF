@@ -696,6 +696,7 @@ td {
 .control {
   margin-top: 0.75rem;
   margin-bottom: 1.5rem;
+  display: flex;
   height: auto;
   width: 100%;
   --tw-bg-opacity: 1;
@@ -705,6 +706,10 @@ td {
 .table-container {
   height: 66.666667%;
   overflow-y: scroll;
+}
+
+.btnUpload {
+  display: flex;
 }
 
 .mr-11 {
@@ -727,8 +732,8 @@ td {
   display: grid;
 }
 
-.contents {
-  display: contents;
+.h-3\/6 {
+  height: 50%;
 }
 
 .h-5 {

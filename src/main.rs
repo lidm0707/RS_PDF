@@ -6,9 +6,9 @@ use rust_pdf::component::menu::MenuButton;
 use rust_pdf::component::table::{LabelTable, RawTable};
 use rust_pdf::component::upload::BtnUplaod;
 use rust_pdf::database::{
-        db_connect::connect_database,
-        db_select::{select_labels, select_raws},
-    };
+    db_connect::connect_database,
+    db_select::{select_labels, select_raws},
+};
 
 fn main() {
     let window = tao::window::WindowBuilder::new()
@@ -63,7 +63,7 @@ fn App() -> Element {
         }
         div { class: "content",
           div { class: "summary" }
-          div { class: "control", Picker {} }
+          div { class: "control", Picker {} ,BtnUplaod{}}
           match show_labels.read().as_ref().unwrap() {
               Content::Label => {
                   rsx! {

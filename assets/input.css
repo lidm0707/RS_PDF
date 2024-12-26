@@ -20,10 +20,13 @@
     @apply w-full h-1/6 mt-3 mb-6 shadow-xl;
   }
   .control{
-    @apply w-full h-auto mt-3 mb-6  bg-yellow-200;
+    @apply flex w-full h-auto mt-3 mb-6  bg-yellow-200 ;
   }
   .table-container {
     @apply h-4/6 overflow-y-scroll ;
+  }
+  .btnUpload{
+     @apply flex; 
   }
 }
 

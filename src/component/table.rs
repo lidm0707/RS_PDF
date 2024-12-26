@@ -67,3 +67,37 @@ pub fn RawTable(data_table: Signal<Vec<SelectRaws>>) -> Element {
         }
     }
 }
+
+
+#[component]
+pub fn UploadTable(files_uploaded:Vec<(String, String, f64)>)-> Element{
+    rsx!{
+        div { class: "table-container h-3/6",
+        table {
+            thead {
+                tr {
+                    th { {"DATE"} }
+                    th { {"CTX"} }
+                    th { {"AMOUNT"} }
+                }
+            }
+            tbody {
+                {
+                    &mut files_uploaded
+                        .iter()
+                        .map(|raw| {
+                            let r2 = format!("{:.2}", raw.2);
+                            rsx! {
+                                tr {
+                                    td { "{raw.0}" }
+                                    td { "{raw.1}" }
+                                    td { class: "text-right", "{r2}" }
+                                }
+                            }
+                        })
+                }
+            }
+        }
+    }
+    }
+}

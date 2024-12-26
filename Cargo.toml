@@ -16,8 +16,8 @@ libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 dotenvy = "0.15"
 dioxus = { version = "0.6.0", features = [] }
 manganis = "0.6.1"
+web-sys = "0.3.76"
 # tokio = { version = "1", features = ["full"] }
-web-sys = { version = "0.3.76", features = ["Window", "Document", "HtmlElement"] }
 
 [features]
 default = ["desktop"]

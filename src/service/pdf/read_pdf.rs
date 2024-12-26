@@ -1,4 +1,5 @@
 use anyhow::Result;
+use dioxus::document;
 use pdfium_render::prelude::*;
 use regex::Regex;
 
@@ -9,13 +10,13 @@ pub struct Line {
     pub amount: Vec<f64>,
 }
 
-pub fn read(file_path: &str, password: &str) -> Result<Line> {
+pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
     let mut data = Line {
         date: Vec::new(),
         ctx: Vec::new(),
         amount: Vec::new(),
     };
-
+    
     let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
     let pdfium = Pdfium::default();
 
