@@ -3,9 +3,15 @@ use dioxus::prelude::*;
 use dioxus_elements::FileEngine;
 use std::sync::Arc;
 
+#[derive(PartialEq, Clone, Props)]
+pub struct FileUpload {
+    pub data:Signal<Vec<(String, String, f64)>>,
+}
+
+
 #[component]
-pub fn BtnUplaod() -> Element {
-    let mut files_uploaded = use_signal(|| Vec::new() as Vec<(String, String, f64)>);
+pub fn BtnUplaod(file_upload:FileUpload) -> Element {
+    let mut files_uploaded = file_upload.data;
     let mut pass_file = use_signal(|| String::new());
     let mut err_show = use_signal(|| String::new());
 
