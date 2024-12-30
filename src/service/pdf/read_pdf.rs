@@ -1,5 +1,4 @@
 use anyhow::Result;
-use dioxus::document;
 use pdfium_render::prelude::*;
 use regex::Regex;
 

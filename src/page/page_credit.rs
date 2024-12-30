@@ -1,15 +1,15 @@
 use dioxus::prelude::*;
 
-use crate::{component::{datepicker::Picker, table::RawTable}, database::db_select::select_raws, models::model_raw::SelectRaws};
+use crate::{component::{datepicker::Picker, table::RawTable}, database::db_select::select_raws, entity::entity_credit::SelectCredit};
 
 #[derive(PartialEq, Clone, Props)]
 pub struct TableRaw {
-   pub  data:Signal<Vec<SelectRaws>>,
+   pub  data:Signal<Vec<SelectCredit>>,
 }
 
 
 pub fn content_credit() ->Element{
-    let table_raw: Signal<Vec<SelectRaws>> = use_signal(|| select_raws().unwrap());
+    let table_raw: Signal<Vec<SelectCredit>> = use_signal(|| select_raws().unwrap());
 
     rsx!{
         div { class: "content",

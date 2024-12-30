@@ -1,10 +1,6 @@
 
-use diesel::SqliteConnection;
 use dioxus::prelude::*;
-use crate::{database::{db_connect::connect_database, db_delete::delete_label, db_select::select_labels}, models::{model_label::SelectLabels, model_raw::SelectRaws}};
-
-
-
+use crate::{database::{db_delete::delete_label, db_select::select_labels}, entity::{entity_label::SelectLabels, entity_credit::SelectCredit}};
 
 #[component]
 pub fn LabelTable(data_table: Signal<Vec<SelectLabels>>) -> Element {
@@ -51,7 +47,7 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabels>>) -> Element {
 }
 
 #[component]
-pub fn RawTable(data_table: Signal<Vec<SelectRaws>>) -> Element {
+pub fn RawTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
     rsx! {
         div { class: "table-container",
             table {

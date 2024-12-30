@@ -25,7 +25,7 @@ fn main() -> Result<(), anyhow::Error> {
     }
     println!("total:// {total:.2}");
 
-    let _ = select_labels(&mut conn);
+    let _ = select_labels();
     // create_post_raw
 
     Ok(())
