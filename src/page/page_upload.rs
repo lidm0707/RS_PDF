@@ -9,7 +9,7 @@ pub struct TableUpload {
 
 
 pub fn content_upload() ->Element{
-    let  files_uploaded = use_signal(|| Vec::new() as Vec<(String, String, f64)>);
+    let  files_uploaded = use_signal(|| Vec::<(String, String, f64)>::new() );
 
     rsx!{
         div { class: "content",

@@ -1,8 +1,8 @@
 use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
-use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_credit::content_credit;
+use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_upload::content_upload;
 
 fn main() {
@@ -34,22 +34,25 @@ fn App() -> Element {
       div { class: "main",
         div { class: "menu",
           div {
-            h5 { "Sidebar" }
+            h5 { "Menu" }
           }
           MenuButton {
             onclick: move |_| {
                 show_content.set(Some(Content::Label));
             },
+            name: "LABEL",
           }
           MenuButton {
             onclick: move |_| {
                 show_content.set(Some(Content::Raw));
             },
+            name: "CREKBANK",
           }
           MenuButton {
             onclick: move |_| {
                 show_content.set(Some(Content::Upload));
             },
+            name: "UPLOAD",
           }
         }
 

@@ -4,7 +4,7 @@ use crate::{
 };
 use diesel::{RunQueryDsl, SelectableHelper, SqliteConnection};
 
-pub fn insert_labels(label: String, abb_ctx: String) -> SelectLabels {
+pub fn insert_label(label: String, abb_ctx: String) -> SelectLabels {
     use crate::database::schema::labels;
     let mut conn = connect_database();
 

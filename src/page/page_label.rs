@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use crate::{component::table::LabelTable, database::db_insert::insert_labels, database::db_select::select_labels};
+use crate::{component::table::LabelTable, database::db_insert::insert_label, database::db_select::select_labels};
 
 
 
@@ -33,11 +33,11 @@ pub fn content_label() -> Element {
                     println!("{:?}", evt.data.values()["ctx"].as_value());
                     let label_value: String = evt.data.values()["label"].as_value().parse().unwrap_or("".to_string());
                     let text_value: String = evt.data.values()["ctx"].as_value().parse().unwrap_or("".to_string());
-                    insert_labels(label_value, text_value);
+                    insert_label(label_value, text_value);
                     show_modal.set(false);
 
                     // Refresh the table data
-                    updated_data.set(select_labels().unwrap());
+                    updated_data.set(select_labels().expect("Failed to load labels"));
                 },
                     div {
                         div { class: "flex justify-center",

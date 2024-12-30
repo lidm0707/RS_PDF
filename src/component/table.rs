@@ -4,7 +4,6 @@ use crate::{database::{db_delete::delete_label, db_select::select_labels}, entit
 
 #[component]
 pub fn LabelTable(data_table: Signal<Vec<SelectLabels>>) -> Element {
-    let mut updated_data = use_signal(|| select_labels().expect("Failed to load labels"));
     rsx! {
         div { class: "table-container h-1/6",
             table {
@@ -31,7 +30,7 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabels>>) -> Element {
                                                 class: "btnEdit",
                                                 onclick: move |_| {
                                                      let _ = delete_label(id.clone());
-                                                     let _ = &mut data_table.set(updated_data.write().to_vec());
+                                                     let _ = &mut data_table.set(select_labels().expect("Failed to load labels"));
                                                 },
                                                 {"DELETE"}
                                             }
