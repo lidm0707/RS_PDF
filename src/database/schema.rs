@@ -1,15 +1,7 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    labels (id) {
-        id -> Integer,
-        label -> Text,
-        abb_ctx -> Text,
-    }
-}
-
-diesel::table! {
-    raws (id) {
+    credits (id) {
         id -> Integer,
         date -> Date,
         ctx -> Text,
@@ -18,4 +10,23 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(labels, raws,);
+diesel::table! {
+    labels (id) {
+        id -> Integer,
+        id_label -> Integer,
+        abb_ctx -> Text,
+    }
+}
+
+diesel::table! {
+    labels_name (id) {
+        id -> Integer,
+        label -> Text,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(
+    credits,
+    labels,
+    labels_name,
+);

@@ -27,7 +27,7 @@ pub fn MenuButton(props: FancyButtonProps) -> Element {
           //   }
           // }
         }
-        {{props.name}}
+        {props.name}
       }
     }
 }

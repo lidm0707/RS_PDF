@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 #[derive(Insertable, Debug)]
-#[diesel(table_name = crate::database::schema::raws)]
+#[diesel(table_name = crate::database::schema::credits)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct InsertCredit {
     pub amount: f64,
@@ -11,7 +11,7 @@ pub struct InsertCredit {
 }
 
 #[derive(Queryable, Selectable, Debug)]
-#[diesel(table_name = crate::database::schema::raws)]
+#[diesel(table_name = crate::database::schema::credits)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectCredit {
     pub id: i32,

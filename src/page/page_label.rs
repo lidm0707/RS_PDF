@@ -1,12 +1,12 @@
 use dioxus::prelude::*;
-use crate::{component::table::LabelTable, database::db_insert::insert_label, database::db_select::select_labels};
+use crate::{component::table::LabelTable, database::{db_insert::insert_label, db_select::{select_labels, select_labels_name}}};
 
 
 
 
 pub fn content_label() -> Element {
     let mut show_modal = use_signal(|| false);
-    let mut updated_data = use_signal(|| select_labels().expect("Failed to load labels"));
+    let mut updated_data = use_signal(|| select_labels_name().expect("Failed to load labels"));
     rsx! {
         div {
             id: "modal",
@@ -27,23 +27,19 @@ pub fn content_label() -> Element {
                 }
 
                 form { class: "", onsubmit: move |evt| { 
-                    println!("{:?}", evt); 
-                    println!("{:?}", evt.data.values()); 
-                    println!("{:?}", evt.data.values()["label"].as_value()); 
-                    println!("{:?}", evt.data.values()["ctx"].as_value());
-                    let label_value: String = evt.data.values()["label"].as_value().parse().unwrap_or("".to_string());
-                    let text_value: String = evt.data.values()["ctx"].as_value().parse().unwrap_or("".to_string());
-                    insert_label(label_value, text_value);
+                    let id_label:i32 = evt.data.values()["id_label"].as_value().parse::<i32>().unwrap_or(0i32);
+                    let abb_ctx: String = evt.data.values()["abb_ctx"].as_value().parse().unwrap_or("".to_string());
+                    insert_label(id_label, abb_ctx);
                     show_modal.set(false);
 
                     // Refresh the table data
-                    updated_data.set(select_labels().expect("Failed to load labels"));
+                    updated_data.set(select_labels_name().expect("Failed to load labels"));
                 },
                     div {
                         div { class: "flex justify-center",
                             input {
                                 class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
-                                name: "label", // Add name attribute to capture data
+                                name: "id_label", // Add name attribute to capture data
                                 r#type:"text",
                                 value: "",
                             }
@@ -51,7 +47,7 @@ pub fn content_label() -> Element {
                         div { class: "flex justify-center",
                             input {
                                 class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
-                                name: "ctx", // Add name attribute to capture data
+                                name: "abb_ctx", // Add name attribute to capture data
                                 r#type:"text",
                                 value: "",
                             }
