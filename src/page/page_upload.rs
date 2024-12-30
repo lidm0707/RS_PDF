@@ -8,15 +8,17 @@ pub struct TableUpload {
 }
 
 
-pub fn PageUpload(table_upload:TableUpload) ->Element{
+pub fn content_upload() ->Element{
+    let  files_uploaded = use_signal(|| Vec::new() as Vec<(String, String, f64)>);
+
     rsx!{
         div { class: "content",
             div { class: "summary" }
             div { class: "control",
                 Picker{}
-                BtnUplaod{file_upload:FileUpload { data: table_upload.data }}
+                BtnUplaod{file_upload:FileUpload { data: files_uploaded }}
             }
-            UploadTable{files_uploaded:table_upload.data.read().to_vec()}
+            UploadTable{files_uploaded:files_uploaded.read().to_vec()}
         }
     }
 

@@ -1,14 +1,9 @@
-use diesel::SqliteConnection;
 use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
-use rust_pdf::database::{
-    db_connect::connect_database,
-    db_select::{select_labels, select_raws},
-};
-use rust_pdf::page::pageRaw::{PageRaw,TableRaw};
-use rust_pdf::page::pageLabel::{PageLabel,Tablelabel};
-use rust_pdf::page::pageUpload::{PageUpload, TableUpload};
+use rust_pdf::page::page_label::content_label;
+use rust_pdf::page::page_credit::content_credit;
+use rust_pdf::page::page_upload::content_upload;
 
 fn main() {
     let window = tao::window::WindowBuilder::new()
@@ -32,11 +27,7 @@ pub enum Content {
 
 #[component]
 fn App() -> Element {
-    let mut conn: SqliteConnection = connect_database();
-    let table_label: Signal<Vec<rust_pdf::models::model_label::SelectLabels>> = use_signal(|| select_labels(&mut conn).unwrap());
-    let table_raw: Signal<Vec<rust_pdf::models::model_raw::SelectRaws>> = use_signal(|| select_raws(&mut conn).unwrap());
-    let mut show_labels = use_signal(|| Some(Content::Label));
-    let mut files_uploaded = use_signal(|| Vec::new() as Vec<(String, String, f64)>);
+    let mut show_content = use_signal(|| Some(Content::Label));
     rsx! {
       document::Link { rel: "stylesheet", href: asset!("/assets/tailwind.css") }
 
@@ -47,35 +38,35 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
-                show_labels.set(Some(Content::Label));
+                show_content.set(Some(Content::Label));
             },
           }
           MenuButton {
             onclick: move |_| {
-                show_labels.set(Some(Content::Raw));
+                show_content.set(Some(Content::Raw));
             },
           }
           MenuButton {
             onclick: move |_| {
-                show_labels.set(Some(Content::Upload));
+                show_content.set(Some(Content::Upload));
             },
           }
         }
 
-        match show_labels.read().as_ref().unwrap() {
+        match show_content.read().as_ref().unwrap() {
             Content::Label => {
                 rsx! {
-                  PageLabel { data: table_label }
+                  content_label {}
                 }
             }
             Content::Raw => {
                 rsx! {
-                  PageRaw { data: table_raw }
+                  content_credit {}
                 }
             }
             Content::Upload => {
                 rsx! {
-                  PageUpload{data:files_uploaded}
+                  content_upload {}
                 }
             }
         }

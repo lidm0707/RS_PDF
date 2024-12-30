@@ -8,7 +8,7 @@ pub struct InsertLabels {
     pub abb_ctx: String,
 }
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Selectable, Debug , Clone )]
 #[diesel(table_name = crate::database::schema::labels)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectLabels {

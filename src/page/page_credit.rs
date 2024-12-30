@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{component::{datepicker::Picker, table::RawTable}, models::model_raw::SelectRaws};
+use crate::{component::{datepicker::Picker, table::RawTable}, database::db_select::select_raws, models::model_raw::SelectRaws};
 
 #[derive(PartialEq, Clone, Props)]
 pub struct TableRaw {
@@ -8,7 +8,9 @@ pub struct TableRaw {
 }
 
 
-pub fn PageRaw(table_raw:TableRaw) ->Element{
+pub fn content_credit() ->Element{
+    let table_raw: Signal<Vec<SelectRaws>> = use_signal(|| select_raws().unwrap());
+
     rsx!{
         div { class: "content",
             div { class: "summary" }
@@ -16,7 +18,7 @@ pub fn PageRaw(table_raw:TableRaw) ->Element{
                 Picker{}
             
             }
-            RawTable{ data_table: table_raw.data }
+            RawTable{ data_table: table_raw }
         }
     }
 

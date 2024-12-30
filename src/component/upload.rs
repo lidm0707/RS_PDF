@@ -44,39 +44,36 @@ pub fn BtnUplaod(file_upload:FileUpload) -> Element {
         }
     };
     rsx! {
-        div { class: "flex items-center justify-center",
+        div { class: "flex items-center justify-center ",
             div {
                 input {
                     r#type: "password",
-                    // we tell the component what to render
+                    class: "border border-2 border-black rounded-md mr-2 ml-2",
                     value: "{pass_file}",
-                    // and what to do when the value changes
                     oninput: move |event| pass_file.set(event.value()),
                 }
             }
             div {
-                button {
-                    r#type: "button",
-                    class: "btn bg-white",
-                    id: "btn-upload",
-                    popovertarget: "upload",
-                    onclick: move |_| {
-                        document::eval(&format!(r#"document.getElementById('input-upload').click();"#));
-                    },
-                    {"Upload Files"}
+                label {
+                    r#for:"upload-fantacy",
+                    div {
+                        class: "py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75",
+                        {"Upload Files"}
+                    }
                 }
 
-
-                input {
-                    class: "btnUpload",
-                    id: "input-upload",
-                    r#type: "file",
-                    style: "display:none;",
-                    accept: ".pdf",
-                    multiple: true,
-                    name: "textreader",
-                    onchange: upload_files,
-                }
+                    input {
+                        class: "btnUpload",
+                        id: "upload-fantacy",
+                        r#type: "file",
+                        style: "display:none;",
+                        accept: ".pdf",
+                        multiple: true,
+                        name: "textreader",
+                        onchange: upload_files,
+                    }
+                
+                
             }
         }
     }
