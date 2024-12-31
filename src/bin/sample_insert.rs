@@ -1,5 +1,5 @@
 use anyhow;
-use database::{db_insert::{insert_credit, insert_label}, db_select::select_labels};
+use database::{db_insert::insert_credit, db_select::select_labels};
 use dotenv::dotenv;
 use rust_pdf::*;
 use service::pdf::read_pdf;
