@@ -27,7 +27,7 @@ pub enum Content {
 
 #[component]
 fn App() -> Element {
-    let mut show_content = use_signal(|| Some(Content::Label));
+    let mut show_content = use_signal(|| Content::Label);
     rsx! {
       document::Link { rel: "stylesheet", href: asset!("/assets/tailwind.css") }
 
@@ -38,25 +38,25 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Some(Content::Label));
+                show_content.set(Content::Label);
             },
             name: "LABEL",
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Some(Content::Raw));
+                show_content.set(Content::Raw);
             },
             name: "CREKBANK",
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Some(Content::Upload));
+                show_content.set(Content::Upload);
             },
             name: "UPLOAD",
           }
         }
 
-        match show_content.read().as_ref().unwrap() {
+        match *show_content.read() {
             Content::Label => {
                 rsx! {
                   content_label {}

@@ -1,6 +1,7 @@
-use crate::{model::model_pdf::Line, service::pdf::check_label::search_labels};
+use crate::{model::model_pdf::Line, service::{date::now::thai_now, pdf::check_label::search_labels}};
 use anyhow::Result;
 use chrono::prelude::*;
+use diesel::dsl::now;
 use pdfium_render::prelude::*;
 use regex::Regex;
 
@@ -47,10 +48,6 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
 }
 
 fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Result<()> {
-    let now: DateTime<Utc> = Utc::now();
-    let now_puls7 = FixedOffset::east_opt(7 * 3600).unwrap();
-    let now_thai = now.with_timezone(&now_puls7);
-
     let arr: Vec<&str> = line.trim().split_whitespace().collect();
 
     // Log line content for debugging
@@ -68,7 +65,7 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
 
         // Remove commas from the amount string
         let sanitized_amount_str = amount_str.replace(",", "");
-
+        let now_thai = thai_now();
         // Attempt to parse the amount as f64
         match sanitized_amount_str.parse::<f64>() {
             Ok(amount) => {

@@ -1,19 +1,12 @@
 use dioxus::prelude::*;
 
-#[derive(PartialEq, Clone, Props)]
-pub struct FancyButtonProps {
-    onclick: EventHandler<MouseEvent>,
-    name:String,
-   
-}
-
 #[component]
-pub fn MenuButton(props: FancyButtonProps) -> Element {
+pub fn MenuButton(name: String, onclick: EventHandler<MouseEvent>) -> Element {
     rsx! {
       div {
         role: "button",
         class: "nav-container",
-        onclick: move |evt| props.onclick.call(evt),
+        onclick: move |event| onclick.call(event),
         div { class: "grid mr-4 place-items-center ",
           // svg {
           //   xmlns: "http://www.w3.org/2000/svg",
@@ -27,7 +20,7 @@ pub fn MenuButton(props: FancyButtonProps) -> Element {
           //   }
           // }
         }
-        {props.name}
+        {name}
       }
     }
 }
