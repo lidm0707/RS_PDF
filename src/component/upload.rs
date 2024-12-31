@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct FileUpload {
-    pub data:Signal<Vec<(String, String, f64)>>,
+    pub data:Signal<Vec<(String, String, f64,i64)>>,
 }
 
 
@@ -26,8 +26,8 @@ pub fn BtnUplaod(file_upload:FileUpload) -> Element {
                         .date
                         .iter()
                         .enumerate()
-                        .map(|(i, _)| (line.date[i].clone(), line.ctx[i].clone(), line.amount[i]))
-                        .collect::<Vec<(String, String, f64)>>();
+                        .map(|(i, _)| (line.date[i].clone(), line.ctx[i].clone(), line.amount[i] , line.label_id[i]))
+                        .collect::<Vec<(String, String, f64,i64)>>();
                     files_uploaded.extend(trafrom);
                 }
                 Err(err) => {

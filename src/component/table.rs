@@ -3,19 +3,25 @@ use crate::{
         db_delete::{delete_label, delete_label_name},
         db_select::{count_labels_where, select_labels_name, select_labels_where},
     },
-    entity::{entity_credit::SelectCredit, entity_label::{SelectLabels, SelectLabelsName}},
+    entity::{
+        entity_credit::SelectCredit,
+        entity_label::{SelectLabels, SelectLabelsName},
+    },
 };
 use dioxus::prelude::*;
 //select_labels_name
 
 #[component]
-pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>, id_show: Signal<i32>,table_ctx: Signal<Vec<SelectLabels>>) -> Element {
-
+pub fn LabelTable(
+    data_table: Signal<Vec<SelectLabelsName>>,
+    id_show: Signal<i32>,
+    table_ctx: Signal<Vec<SelectLabels>>,
+) -> Element {
     rsx! {
         div { class: "table-container h-4/6",
             table {
                 if *id_show.read() == 0 {
-                
+
                     thead {
                         tr {
                             th { {"LABEL"} }
@@ -168,7 +174,7 @@ pub fn RawTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
 }
 
 #[component]
-pub fn UploadTable(files_uploaded: Vec<(String, String, f64)>) -> Element {
+pub fn UploadTable(files_uploaded: Vec<(String, String, f64, i64)>) -> Element {
     rsx! {
         div { class: "table-container",
             table {
@@ -177,6 +183,7 @@ pub fn UploadTable(files_uploaded: Vec<(String, String, f64)>) -> Element {
                         th { {"DATE"} }
                         th { {"CTX"} }
                         th { {"AMOUNT"} }
+                        th { {"LABEL_ID"} }
                     }
                 }
                 tbody {
@@ -190,6 +197,7 @@ pub fn UploadTable(files_uploaded: Vec<(String, String, f64)>) -> Element {
                                         td { "{raw.0}" }
                                         td { "{raw.1}" }
                                         td { class: "text-right", "{r2}" }
+                                        td {  "{raw.3}" }
                                     }
                                 }
                             })

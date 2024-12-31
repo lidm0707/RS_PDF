@@ -43,6 +43,22 @@ pub fn count_labels_where(input_id: i32) -> Result<i64, anyhow::Error> {
     Ok(result)
 }
 
+
+
+pub fn select_labels_like(search_pattern: &str) -> Result<Vec<SelectLabels>, anyhow::Error> {
+    use self::database::schema::labels::dsl::*;
+    let mut conn = connect_database();
+    let pattern = format!("%{}%", search_pattern); // ใช้ % เพื่อ match pattern
+
+    let result = labels
+        .filter(abb_ctx.eq(&pattern))
+        .select(SelectLabels::as_select())
+        .load(&mut conn)
+        .expect("Error loading posts");
+
+    Ok(result)
+}
+
 pub fn select_labels_name() -> Result<Vec<SelectLabelsName>, anyhow::Error> {
     use self::database::schema::labels_name::dsl::*;
     let mut conn = connect_database();
@@ -55,7 +71,7 @@ pub fn select_labels_name() -> Result<Vec<SelectLabelsName>, anyhow::Error> {
     Ok(results)
 }
 
-pub fn select_raws() -> Result<Vec<SelectCredit>, anyhow::Error> {
+pub fn select_credit() -> Result<Vec<SelectCredit>, anyhow::Error> {
     use self::database::schema::credits::dsl::*;
     let mut conn = connect_database();
 
@@ -66,3 +82,18 @@ pub fn select_raws() -> Result<Vec<SelectCredit>, anyhow::Error> {
 
     Ok(results)
 }
+
+
+// pub fn select_labels_like(search_pattern: &str) -> Result<Vec<SelectLabels>, anyhow::Error> {
+//     use self::database::schema::labels::dsl::*;
+//     let mut conn = connect_database();
+//     let pattern = format!("%{}%", search_pattern); // ใช้ % เพื่อ match pattern
+
+//     let result = labels
+//         .filter(abb_ctx.eq(&pattern))
+//         .select(SelectLabels::as_select())
+//         .load(&mut conn)
+//         .expect("Error loading posts");
+
+//     Ok(result)
+// }

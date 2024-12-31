@@ -2,11 +2,14 @@ use anyhow::Result;
 use pdfium_render::prelude::*;
 use regex::Regex;
 
+use crate::service::pdf::check_label::search_labels;
+
 #[derive(Debug)]
 pub struct Line {
     pub date: Vec<String>,
     pub ctx: Vec<String>,
     pub amount: Vec<f64>,
+    pub label_id:Vec<i64>,
 }
 
 pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
@@ -14,6 +17,7 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
         date: Vec::new(),
         ctx: Vec::new(),
         amount: Vec::new(),
+        label_id: Vec::new(),
     };
     
     let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
@@ -63,6 +67,7 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
         let date = arr[1].to_string(); // Assuming the first word is the date
         let ctx = arr[2..arr.len() - 1].join(" "); // Everything except the first and last word is the context
         let amount_str = arr.last().unwrap(); // Last word is the amount
+        let label_search_id = search_labels(&ctx).unwrap().unwrap() as i64;
 
         // Remove commas from the amount string
         let sanitized_amount_str = amount_str.replace(",", "");
@@ -74,6 +79,7 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
                     data.date.push(date);
                     data.ctx.push(ctx);
                     data.amount.push(amount);
+                    data.label_id.push(label_search_id);
                 }
             }
             Err(e) => {
