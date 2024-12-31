@@ -1,16 +1,8 @@
+use crate::{model::model_pdf::Line, service::pdf::check_label::search_labels};
 use anyhow::Result;
+use chrono::prelude::*;
 use pdfium_render::prelude::*;
 use regex::Regex;
-
-use crate::service::pdf::check_label::search_labels;
-
-#[derive(Debug)]
-pub struct Line {
-    pub date: Vec<String>,
-    pub ctx: Vec<String>,
-    pub amount: Vec<f64>,
-    pub label_id:Vec<i64>,
-}
 
 pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
     let mut data = Line {
@@ -18,8 +10,9 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
         ctx: Vec::new(),
         amount: Vec::new(),
         label_id: Vec::new(),
+        period: Vec::new(),
     };
-    
+
     let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
     let pdfium = Pdfium::default();
 
@@ -54,6 +47,10 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
 }
 
 fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Result<()> {
+    let now: DateTime<Utc> = Utc::now();
+    let now_puls7 = FixedOffset::east_opt(7 * 3600).unwrap();
+    let now_thai = now.with_timezone(&now_puls7);
+
     let arr: Vec<&str> = line.trim().split_whitespace().collect();
 
     // Log line content for debugging
@@ -80,6 +77,8 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
                     data.ctx.push(ctx);
                     data.amount.push(amount);
                     data.label_id.push(label_search_id);
+                    data.period
+                        .push(format!("{}-{}", now_thai.year(), now_thai.month()))
                 }
             }
             Err(e) => {

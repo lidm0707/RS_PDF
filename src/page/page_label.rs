@@ -1,15 +1,26 @@
+use crate::{
+    component::table_component::table_label::LabelTable,
+    database::{
+        db_insert::{insert_label, insert_label_name},
+        db_select::{select_labels_name, select_labels_where},
+    },
+    entity::entity_label::{SelectLabels, SelectLabelsName},
+};
 use dioxus::prelude::*;
-use crate::{component::table::LabelTable, database::{db_insert::{insert_label, insert_label_name}, db_select::{select_labels_name, select_labels_where}}, entity::entity_label::SelectLabels};
-
-
-
 
 pub fn content_label() -> Element {
-    let mut show_modal = use_signal(|| false);
-    let mut updated_data = use_signal(|| select_labels_name().expect("Failed to load labels"));
-    let mut id_show = use_signal(|| 0);
+    let mut show_modal: Signal<bool> = use_signal(|| false);
+    let mut id_show: Signal<i32> = use_signal(|| 0);
+    let mut updated_data: Signal<Vec<SelectLabelsName>> =
+        use_signal(|| select_labels_name().expect("Failed to load labels"));
     let mut table_ctx: Signal<Vec<SelectLabels>> =
-    use_signal(|| select_labels_where(*id_show.read()).expect("Failed to load labels"));
+        use_signal(|| select_labels_where(*id_show.read()).expect("Failed to load labels"));
+        //impl FnMut(i32)
+    
+    let set_id_show: Callback<i32> = use_callback(move |id: i32| {
+        id_show.set(id);
+    });
+
     rsx! {
         div {
             id: "modal",
@@ -22,7 +33,7 @@ pub fn content_label() -> Element {
                         button {
                             class: "text-gray-400 hover:text-gray-600",
                             onclick: move |_| {
-                                println!("{}",id_show.read());
+                                println!("{}", id_show.read());
                                 show_modal.set(false);
                             },
                             {"btn"}
@@ -33,10 +44,7 @@ pub fn content_label() -> Element {
                     form {
                         class: "",
                         onsubmit: move |evt| {
-                            let label_name:String = evt
-                                .data
-                                .values()["label"]
-                                .as_value();
+                            let label_name: String = evt.data.values()["label"].as_value();
                             insert_label_name(label_name);
                             show_modal.set(false);
                             updated_data.set(select_labels_name().expect("Failed to load labels"));
@@ -77,7 +85,8 @@ pub fn content_label() -> Element {
                                 .unwrap_or("".to_string());
                             insert_label(id_label, abb_ctx);
                             show_modal.set(false);
-                            table_ctx.set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                            table_ctx
+                                .set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
                         },
                         div {
                             div { class: "flex justify-center",
@@ -106,7 +115,6 @@ pub fn content_label() -> Element {
                         }
                     }
                 }
-            
             }
         }
         div { class: "content",
@@ -121,7 +129,13 @@ pub fn content_label() -> Element {
                     {"button"}
                 }
             }
-            LabelTable { data_table: updated_data, id_show:id_show ,table_ctx:table_ctx }
+            LabelTable { updated_data, id_show, table_ctx ,set_id_show }
         }
     }
 }
+
+/*
+updated_data: updated_data,
+id_show: id_show,
+table_ctx: table_ctx,
+*/

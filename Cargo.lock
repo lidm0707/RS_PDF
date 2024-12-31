@@ -4936,6 +4936,7 @@ name = "rust_pdf"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "diesel",
  "dioxus",
  "dotenv",

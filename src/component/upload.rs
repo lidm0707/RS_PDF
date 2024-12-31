@@ -1,11 +1,11 @@
-use crate::service::pdf::read_pdf::read_credit_kbank;
+use crate::{model::model_pdf::TranformLine, service::pdf::read_pdf::read_credit_kbank};
 use dioxus::prelude::*;
 use dioxus_elements::FileEngine;
 use std::sync::Arc;
 
 #[derive(PartialEq, Clone, Props)]
 pub struct FileUpload {
-    pub data:Signal<Vec<(String, String, f64,i64)>>,
+    pub data:Signal<Vec<TranformLine>>,
 }
 
 
@@ -26,8 +26,14 @@ pub fn BtnUplaod(file_upload:FileUpload) -> Element {
                         .date
                         .iter()
                         .enumerate()
-                        .map(|(i, _)| (line.date[i].clone(), line.ctx[i].clone(), line.amount[i] , line.label_id[i]))
-                        .collect::<Vec<(String, String, f64,i64)>>();
+                        .map(|(i, _)| TranformLine {
+                            date: line.date[i].to_string(),
+                            ctx: line.ctx[i].to_string(),
+                            amount: line.amount[i],
+                            label_id: line.label_id[i],
+                            period: line.period[i].to_string(),
+                        })
+                        .collect::<Vec<TranformLine>>();
                     files_uploaded.extend(trafrom);
                 }
                 Err(err) => {

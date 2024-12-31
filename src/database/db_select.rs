@@ -71,6 +71,20 @@ pub fn select_labels_name() -> Result<Vec<SelectLabelsName>, anyhow::Error> {
     Ok(results)
 }
 
+
+pub fn select_labels_name_where(input_id: i32) -> Result<Vec<SelectLabelsName>, anyhow::Error> {
+    use self::database::schema::labels_name::dsl::*;
+    let mut conn = connect_database();
+
+    let result = labels_name
+        .filter(id.eq(input_id))
+        .select(SelectLabelsName::as_select())
+        .load(&mut conn)
+        .expect("Error loading posts");
+
+    Ok(result)
+}
+
 pub fn select_credit() -> Result<Vec<SelectCredit>, anyhow::Error> {
     use self::database::schema::credits::dsl::*;
     let mut conn = connect_database();
