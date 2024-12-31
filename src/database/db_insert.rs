@@ -17,6 +17,20 @@ pub fn insert_label(id_label: i32, abb_ctx: String) -> SelectLabels {
         .expect("Error saving new post")
 }
 
+
+pub fn insert_label_name(label: String) -> SelectLabelsName {
+    use crate::database::schema::labels_name;
+    let mut conn = connect_database();
+
+    let new_post = InsertLabelsName { label };
+
+    diesel::insert_into(labels_name::table)
+        .values(new_post)
+        .returning(SelectLabelsName::as_returning())
+        .get_result(&mut conn)
+        .expect("Error saving new post")
+}
+
 pub fn insert_credit(date: String, ctx: String, amount: f64, label: String) -> SelectCredit {
     use crate::database::schema::credits;
     let new_post = InsertCredit {

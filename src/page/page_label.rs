@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use crate::{component::table::LabelTable, database::{db_insert::insert_label, db_select::{select_labels, select_labels_name}}};
+use crate::{component::table::LabelTable, database::{db_insert::{insert_label, insert_label_name}, db_select::{select_labels_name, select_labels_where}}, entity::entity_label::SelectLabels};
 
 
 
@@ -7,6 +7,9 @@ use crate::{component::table::LabelTable, database::{db_insert::insert_label, db
 pub fn content_label() -> Element {
     let mut show_modal = use_signal(|| false);
     let mut updated_data = use_signal(|| select_labels_name().expect("Failed to load labels"));
+    let mut id_show = use_signal(|| 0);
+    let mut table_ctx: Signal<Vec<SelectLabels>> =
+    use_signal(|| select_labels_where(*id_show.read()).expect("Failed to load labels"));
     rsx! {
         div {
             id: "modal",
@@ -19,48 +22,91 @@ pub fn content_label() -> Element {
                         button {
                             class: "text-gray-400 hover:text-gray-600",
                             onclick: move |_| {
+                                println!("{}",id_show.read());
                                 show_modal.set(false);
                             },
                             {"btn"}
                         }
                     }
                 }
-
-                form { class: "", onsubmit: move |evt| { 
-                    let id_label:i32 = evt.data.values()["id_label"].as_value().parse::<i32>().unwrap_or(0i32);
-                    let abb_ctx: String = evt.data.values()["abb_ctx"].as_value().parse().unwrap_or("".to_string());
-                    insert_label(id_label, abb_ctx);
-                    show_modal.set(false);
-
-                    // Refresh the table data
-                    updated_data.set(select_labels_name().expect("Failed to load labels"));
-                },
-                    div {
-                        div { class: "flex justify-center",
-                            input {
-                                class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
-                                name: "id_label", // Add name attribute to capture data
-                                r#type:"text",
-                                value: "",
+                if *id_show.read() == 0 {
+                    form {
+                        class: "",
+                        onsubmit: move |evt| {
+                            let label_name:String = evt
+                                .data
+                                .values()["label"]
+                                .as_value();
+                            insert_label_name(label_name);
+                            show_modal.set(false);
+                            updated_data.set(select_labels_name().expect("Failed to load labels"));
+                        },
+                        div {
+                            div { class: "flex justify-center",
+                                input {
+                                    class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
+                                    name: "label", // Add name attribute to capture data
+                                    r#type: "text",
+                                    value: "",
+                                }
                             }
                         }
-                        div { class: "flex justify-center",
+                        div { class: "flex justify-end mr-2",
                             input {
-                                class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
-                                name: "abb_ctx", // Add name attribute to capture data
-                                r#type:"text",
-                                value: "",
+                                class: "",
+                                r#type: "submit",
+                                class: "btnEdit mt-3 mb-3 mr-10",
                             }
                         }
                     }
-                    div { class: "flex justify-end mr-2",
-                        input {
-                            class: "",
-                            r#type: "submit",
-                            class: "btnEdit mt-3 mb-3 mr-10",
+                } else {
+                    form {
+                        class: "",
+                        onsubmit: move |evt| {
+                            let id_label: i32 = evt
+                                .data
+                                .values()["id_label"]
+                                .as_value()
+                                .parse::<i32>()
+                                .unwrap_or(0i32);
+                            let abb_ctx: String = evt
+                                .data
+                                .values()["abb_ctx"]
+                                .as_value()
+                                .parse()
+                                .unwrap_or("".to_string());
+                            insert_label(id_label, abb_ctx);
+                            show_modal.set(false);
+                            table_ctx.set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                        },
+                        div {
+                            div { class: "flex justify-center",
+                                input {
+                                    class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
+                                    name: "id_label", // Add name attribute to capture data
+                                    r#type: "text",
+                                    value: "",
+                                }
+                            }
+                            div { class: "flex justify-center",
+                                input {
+                                    class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
+                                    name: "abb_ctx", // Add name attribute to capture data
+                                    r#type: "text",
+                                    value: "",
+                                }
+                            }
+                        }
+                        div { class: "flex justify-end mr-2",
+                            input {
+                                class: "",
+                                r#type: "submit",
+                                class: "btnEdit mt-3 mb-3 mr-10",
+                            }
                         }
                     }
                 }
+            
             }
         }
         div { class: "content",
@@ -75,7 +121,7 @@ pub fn content_label() -> Element {
                     {"button"}
                 }
             }
-            LabelTable { data_table: updated_data}
+            LabelTable { data_table: updated_data, id_show:id_show ,table_ctx:table_ctx }
         }
     }
 }

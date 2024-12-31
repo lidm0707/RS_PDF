@@ -3,21 +3,19 @@ use crate::{
         db_delete::{delete_label, delete_label_name},
         db_select::{count_labels_where, select_labels_name, select_labels_where},
     },
-    entity::{
-        entity_credit::SelectCredit,
-        entity_label::SelectLabelsName,
-    },
+    entity::{entity_credit::SelectCredit, entity_label::{SelectLabels, SelectLabelsName}},
 };
 use dioxus::prelude::*;
 //select_labels_name
+
 #[component]
-pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
-    let mut swicth_show = use_signal(|| true);
-    let mut  id_show = use_signal(|| 1);
+pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>, id_show: Signal<i32>,table_ctx: Signal<Vec<SelectLabels>>) -> Element {
+
     rsx! {
         div { class: "table-container h-4/6",
             table {
-                if *swicth_show.read() {
+                if *id_show.read() == 0 {
+                
                     thead {
                         tr {
                             th { {"LABEL"} }
@@ -36,8 +34,9 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
                                         tr { id: "{label.id}",
                                             td {
                                                 onclick: move |_| {
-                                                    swicth_show.set(false);
-                                                    id_show.set(id);
+                                                    println!("{}",id_show.read());
+                                                    println!("{}",id);
+                                                    let _ = &mut id_show.set(id);
                                                 },
                                                 "{label.label}"
                                             }
@@ -72,8 +71,8 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
                     }
                     tbody {
                         {
-                            select_labels_where(*id_show.read())
-                                .expect("Failed to load labels")
+                            let _ = table_ctx.set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                            table_ctx
                                 .iter()
                                 .map(|label| {
                                     let id = label.id.clone();
@@ -81,7 +80,7 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
                                         tr { id: "{label.id}",
                                             td {
                                                 onclick: move |_| {
-                                                    swicth_show.set(true);
+                                                    let _ = &mut id_show.set(0);
                                                 },
                                                 "{label.abb_ctx}"
                                             }
@@ -90,10 +89,9 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
                                                     class: "btnEdit",
                                                     onclick: move |_| {
                                                         let _ = delete_label(id.clone());
-                                                        let _ = &mut data_table
-                                                            .set(select_labels_name().expect("Failed to load labels"));
+                                                        let _ = &mut table_ctx.set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
                                                         let id_value = *id_show.read();
-                                                        let _ = id_show.set(id_value);
+                                                        let _ = &mut id_show.set(id_value);
                                                     },
                                                     {"DELETE"}
                                                 }
@@ -107,8 +105,7 @@ pub fn LabelTable(data_table: Signal<Vec<SelectLabelsName>>) -> Element {
             }
         }
     }
-    }
-
+}
 
 /*                    {
     data_table
