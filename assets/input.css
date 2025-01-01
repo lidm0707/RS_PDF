@@ -17,7 +17,10 @@
   }
 
   .summary {
-    @apply w-full h-1/6 mt-3 mb-6 shadow-xl;
+    @apply  flex w-full h-1/6 mt-3 mb-6 shadow-xl;
+  }
+  .summary-items {
+    @apply  mr-2 border-x-2 border-stone-400;
   }
   .control{
     @apply flex w-full h-auto mt-3 mb-6  bg-yellow-200 ;

@@ -18,6 +18,7 @@ dioxus = { version = "0.6.0", features = [] }
 manganis = "0.6.1"
 web-sys = "0.3.76"
 chrono = "0.4.39"
+num-format = "0.4.4"
 # tokio = { version = "1", features = ["full"] }
 
 [features]

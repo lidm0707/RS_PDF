@@ -1,7 +1,6 @@
 use crate::{model::model_pdf::Line, service::{date::now::thai_now, pdf::check_label::search_labels}};
 use anyhow::Result;
 use chrono::prelude::*;
-use diesel::dsl::now;
 use pdfium_render::prelude::*;
 use regex::Regex;
 
@@ -75,7 +74,7 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
                     data.amount.push(amount);
                     data.label_id.push(label_search_id);
                     data.period
-                        .push(format!("{}-{}", now_thai.year(), now_thai.month()))
+                        .push(format!("{}-{:02}", now_thai.year(), now_thai.month()))
                 }
             }
             Err(e) => {
