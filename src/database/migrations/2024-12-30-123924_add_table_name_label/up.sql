@@ -56,5 +56,7 @@ CREATE TABLE
         date DATE NOT NULL,
         ctx TEXT NOT NULL,
         amount DOUBLE NOT NULL,
-        label TEXT NOT NULL
+        label_id INTEGER NOT NULL,
+        period TEXT NOT NULL
+        
     );

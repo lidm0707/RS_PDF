@@ -4,10 +4,11 @@ use diesel::prelude::*;
 #[diesel(table_name = crate::database::schema::credits)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct InsertCredit {
-    pub amount: f64,
-    pub ctx: String,
     pub date: String,
-    pub label: String,
+    pub ctx: String,
+    pub amount: f64,
+    pub label_id: i32,
+    pub period: String,
 }
 
 #[derive(Queryable, Selectable, Debug)]
@@ -18,5 +19,6 @@ pub struct SelectCredit {
     pub date: String,
     pub ctx: String,
     pub amount: f64,
-    pub label: String,
+    pub label_id: i32,
+    pub period: String,
 }

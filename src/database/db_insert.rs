@@ -17,7 +17,6 @@ pub fn insert_label(id_label: i32, abb_ctx: String) -> SelectLabels {
         .expect("Error saving new post")
 }
 
-
 pub fn insert_label_name(label: String) -> SelectLabelsName {
     use crate::database::schema::labels_name;
     let mut conn = connect_database();
@@ -31,13 +30,20 @@ pub fn insert_label_name(label: String) -> SelectLabelsName {
         .expect("Error saving new post")
 }
 
-pub fn insert_credit(date: String, ctx: String, amount: f64, label: String) -> SelectCredit {
+pub fn insert_credit(
+    date: String,
+    ctx: String,
+    amount: f64,
+    label_id: i32,
+    period: String,
+) -> SelectCredit {
     use crate::database::schema::credits;
     let new_post = InsertCredit {
         date,
         ctx,
         amount,
-        label,
+        label_id,
+        period,
     };
     let mut conn = connect_database();
 

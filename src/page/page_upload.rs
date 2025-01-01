@@ -1,15 +1,13 @@
 use chrono::prelude::*;
 use dioxus::prelude::*;
-use dioxus_elements::button::form;
 use num_format::{Locale, ToFormattedString};
 
 use crate::{
     component::{
-        datepicker::Picker,
         table_component::table_upload::UploadTable,
         upload::{BtnUplaod, FileUpload},
     },
-    database::db_select::select_labels_name,
+    database::{db_insert::insert_credit, db_select::select_labels_name},
     model::model_pdf::TranformLine,
     service::date::now::thai_now,
 };
@@ -94,7 +92,9 @@ pub fn content_upload() -> Element {
                                     div { class: "p-3 text-center",
                                         "{x.label}"
                                         div { class: "text-right each-summary-item", {format_thai(sum_by_gorupby_label(x.id))} }
-                                        div{class: "text-right each-summary-item",{format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount)*100.0)} }
+                                        div { class: "text-right each-summary-item",
+                                            {format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount) * 100.0)}
+                                        }
                                     }
                                 }
                             }
@@ -123,7 +123,6 @@ pub fn content_upload() -> Element {
                                 }
                             })
                     }
-                
                 }
 
                 select {
@@ -148,6 +147,25 @@ pub fn content_upload() -> Element {
                                 }
                             })
                     }
+                }
+                button {
+                    class: "btn",
+                    onclick: move |_| {
+                        {
+                            files_uploaded
+                                .iter()
+                                .for_each(|line| {
+                                    let date = line.date.clone();
+                                    let ctx = line.ctx.clone();
+                                    let amount = line.amount;
+                                    let label_id = line.label_id as i32;
+                                    let period = line.period.clone();
+                                    insert_credit(date, ctx, amount, label_id, period);
+                                });
+                        }
+                        files_uploaded.set(Vec::<TranformLine>::new());
+                    },
+                    {"SAVE"}
                 }
             }
             UploadTable { file_upload: FileUpload { data: files_uploaded } }

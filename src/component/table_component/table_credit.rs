@@ -13,6 +13,7 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                         th { {"CTX"} }
                         th { {"AMOUNT"} }
                         th { {"LABEL"} }
+                        th { {"PERIOD"} }
                     }
                 }
                 tbody {
@@ -26,7 +27,8 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                                         td { "{raw.date}" }
                                         td { "{raw.ctx}" }
                                         td { class: "text-right", "{r2}" }
-                                        td { "{raw.label}" }
+                                        td { "{raw.label_id}" }
+                                        td { "{raw.period}" }
                                     }
                                 }
                             })

@@ -6,7 +6,8 @@ diesel::table! {
         date -> Date,
         ctx -> Text,
         amount -> Double,
-        label -> Text,
+        label_id -> Integer,
+        period -> Text,
     }
 }
 
