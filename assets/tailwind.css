@@ -696,10 +696,26 @@ td {
 
 .summary-items {
   margin-right: 0.5rem;
+}
+
+.select {
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(168 162 158 / var(--tw-border-opacity, 1));
+}
+
+.each-summary-item {
+  margin-right: 0.5rem;
+  height: 100%;
   border-left-width: 2px;
   border-right-width: 2px;
   --tw-border-opacity: 1;
   border-color: rgb(168 162 158 / var(--tw-border-opacity, 1));
+  padding: 0.75rem;
 }
 
 .control {
@@ -708,6 +724,7 @@ td {
   display: flex;
   height: auto;
   width: 100%;
+  align-items: center;
   --tw-bg-opacity: 1;
   background-color: rgb(254 240 138 / var(--tw-bg-opacity, 1));
 }
@@ -762,6 +779,10 @@ td {
 
 .inset-0 {
   inset: 0px;
+}
+
+.m-2 {
+  margin: 0.5rem;
 }
 
 .mb-2 {
@@ -931,6 +952,10 @@ td {
   padding: 0.5rem;
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -947,6 +972,10 @@ td {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-right {

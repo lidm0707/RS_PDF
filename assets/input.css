@@ -20,10 +20,17 @@
     @apply  flex w-full h-1/6 mt-3 mb-6 shadow-xl;
   }
   .summary-items {
-    @apply  mr-2 border-x-2 border-stone-400;
+    @apply  mr-2 ;
+  }
+  .select{
+    @apply border-2 border-stone-400 h-fit w-fit;
+  }
+
+  .each-summary-item {
+    @apply  mr-2 p-3 h-full border-x-2 border-stone-400;
   }
   .control{
-    @apply flex w-full h-auto mt-3 mb-6  bg-yellow-200 ;
+    @apply flex w-full h-auto items-center mt-3 mb-6  bg-yellow-200 ;
   }
   .table-container {
     @apply h-4/6 overflow-y-scroll ;

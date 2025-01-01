@@ -1,5 +1,6 @@
 use chrono::prelude::*;
 use dioxus::prelude::*;
+use dioxus_elements::button::form;
 use num_format::{Locale, ToFormattedString};
 
 use crate::{
@@ -10,27 +11,48 @@ use crate::{
     },
     database::db_select::select_labels_name,
     model::model_pdf::TranformLine,
-    service::{date::now::thai_now, pdf::check_label::search_labels},
+    service::date::now::thai_now,
 };
 
 pub fn content_upload() -> Element {
     let mut files_uploaded = use_signal(|| Vec::<TranformLine>::new());
     // runtime if vec emty and direct index as i[0] is break!!
     let now_thai = thai_now();
-    let default_yymm = use_signal(|| format!("{}-{:02}", now_thai.year(), now_thai.month()));
-    let mut chang_yymm = move |evt: Event<FormData>| {
+    let arr_year: Vec<i32> = (now_thai.year() - 5..=now_thai.year() + 5).collect();
+    let mut year: Signal<i32> =use_signal(move || now_thai.year());
+    let mut month: Signal<u32> =use_signal(move || now_thai.month());
+
+    let chang_yy = use_callback(move |evt: Event<FormData>| {
+        let tem_yy = evt.value().parse::<i32>().unwrap();
+        let _ =  year.set(tem_yy);
         let temp = files_uploaded.read().clone();
         let tran = temp
             .iter()
             .enumerate()
             .map(|(i, _)| {
                 let mut temp = temp[i].clone();
-                temp.period = evt.value();
+                temp.period = format!("{}-{:02}", year, month);
                 temp
             })
             .collect::<Vec<TranformLine>>();
         files_uploaded.set(tran);
-    };
+    });
+
+    let chang_mm = use_callback(move |evt: Event<FormData>| {
+        let tem_m = evt.value().parse::<u32>().unwrap();
+        let _ =  month.set(tem_m);
+        let temp = files_uploaded.read().clone();
+        let tran = temp
+            .iter()
+            .enumerate()
+            .map(|(i, _)| {
+                let mut temp = temp[i].clone();
+                temp.period = format!("{}-{:02}", year, month);
+                temp
+            })
+            .collect::<Vec<TranformLine>>();
+        files_uploaded.set(tran);
+    });
 
     let sum_amount = files_uploaded
         .read()
@@ -57,13 +79,9 @@ pub fn content_upload() -> Element {
         div { class: "content",
             div { class: "summary",
                 div { class: "summary-items",
-                    div {
+                    div { class: "p-3 text-center",
                         "AMOUNT"
-                        div { class: "text-right",
-                            {
-                                format_thai(sum_amount)
-                            }
-                        }
+                        div { class: "text-right each-summary-item", {format_thai(sum_amount)} }
                     }
                 }
                 {
@@ -73,11 +91,10 @@ pub fn content_upload() -> Element {
                         .map(|x| {
                             rsx! {
                                 div { class: "summary-items",
-                                    "{x.label}"
-                                    div { class: "text-right",
-                                        {
-                                            format_thai(sum_by_gorupby_label(x.id))
-                                        }
+                                    div { class: "p-3 text-center",
+                                        "{x.label}"
+                                        div { class: "text-right each-summary-item", {format_thai(sum_by_gorupby_label(x.id))} }
+                                        div{class: "text-right each-summary-item",{format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount)*100.0)} }
                                     }
                                 }
                             }
@@ -85,27 +102,52 @@ pub fn content_upload() -> Element {
                 }
             }
             div { class: "control",
-                Picker {}
                 BtnUplaod { file_upload: FileUpload { data: files_uploaded } }
-                input {
-                    value: "{default_yymm.read()}",
-                    oninput: move |evt| {
-                        chang_yymm(evt);
+                select {
+                    class: "select",
+                    onchange: move |evt| {
+                        println!("{}", evt.value());
+                        let _ = chang_mm.call(evt);
                     },
+                    {
+                        (1..=12)
+                            .map(|m| {
+                                if m == *month.read() {
+                                    rsx! {
+                                        option { selected: true, value: "{m}", "{m}" }
+                                    }
+                                } else {
+                                    rsx! {
+                                        option { value: "{m}", "{m}" }
+                                    }
+                                }
+                            })
+                    }
+                
                 }
-                select { class: "select", autocomplete: "on",
-                    option { value: "1", "1" }
-                    option { value: "2", "2" }
-                    option { value: "3", "3" }
-                    option { value: "4", "4" }
-                    option { value: "5", "5" }
-                    option { value: "6", "6" }
-                    option { value: "7", "7" }
-                    option { value: "8", "8" }
-                    option { value: "9", "9" }
-                    option { value: "10", "10" }
-                    option { value: "11", "11" }
-                    option { value: "12", "12" }
+
+                select {
+                    class: "select",
+                    onchange: move |evt| {
+                        println!("{}", evt.value());
+                        let _ = chang_yy.call(evt);
+                    },
+                    value: "{year.read()}",
+                    {
+                        arr_year
+                            .iter()
+                            .map(|item_year| {
+                                if item_year == &*year.read() {
+                                    rsx! {
+                                        option { selected: true, value: "{item_year}", "{item_year}" }
+                                    }
+                                } else {
+                                    rsx! {
+                                        option { value: "{item_year}", "{item_year}" }
+                                    }
+                                }
+                            })
+                    }
                 }
             }
             UploadTable { file_upload: FileUpload { data: files_uploaded } }
