@@ -60,3 +60,47 @@ CREATE TABLE
         period TEXT NOT NULL
         
     );
+
+
+CREATE TABLE
+    t1 (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date_stard DATE NOT NULL,
+        date_end DATE NOT NULL,
+        time INTEGER NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL,
+        total DOUBLE NOT NULL
+    );
+
+CREATE TABLE
+    t1_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        period TEXT NOT NULL,
+        t1_id INTEGER NOT NULL
+    );
+
+CREATE TABLE
+    cash (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        period TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL      
+    );
+
+CREATE TABLE
+    setting_pass_pdf (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        ctx TEXT NOT NULL,
+        type TEXT NOT NULL
+    );
+
+CREATE TABLE
+    setting_hotkey (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        type TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL
+    );

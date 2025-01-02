@@ -1,0 +1,28 @@
+use dioxus::prelude::*;
+
+use crate::{
+    component::{datepicker::Picker, table_component::table_credit::CreditTable},
+    database::db_select::select_credit,
+    entity::entity_credit::SelectCredit,
+};
+
+#[derive(PartialEq, Clone, Props)]
+pub struct TableRaw {
+    pub data: Signal<Vec<SelectCredit>>,
+}
+
+pub fn content_t1() -> Element {
+    let data_table: Signal<Vec<SelectCredit>> = use_signal(|| select_credit().unwrap());
+
+    rsx! {
+        div { class: "content",
+            div { class: "summary" }
+            div { class: "control",
+                Picker{}
+
+            }
+
+            CreditTable{ data_table }
+        }
+    }
+}

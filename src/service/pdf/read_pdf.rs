@@ -1,4 +1,4 @@
-use crate::{model::model_pdf::Line, service::{date::now::thai_now, pdf::check_label::search_labels}};
+use crate::{model::model_pdf::Line, service::{date::{date_format::format_date, now::thai_now}, pdf::check_label::search_labels}};
 use anyhow::Result;
 use chrono::prelude::*;
 use pdfium_render::prelude::*;
@@ -69,7 +69,7 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
         match sanitized_amount_str.parse::<f64>() {
             Ok(amount) => {
                 if amount >= 0.0 {
-                    data.date.push(date);
+                    data.date.push(format_date(&date));
                     data.ctx.push(ctx);
                     data.amount.push(amount);
                     data.label_id.push(label_search_id);

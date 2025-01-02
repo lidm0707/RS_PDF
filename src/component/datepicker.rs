@@ -16,6 +16,7 @@ pub fn Picker() -> Element {
                 value: "{stard}",
                 oninput: move |event| {
                     stard.set(event.value());
+                    println!("{:?}", stard.read());
                 },
             }
             input {
@@ -24,6 +25,7 @@ pub fn Picker() -> Element {
                 value: "{end}",
                 oninput: move |event| {
                     end.set(event.value());
+                    println!("{:?}", end.read());
                 },
             }
         }
