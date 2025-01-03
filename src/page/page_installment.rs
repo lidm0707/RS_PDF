@@ -1,7 +1,7 @@
 use crate::{
-    component::datepicker::PickerDiffMonth,
-    database::{db_bank::db_select::select_bank, db_installment::db_insert::{insert_installment, insert_installment_items}, db_select::select_labels_name},
-    entity::entity_label::SelectLabelsName, service::date::{add::month_add, date_format::format_date, now::thai_now},
+    component::{datepicker::PickerDiffMonth, table_component::{table_installment::TableInstallment, table_installment_items::TableInstallmentItem}},
+    database::{db_bank::db_select::select_bank, db_installment::{db_insert::{insert_installment, insert_installment_items}, db_select::{select_installment, select_installment_items_where}}, db_select::select_labels_name},
+    entity::{entity_installment::{SelectInstallment, SelectInstallmentItems}, entity_label::SelectLabelsName}, service::date::{add::month_add, date_format::format_date, now::thai_now},
 };
 use dioxus::prelude::*;
 use chrono::prelude::*;
@@ -18,6 +18,9 @@ pub fn content_installment() -> Element {
     let mut total: Signal<f64> = use_signal(|| 0.00);
     let mut static_price: Signal<f64> = use_signal(|| 0.00);
     let mut diff=use_signal(|| 0.00);
+    let mut id_table: Signal<i32> = use_signal(|| 0);
+    let mut df_installment: Signal<Vec<SelectInstallment>> = use_signal(|| select_installment() .expect("Failed to load labels"));
+    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| select_installment_items_where(*id_table.read()).expect("Failed to load labels"));
 
     let  time_for_payment = move |full: (String, String)| {
         match (full.0.parse::<f64>(), full.1.parse::<i32>()) {
@@ -84,6 +87,7 @@ pub fn content_installment() -> Element {
                         }
                         show_modal.set(false);
                         updated_data.set(select_labels_name().expect("Failed to load labels"));
+                        df_installment.set(select_installment().expect("Failed to load labels"));
                     },
                     div { class: "",
                         PickerDiffMonth {
@@ -218,24 +222,24 @@ pub fn content_installment() -> Element {
                                         stard_date.clone().read().as_ref(),
                                         &time.to_string(),
                                     );
-                                    let in_box = in_total/in_time;
-                                    let str_box = format!("{:.2}",in_box).parse::<f64>().unwrap_or(0.00);
+                                    let in_box = in_total / in_time;
+                                    let str_box = format!("{:.2}", in_box).parse::<f64>().unwrap_or(0.00);
                                     rsx! {
                                         div {
                                             div { class: "flex ",
                                                 label { class: "w-3/6 mr-4", "date: {date_time}" }
                                                 input {
                                                     oninput: move |evt| {
-                                                        let price = static_price.clone() * (time.to_string().parse::<f64>().unwrap_or(0.00) - 1.00);
+                                                        let price = static_price.clone()
+                                                            * (time.to_string().parse::<f64>().unwrap_or(0.00) - 1.00);
                                                         let current = evt.value().parse::<f64>().unwrap_or(0.00);
-                                                        let sum = format!("{:.2}",price + current).parse::<f64>().unwrap_or(0.00);
-                                                        let new_diff =  sum - in_total;
+                                                        let sum = format!("{:.2}", price + current).parse::<f64>().unwrap_or(0.00);
+                                                        let new_diff = sum - in_total;
                                                         diff.set(new_diff);
-                                                        
                                                     },
                                                     class: "border-b",
                                                     name: "{time.to_string()}",
-                                                    initial_value:  "{str_box}" ,
+                                                    initial_value: "{str_box}",
                                                 }
                                             }
                                         }
@@ -267,8 +271,20 @@ pub fn content_installment() -> Element {
                     {"button"}
                 }
             }
-                // LabelTable { updated_data, id_show, table_ctx ,set_id_show }
+            div {  
+
+                if *id_table.read() as i32 == 0 {
+                    TableInstallment {df_installment,df_installment_items, id_table}
+                } else {
+                    TableInstallmentItem {df_installment_items,df_installment, id_table}
+                 }
+
+            }
+        
         }
+
+
+
     }
 }
 

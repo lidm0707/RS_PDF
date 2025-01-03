@@ -1,5 +1,5 @@
 use self::database::schema::installment::dsl::*;
-use self::database::schema::installment_items::dsl::*;
+use self::database::schema::installment_items::dsl::{*, id as installment_items_id};
 use crate::entity::entity_installment::*;
 use crate::*;
 use anyhow;
@@ -20,6 +20,19 @@ pub fn select_installment_items() -> Result<Vec<SelectInstallmentItems>, anyhow:
     let mut conn = connect_database();
 
     let results = installment_items
+        .select(SelectInstallmentItems::as_select())
+        .load(&mut conn)
+        .expect("Error loading posts");
+    Ok(results)
+}
+
+pub fn select_installment_items_where(
+    input_id: i32,
+) -> Result<Vec<SelectInstallmentItems>, anyhow::Error> {
+    let mut conn = connect_database();
+
+    let results = installment_items
+        .filter(installment_id.eq(input_id))
         .select(SelectInstallmentItems::as_select())
         .load(&mut conn)
         .expect("Error loading posts");

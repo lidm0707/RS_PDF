@@ -3,7 +3,6 @@ use crate::database::schema::installment::dsl::*;
 use crate::database::schema::installment_items::dsl::*;
 use crate::entity::entity_installment::*;
 use diesel::prelude::*;
-use dioxus::html::a;
 
 pub fn insert_installment(
     date_stard_value: String,
