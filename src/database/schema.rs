@@ -1,10 +1,19 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    bank (id) {
+        id -> Integer,
+        name -> Text,
+    }
+}
+
+diesel::table! {
     cash (id) {
         id -> Integer,
         date -> Date,
         period -> Text,
+        #[sql_name = "type"]
+        type_ -> Text,
         label_id -> Integer,
         amount -> Double,
     }
@@ -18,6 +27,30 @@ diesel::table! {
         amount -> Double,
         label_id -> Integer,
         period -> Text,
+        payment_type_id -> Integer,
+    }
+}
+
+diesel::table! {
+    installment (id) {
+        id -> Integer,
+        date_stard -> Date,
+        date_end -> Date,
+        time -> Integer,
+        note -> Text,
+        label_id -> Integer,
+        amount -> Double,
+        total -> Double,
+    }
+}
+
+diesel::table! {
+    installment_items (id) {
+        id -> Integer,
+        date -> Date,
+        period -> Text,
+        bank_id -> Integer,
+        installment_id -> Integer,
     }
 }
 
@@ -33,6 +66,13 @@ diesel::table! {
     labels_name (id) {
         id -> Integer,
         label -> Text,
+    }
+}
+
+diesel::table! {
+    payment_type (id) {
+        id -> Integer,
+        chanel -> Text,
     }
 }
 
@@ -55,34 +95,15 @@ diesel::table! {
     }
 }
 
-diesel::table! {
-    t1 (id) {
-        id -> Integer,
-        date_stard -> Date,
-        date_end -> Date,
-        time -> Integer,
-        label_id -> Integer,
-        amount -> Double,
-        total -> Double,
-    }
-}
-
-diesel::table! {
-    t1_items (id) {
-        id -> Integer,
-        date -> Date,
-        period -> Text,
-        t1_id -> Integer,
-    }
-}
-
 diesel::allow_tables_to_appear_in_same_query!(
+    bank,
     cash,
     credits,
+    installment,
+    installment_items,
     labels,
     labels_name,
+    payment_type,
     setting_hotkey,
     setting_pass_pdf,
-    t1,
-    t1_items,
 );

@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
 use rust_pdf::page::page_credit::content_credit;
 use rust_pdf::page::page_label::content_label;
-use rust_pdf::page::page_t1::content_t1;
+use rust_pdf::page::page_installment::content_installment;
 use rust_pdf::page::page_upload::content_upload;
 
 fn main() {
@@ -24,7 +24,7 @@ pub enum Content {
     Label,
     Raw,
     Upload,
-    T1,
+    INSTALLMENT,
 }
 
 #[component]
@@ -52,9 +52,9 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Content::T1);
+                show_content.set(Content::INSTALLMENT);
             },
-            name: "T1",
+            name: "INSTALLMENT",
           }
           MenuButton {
             onclick: move |_| {
@@ -80,9 +80,9 @@ fn App() -> Element {
                   content_upload {}
                 }
             }
-            Content::T1 =>{
+            Content::INSTALLMENT =>{
               rsx! {
-                content_t1{}
+                content_installment{}
               }
             }
         }

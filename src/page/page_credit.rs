@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    component::{datepicker::Picker, table_component::table_credit::CreditTable},
+    component::{datepicker::PickerDiffMonth, table_component::table_credit::CreditTable},
     database::db_select::select_credit,
     entity::entity_credit::SelectCredit,
 };
@@ -18,7 +18,7 @@ pub fn content_credit() -> Element {
         div { class: "content",
             div { class: "summary" }
             div { class: "control",
-                Picker{}
+                // Picker{}
 
             }
 

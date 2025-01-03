@@ -32,6 +32,7 @@ pub fn BtnUplaod(file_upload:FileUpload) -> Element {
                             amount: line.amount[i],
                             label_id: line.label_id[i],
                             period: line.period[i].to_string(),
+                            payment_type_id: line.payment_type_id[i],
                         })
                         .collect::<Vec<TranformLine>>();
                     files_uploaded.extend(trafrom);

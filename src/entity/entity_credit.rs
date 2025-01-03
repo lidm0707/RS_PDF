@@ -9,6 +9,7 @@ pub struct InsertCredit {
     pub amount: f64,
     pub label_id: i32,
     pub period: String,
+    pub payment_type_id: i32,
 }
 
 #[derive(Queryable, Selectable, Debug)]
@@ -21,4 +22,5 @@ pub struct SelectCredit {
     pub amount: f64,
     pub label_id: i32,
     pub period: String,
+    pub payment_type_id: i32,
 }

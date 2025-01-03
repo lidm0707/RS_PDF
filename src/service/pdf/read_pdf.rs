@@ -11,6 +11,7 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
         amount: Vec::new(),
         label_id: Vec::new(),
         period: Vec::new(),
+        payment_type_id: Vec::new(),
     };
 
     let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
@@ -57,11 +58,11 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
         println!("Skipping line: {} - insufficient data", line);
     } else {
         // Extract components
-        let date = arr[1].to_string(); // Assuming the first word is the date
-        let ctx = arr[2..arr.len() - 1].join(" "); // Everything except the first and last word is the context
-        let amount_str = arr.last().unwrap(); // Last word is the amount
-        let label_search_id = search_labels(&ctx).unwrap().unwrap() as i64;
-
+        let date = arr[1].to_string(); 
+        let ctx = arr[2..arr.len() - 1].join(" "); 
+        let amount_str = arr.last().unwrap(); 
+        let (label_search_id ,payment_type_id)= search_labels(&ctx).unwrap().unwrap() ; // todo
+        ////////////////////////////////////////////////////////////////////////////////////
         // Remove commas from the amount string
         let sanitized_amount_str = amount_str.replace(",", "");
         let now_thai = thai_now();
@@ -72,9 +73,10 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
                     data.date.push(format_date(&date));
                     data.ctx.push(ctx);
                     data.amount.push(amount);
-                    data.label_id.push(label_search_id);
+                    data.label_id.push(label_search_id as i64);
                     data.period
-                        .push(format!("{}-{:02}", now_thai.year(), now_thai.month()))
+                        .push(format!("{}-{:02}", now_thai.year(), now_thai.month()));
+                    data.payment_type_id.push(payment_type_id as i64);
                 }
             }
             Err(e) => {

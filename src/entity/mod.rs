@@ -1,3 +1,5 @@
 pub mod entity_label;
 pub mod entity_credit;
-pub mod entity_t1;
+pub mod entity_installment;
+pub mod entity_payment;
+pub mod entity_bank;

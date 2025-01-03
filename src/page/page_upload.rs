@@ -17,12 +17,12 @@ pub fn content_upload() -> Element {
     // runtime if vec emty and direct index as i[0] is break!!
     let now_thai = thai_now();
     let arr_year: Vec<i32> = (now_thai.year() - 5..=now_thai.year() + 5).collect();
-    let mut year: Signal<i32> =use_signal(move || now_thai.year());
-    let mut month: Signal<u32> =use_signal(move || now_thai.month());
+    let mut year: Signal<i32> = use_signal(move || now_thai.year());
+    let mut month: Signal<u32> = use_signal(move || now_thai.month());
 
     let chang_yy = use_callback(move |evt: Event<FormData>| {
         let tem_yy = evt.value().parse::<i32>().unwrap();
-        let _ =  year.set(tem_yy);
+        let _ = year.set(tem_yy);
         let temp = files_uploaded.read().clone();
         let tran = temp
             .iter()
@@ -38,7 +38,7 @@ pub fn content_upload() -> Element {
 
     let chang_mm = use_callback(move |evt: Event<FormData>| {
         let tem_m = evt.value().parse::<u32>().unwrap();
-        let _ =  month.set(tem_m);
+        let _ = month.set(tem_m);
         let temp = files_uploaded.read().clone();
         let tran = temp
             .iter()
@@ -70,7 +70,7 @@ pub fn content_upload() -> Element {
 
     let format_thai = move |number_f64: f64| {
         let whole_part = (number_f64.trunc() as u64).to_formatted_string(&Locale::th);
-        let fractional_part = (sum_amount.fract() * 100.0).round() as u64;
+        let fractional_part = (number_f64.fract() * 100.0).round() as u64;
         format!("{}.{:02}", whole_part, fractional_part)
     };
     rsx! {
@@ -86,11 +86,12 @@ pub fn content_upload() -> Element {
                     label_name
                         .read()
                         .iter()
-                        .map(|x| {
+                        .enumerate()
+                        .map(|(i, x)| {
                             rsx! {
                                 div { class: "summary-items",
                                     div { class: "p-3 text-center",
-                                        "{x.label}"
+                                    "{x.label}"
                                         div { class: "text-right each-summary-item", {format_thai(sum_by_gorupby_label(x.id))} }
                                         div { class: "text-right each-summary-item",
                                             {format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount) * 100.0)}
@@ -160,7 +161,8 @@ pub fn content_upload() -> Element {
                                     let amount = line.amount;
                                     let label_id = line.label_id as i32;
                                     let period = line.period.clone();
-                                    insert_credit(date, ctx, amount, label_id, period);
+                                    let payment_type_id = line.payment_type_id as i32;
+                                    insert_credit(date, ctx, amount, label_id, period, payment_type_id);
                                 });
                         }
                         files_uploaded.set(Vec::<TranformLine>::new());

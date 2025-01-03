@@ -1,15 +1,28 @@
 use anyhow;
+use regex::Regex;
 
 use crate::database::db_select::select_labels;
 
-pub fn search_labels(ctx: &str) -> Result<Option<i32>, anyhow::Error> {
-    let label_items = select_labels().unwrap();
-    if let Some(macth) = label_items
-        .iter()
-        .find(|item| ctx.to_lowercase().contains(&item.abb_ctx.to_lowercase()))
-    {
-        Ok(Some(macth.id_label))
-    } else {
-        Ok(Some(0i32))
+pub fn search_labels(ctx: &str) -> Result<Option<(i32,i32)>, anyhow::Error> {
+    let label_items = select_labels()?;
+    let ctx_lower = ctx.to_lowercase();
+
+    // Regex สำหรับตรวจสอบ channel
+    let re_channel = Regex::new(r"(?i)\d{2}/10|INSTALLMENT")?;
+
+    for item in label_items {
+        let channel = if re_channel.is_match(&ctx_lower) {
+            2 // Installment
+        } else {
+            1 // Credit
+        };
+
+        let regex_pattern = format!(r"(?i).*{}.*", regex::escape(&item.abb_ctx));
+        if Regex::new(&regex_pattern)?.is_match(&ctx_lower) {
+            return Ok(Some((item.id_label, channel)));
+        }
     }
+
+    // ไม่พบการจับคู่
+    Ok(Some((0, 0)))
 }

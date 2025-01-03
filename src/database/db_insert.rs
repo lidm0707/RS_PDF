@@ -36,6 +36,7 @@ pub fn insert_credit(
     amount: f64,
     label_id: i32,
     period: String,
+    payment_type_id: i32,
 ) -> SelectCredit {
     use crate::database::schema::credits;
     let new_post = InsertCredit {
@@ -44,6 +45,7 @@ pub fn insert_credit(
         amount,
         label_id,
         period,
+        payment_type_id,
     };
     let mut conn = connect_database();
 
