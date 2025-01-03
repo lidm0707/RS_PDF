@@ -95,6 +95,7 @@ CREATE TABLE
         date DATE NOT NULL,
         period TEXT NOT NULL,
         bank_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL,
         installment_id INTEGER NOT NULL
     );
 

@@ -36,6 +36,8 @@ pub struct SelectInstallment {
 pub struct InsertInstallmentItems {
     pub date: String,
     pub period: String,
+    pub bank_id:i32,
+    pub amount:f64,
     pub installment_id: i32,
 }
 
@@ -46,5 +48,7 @@ pub struct SelectInstallmentItems {
     pub id: i32,
     pub date: String,
     pub period: String,
+    pub bank_id:i32,
+    pub amount:f64,
     pub installment_id: i32,
 }

@@ -3,8 +3,9 @@ use crate::database::schema::installment::dsl::*;
 use crate::database::schema::installment_items::dsl::*;
 use crate::entity::entity_installment::*;
 use diesel::prelude::*;
+use dioxus::html::a;
 
-pub fn insert_t1(
+pub fn insert_installment(
     date_stard_value: String,
     date_end_value: String,
     time_value: i32,
@@ -32,9 +33,11 @@ pub fn insert_t1(
         .expect("Error saving new post")
 }
 
-pub fn insert_t1_items(
+pub fn insert_installment_items(
     date_value: String,
     period_value: String,
+    bank_id_value: i32,
+    amount_value: f64,
     installment_id_value: i32,
 ) -> SelectInstallmentItems {
     let mut conn = connect_database();
@@ -42,8 +45,12 @@ pub fn insert_t1_items(
     let new_post = InsertInstallmentItems {
         date: date_value,
         period: period_value,
+        bank_id:bank_id_value,
+        amount:amount_value,
         installment_id: installment_id_value,
     };
+
+
 
     diesel::insert_into(installment_items)
         .values(new_post)

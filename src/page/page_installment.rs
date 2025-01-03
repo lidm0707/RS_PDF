@@ -1,11 +1,10 @@
 use crate::{
     component::datepicker::PickerDiffMonth,
-    database::{db_bank::db_select::select_bank, db_select::select_labels_name},
+    database::{db_bank::db_select::select_bank, db_installment::db_insert::{insert_installment, insert_installment_items}, db_select::select_labels_name},
     entity::entity_label::SelectLabelsName, service::date::{add::month_add, date_format::format_date, now::thai_now},
 };
 use dioxus::prelude::*;
 use chrono::prelude::*;
-use svg_attributes::end;
 
 pub fn content_installment() -> Element {
     let mut show_modal: Signal<bool> = use_signal(|| false);
@@ -16,17 +15,22 @@ pub fn content_installment() -> Element {
     let mut end_date: Signal<String> = use_signal(|| format_date(&now));
     let mut time: Signal<String> = use_signal(|| "1".to_string());
     let mut period: Signal<String> = use_signal(|| "".to_string());
-    let mut total: Signal<String> = use_signal(|| "0.00".to_string());
+    let mut total: Signal<f64> = use_signal(|| 0.00);
+    let mut static_price: Signal<f64> = use_signal(|| 0.00);
+    let mut diff=use_signal(|| 0.00);
 
-    let mut time_for_payment = use_callback(move |full: (String, String)| {
+    let  time_for_payment = move |full: (String, String)| {
         match (full.0.parse::<f64>(), full.1.parse::<i32>()) {
-            (Ok(price), Ok(time)) if time != 0 => {
-                let result = price / time as f64;
-                result
+            (Ok(p), Ok(t)) if t != 0 => {
+                let result = p / t as f64;
+                format!("{:.2}",result).parse::<f64>().unwrap_or(0.00)
             }
             _ => 0.00,
         }
-    });
+    };
+
+    let mut label_id: Signal<i32> = use_signal(|| 1);
+    let mut bank_id: Signal<i32> = use_signal(|| 1);
 
     rsx! {
         div {
@@ -53,20 +57,31 @@ pub fn content_installment() -> Element {
                     onsubmit: move |evt| {
                         println!("{:?}", evt);
                         println!("{:?}", "");
-                        println!("{:?}", evt.data.values());
-                        println!("{:?}", evt.data.values()["note"].as_value());
-                        println!("{:?}", evt.data.values()["amount"].as_value());
-                        println!("{:?}", evt.data.values()["total"].as_value());
                         println!("{:?}", time.read());
+                        let master = insert_installment(
+                            stard_date.clone().read().to_string(),
+                            end_date.clone().read().to_string(),
+                            time.read().parse::<i32>().unwrap(),
+                            evt.data.values()["note"].as_value().to_string(),
+                            *label_id.read(),
+                            evt.data.values()["amount"].as_value().to_string().parse::<f64>().unwrap(),
+                            *total.read(),
+                        );
+                        println!("{:?}", master);
                         let t = time.read().parse::<i32>().unwrap();
-                        for time in 0..t {
-                            if let Some(value) = evt.data.values().get(&time.to_string()) {
+                        for i in 0..t {
+                            if let Some(value) = evt.data.values().get(&i.to_string()) {
                                 println!("{:?}", value.as_value());
+                                let check_item = insert_installment_items(
+                                    stard_date.read().clone(),
+                                    period.read().clone(),
+                                    bank_id.read().clone(),
+                                    value.as_value().to_string().parse::<f64>().unwrap(),
+                                    master.id,
+                                );
+                                println!("{:?}", check_item);
                             }
                         }
-
-                   
-
                         show_modal.set(false);
                         updated_data.set(select_labels_name().expect("Failed to load labels"));
                     },
@@ -97,6 +112,7 @@ pub fn content_installment() -> Element {
                             select {
                                 class: "border-b w-fit mr-2 ml-2 mb-2",
                                 onchange: move |evt| {
+                                    bank_id.set(evt.value().parse::<i32>().unwrap());
                                     println!("{} ", evt.value());
                                 },
                                 {
@@ -118,6 +134,7 @@ pub fn content_installment() -> Element {
                             select {
                                 class: "border-b w-fit  mr-2 ml-2 mb-2",
                                 onchange: move |evt| {
+                                    label_id.set(evt.value().parse::<i32>().unwrap());
                                     println!("{} ", evt.value());
                                 },
                                 {
@@ -161,7 +178,17 @@ pub fn content_installment() -> Element {
                             label { class: "w-1/6", {"total"} }
                             input {
                                 oninput: move |evt| {
-                                    total.set(evt.value());
+                                    total.set(evt.value().parse::<f64>().unwrap_or(0.00));
+                                    let price = format!(
+                                        "{:.02}",
+                                        time_for_payment((total.read().to_string(), time.read().to_string())),
+                                    );
+                                    static_price.set(price.parse::<f64>().unwrap_or(0.00));
+                                    diff.set(
+                                        (*static_price.read() * time.read().parse::<f64>().unwrap_or(0.00))
+                                            - *total.read(),
+                                    );
+                                    diff.read();
                                 },
                                 class: "border-b w-fit   mr-2 ml-2 mb-2",
                                 name: "total", // Add name attribute to capture data
@@ -171,24 +198,44 @@ pub fn content_installment() -> Element {
                         }
                     }
 
+                    div {
+                        div { class: "flex ",
+                            label { class: "w-1/6", {"diff: "} }
+                            div { "{diff.read()}" }
+                        }
+                    }
+
 
                     div { class: if time.read().parse::<i32>().unwrap_or(0) > 0 { "block" } else { "hidden" },
-                        {"PALNING PAYMENT"}
+                        {"PLANING PAYMENT"}
                         {
-                            let price = time_for_payment
-                                .call((total.read().to_string(), time.read().to_string()));
-                            let price_clone = price.clone();
-                            (0..time.read().parse::<i32>().unwrap_or(0))
+                            let time_clone = time.read().clone();
+                            let in_total = *total.clone().read();
+                            let in_time = time_clone.parse::<f64>().unwrap_or(0.00);
+                            (0..time_clone.parse::<i32>().unwrap_or(0))
                                 .map(move |time| {
-                                    let date_time = month_add(stard_date.read().as_ref(),&time.to_string());
+                                    let date_time = month_add(
+                                        stard_date.clone().read().as_ref(),
+                                        &time.to_string(),
+                                    );
+                                    let in_box = in_total/in_time;
+                                    let str_box = format!("{:.2}",in_box).parse::<f64>().unwrap_or(0.00);
                                     rsx! {
                                         div {
                                             div { class: "flex ",
                                                 label { class: "w-3/6 mr-4", "date: {date_time}" }
                                                 input {
+                                                    oninput: move |evt| {
+                                                        let price = static_price.clone() * (time.to_string().parse::<f64>().unwrap_or(0.00) - 1.00);
+                                                        let current = evt.value().parse::<f64>().unwrap_or(0.00);
+                                                        let sum = format!("{:.2}",price + current).parse::<f64>().unwrap_or(0.00);
+                                                        let new_diff =  sum - in_total;
+                                                        diff.set(new_diff);
+                                                        
+                                                    },
                                                     class: "border-b",
                                                     name: "{time.to_string()}",
-                                                    value: price_clone.to_string(),
+                                                    initial_value:  "{str_box}" ,
                                                 }
                                             }
                                         }

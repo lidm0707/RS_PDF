@@ -50,6 +50,7 @@ diesel::table! {
         date -> Date,
         period -> Text,
         bank_id -> Integer,
+        amount -> Double,
         installment_id -> Integer,
     }
 }
