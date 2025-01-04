@@ -4,7 +4,7 @@ use num_format::{Locale, ToFormattedString};
 
 use crate::{
     component::{
-        table_component::table_upload::UploadTable,
+        com_table::table_upload::UploadTable,
         upload::{BtnUplaod, FileUpload},
     }, database::{db_credit::db_insert::insert_credit, db_label::db_select::select_labels_name}, model::model_pdf::TranformLine, service::date::now::thai_now
 };
@@ -83,8 +83,7 @@ pub fn content_upload() -> Element {
                     label_name
                         .read()
                         .iter()
-                        .enumerate()
-                        .map(|(i, x)| {
+                        .map(| x| {
                             rsx! {
                                 div { class: "summary-items",
                                     div { class: "p-3 text-center",

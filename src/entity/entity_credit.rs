@@ -25,3 +25,13 @@ pub struct SelectCredit {
     pub payment_type_id: i32,
 }
 
+
+
+
+#[derive(Queryable, Selectable, Debug)]
+#[diesel(table_name = crate::database::schema::credits)]
+pub struct GroupBySumCredit {
+    pub label_id: i32,
+    pub amount: Option<f64>,
+    
+}

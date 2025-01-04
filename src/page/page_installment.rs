@@ -1,7 +1,7 @@
 use crate::{
     component::{
-        date::datepickermonth::PickerDiffMonth,
-        table_component::{
+        com_date::datepickermonth::PickerDiffMonth,
+        com_table::{
             table_installment::TableInstallment, table_installment_items::TableInstallmentItem,
         },
     },
@@ -21,6 +21,7 @@ use crate::{
 };
 use chrono::prelude::*;
 use dioxus::prelude::*;
+
 
 pub fn content_installment() -> Element {
     let mut show_modal: Signal<bool> = use_signal(|| false);

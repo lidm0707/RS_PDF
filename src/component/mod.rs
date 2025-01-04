@@ -1,5 +1,6 @@
-pub mod table_component;
+pub mod com_table;
 pub mod menu;
 pub mod upload;
 pub mod create_label;
-pub mod date;
+pub mod com_date;
+pub mod com_create;

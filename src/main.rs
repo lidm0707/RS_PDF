@@ -25,16 +25,16 @@ pub enum Content {
     Label,
     Raw,
     Upload,
-    INSTALLMENT,
-    CASH,
+    Installment,
+    Cash,
+    Dashboard,
 }
 
 #[component]
 fn App() -> Element {
-    let mut show_content = use_signal(|| Content::Label);
+    let mut show_content = use_signal(|| Content::Dashboard);
     rsx! {
       document::Link { rel: "stylesheet", href: asset!("/assets/tailwind.css") }
-
       div { class: "main",
         div { class: "menu",
           div {
@@ -54,7 +54,7 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Content::INSTALLMENT);
+                show_content.set(Content::Installment);
             },
             name: "INSTALLMENT",
           }
@@ -66,7 +66,7 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
-                show_content.set(Content::CASH);
+                show_content.set(Content::Cash);
             },
             name: "CASH",
           }
@@ -88,19 +88,19 @@ fn App() -> Element {
                   content_upload {}
                 }
             }
-            Content::INSTALLMENT =>{
+            Content::Installment =>{
               rsx! {
                 content_installment{}
               }
             }
-            Content::INSTALLMENT => {
-              rsx! {
-                content_installment {}
-              }
-            }
-            Content::CASH => {
+            Content::Cash => {
               rsx! {
                 content_cash{}
+              }
+            }
+            Content::Dashboard => {
+              rsx! {
+                // content_cash{}
               }
             }
         }

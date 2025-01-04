@@ -10,7 +10,7 @@ use dioxus::prelude::*;
 use chrono::prelude::*;
 
 use crate::{
-    component::{date::datepicker::PickerDate, table_component::table_cash::CashTable},
+    component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
     database::{
         db_cash::{db_insert::insert_cash, db_select::select_cash},
         db_label::db_select::select_labels_name,
