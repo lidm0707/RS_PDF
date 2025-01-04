@@ -1,7 +1,8 @@
 use anyhow;
 use regex::Regex;
 
-use crate::database::db_select::select_labels;
+use crate::database::db_label::db_select::select_labels;
+
 
 pub fn search_labels(ctx: &str) -> Result<Option<(i32,i32)>, anyhow::Error> {
     let label_items = select_labels()?;

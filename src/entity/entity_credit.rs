@@ -24,3 +24,4 @@ pub struct SelectCredit {
     pub period: String,
     pub payment_type_id: i32,
 }
+

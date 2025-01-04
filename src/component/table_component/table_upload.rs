@@ -1,5 +1,12 @@
 use dioxus::prelude::*;
-use crate::{component::upload::FileUpload, database::{db_payment::db_select::select_payment_type_where, db_select::{select_labels_name, select_labels_name_where}}};
+
+use crate::{
+    component::upload::FileUpload,
+    database::{
+        db_label::db_select::{select_labels_name, select_labels_name_where},
+        db_payment::db_select::select_payment_type_where,
+    },
+};
 
 #[component]
 pub fn UploadTable(file_upload: FileUpload) -> Element {

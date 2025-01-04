@@ -1,36 +1,59 @@
 use crate::{
-    component::{datepicker::PickerDiffMonth, table_component::{table_installment::TableInstallment, table_installment_items::TableInstallmentItem}},
-    database::{db_bank::db_select::select_bank, db_installment::{db_insert::{insert_installment, insert_installment_items}, db_select::{select_installment, select_installment_items_where}}, db_select::select_labels_name},
-    entity::{entity_installment::{SelectInstallment, SelectInstallmentItems}, entity_label::SelectLabelsName}, service::date::{add::month_add, date_format::format_date, now::thai_now},
+    component::{
+        date::datepickermonth::PickerDiffMonth,
+        table_component::{
+            table_installment::TableInstallment, table_installment_items::TableInstallmentItem,
+        },
+    },
+    database::{
+        db_bank::db_select::select_bank,
+        db_installment::{
+            db_insert::{insert_installment, insert_installment_items},
+            db_select::{select_installment, select_installment_items_where},
+        },
+        db_label::db_select::select_labels_name,
+    },
+    entity::{
+        entity_installment::{SelectInstallment, SelectInstallmentItems},
+        entity_label::SelectLabelsName,
+    },
+    service::date::{add::month_add, date_format::format_date, now::thai_now},
 };
-use dioxus::prelude::*;
 use chrono::prelude::*;
+use dioxus::prelude::*;
 
 pub fn content_installment() -> Element {
     let mut show_modal: Signal<bool> = use_signal(|| false);
     let mut updated_data: Signal<Vec<SelectLabelsName>> =
         use_signal(|| select_labels_name().expect("Failed to load labels"));
-    let now = format!("{:02}/{:02}/{}", 1, thai_now().month(), &thai_now().year().to_string()[2..4]);
-    let mut stard_date: Signal<String> = use_signal(|| format_date(&now));
+    let now = format!(
+        "{:02}/{:02}/{}",
+        1,
+        thai_now().month(),
+        &thai_now().year().to_string()[2..4]
+    );
+    let mut start_date: Signal<String> = use_signal(|| format_date(&now));
     let mut end_date: Signal<String> = use_signal(|| format_date(&now));
     let mut time: Signal<String> = use_signal(|| "1".to_string());
     let mut period: Signal<String> = use_signal(|| "".to_string());
     let mut total: Signal<f64> = use_signal(|| 0.00);
     let mut static_price: Signal<f64> = use_signal(|| 0.00);
-    let mut diff=use_signal(|| 0.00);
+    let mut diff = use_signal(|| 0.00);
     let mut id_table: Signal<i32> = use_signal(|| 0);
-    let mut df_installment: Signal<Vec<SelectInstallment>> = use_signal(|| select_installment() .expect("Failed to load labels"));
-    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| select_installment_items_where(*id_table.read()).expect("Failed to load labels"));
+    let mut df_installment: Signal<Vec<SelectInstallment>> =
+        use_signal(|| select_installment().expect("Failed to load labels"));
+    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| {
+        select_installment_items_where(*id_table.read()).expect("Failed to load labels")
+    });
 
-    let  time_for_payment = move |full: (String, String)| {
-        match (full.0.parse::<f64>(), full.1.parse::<i32>()) {
+    let time_for_payment =
+        move |full: (String, String)| match (full.0.parse::<f64>(), full.1.parse::<i32>()) {
             (Ok(p), Ok(t)) if t != 0 => {
                 let result = p / t as f64;
-                format!("{:.2}",result).parse::<f64>().unwrap_or(0.00)
+                format!("{:.2}", result).parse::<f64>().unwrap_or(0.00)
             }
             _ => 0.00,
-        }
-    };
+        };
 
     let mut label_id: Signal<i32> = use_signal(|| 1);
     let mut bank_id: Signal<i32> = use_signal(|| 1);
@@ -48,7 +71,7 @@ pub fn content_installment() -> Element {
                             class: "text-gray-400 hover:text-gray-600",
                             onclick: move |_| {
                                 show_modal.set(false);
-                                println!("{:?}", stard_date);
+                                println!("{:?}", start_date);
                                 println!("{:?}", end_date);
                             },
                             {"btn"}
@@ -62,7 +85,7 @@ pub fn content_installment() -> Element {
                         println!("{:?}", "");
                         println!("{:?}", time.read());
                         let master = insert_installment(
-                            stard_date.clone().read().to_string(),
+                            start_date.clone().read().to_string(),
                             end_date.clone().read().to_string(),
                             time.read().parse::<i32>().unwrap(),
                             evt.data.values()["note"].as_value().to_string(),
@@ -76,7 +99,7 @@ pub fn content_installment() -> Element {
                             if let Some(value) = evt.data.values().get(&i.to_string()) {
                                 println!("{:?}", value.as_value());
                                 let check_item = insert_installment_items(
-                                    stard_date.read().clone(),
+                                    start_date.read().clone(),
                                     period.read().clone(),
                                     bank_id.read().clone(),
                                     value.as_value().to_string().parse::<f64>().unwrap(),
@@ -91,7 +114,7 @@ pub fn content_installment() -> Element {
                     },
                     div { class: "",
                         PickerDiffMonth {
-                            stard_date,
+                            start_date,
                             end_date,
                             time,
                             period,
@@ -219,7 +242,7 @@ pub fn content_installment() -> Element {
                             (0..time_clone.parse::<i32>().unwrap_or(0))
                                 .map(move |time| {
                                     let date_time = month_add(
-                                        stard_date.clone().read().as_ref(),
+                                        start_date.clone().read().as_ref(),
                                         &time.to_string(),
                                     );
                                     let in_box = in_total / in_time;
@@ -271,21 +294,23 @@ pub fn content_installment() -> Element {
                     {"button"}
                 }
             }
-            div {  
+            div {
 
                 if *id_table.read() as i32 == 0 {
-                    TableInstallment {df_installment,df_installment_items, id_table}
+                    TableInstallment {
+                        df_installment,
+                        df_installment_items,
+                        id_table,
+                    }
                 } else {
-                    TableInstallmentItem {df_installment_items,df_installment, id_table}
-                 }
+                    TableInstallmentItem {
+                        df_installment_items,
+                        df_installment,
+                        id_table,
+                    }
+                }
 
             }
-        
         }
-
-
-
     }
 }
-
-

@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    database::{
+    database::db_label::{
         db_delete::{delete_label, delete_label_name},
         db_select::{count_labels_where, select_labels_name, select_labels_where},
     },
@@ -13,7 +13,7 @@ pub fn LabelTable(
     updated_data: Signal<Vec<SelectLabelsName>>,
     id_show: Signal<i32>,
     table_ctx: Signal<Vec<SelectLabels>>,
-    set_id_show:Callback<i32>,
+    set_id_show: Callback<i32>,
 ) -> Element {
     rsx! {
         div { class: "table-container h-4/6",

@@ -1,4 +1,5 @@
-use rust_pdf::database::db_select::select_credit;
+use rust_pdf::database::db_credit::db_select::select_credit;
+
 
 fn main() {
     let display = select_credit().unwrap();

@@ -6,21 +6,21 @@ use crate::service::date::{date_format::format_period, diff::diff_month};
 
 
 #[component]
-pub fn PickerDiffMonth(stard_date:Signal<String>,end_date:Signal<String>,time:Signal<String>,period:Signal<String>,) ->Element {
-    //stard_date_date,stard_date_date
+pub fn PickerDiffMonth(start_date:Signal<String>,end_date:Signal<String>,time:Signal<String>,period:Signal<String>,) ->Element {
+    //start_date_date,start_date_date
     rsx!{
         div { class: "flex p-1",
             label { class: "content-center mr-2", {"Start"} }
             input {
                 class: "border border-gray-300 rounded-lg p-2 w-64 focus:ring-2 focus:ring-blue-500 focus:outline-none mr-2",
                 r#type: "date",
-                value: stard_date.read().to_string(),
+                value: start_date.read().to_string(),
                 onchange: move |event| {
-                    stard_date.set(event.value());
-                    println!("{:?}", stard_date.read());
-                    match diff_month(stard_date.read().clone(), end_date.read().clone()) {
+                    start_date.set(event.value());
+                    println!("{:?}", start_date.read());
+                    match diff_month(start_date.read().clone(), end_date.read().clone()) {
                         Ok(diff) => {
-                            period.set(format_period(&stard_date.read()));
+                            period.set(format_period(&start_date.read()));
                             time.set(diff.to_string())
                         }
                         Err(_) => println!("Error calculating diff"),
@@ -35,9 +35,9 @@ pub fn PickerDiffMonth(stard_date:Signal<String>,end_date:Signal<String>,time:Si
                 onchange: move |event| {
                     end_date.set(event.value());
                     println!("{:?}", end_date.read());
-                    match diff_month(stard_date.read().clone(), end_date.read().clone()) {
+                    match diff_month(start_date.read().clone(), end_date.read().clone()) {
                         Ok(diff) => {
-                            period.set(format_period(&stard_date.read()));
+                            period.set(format_period(&start_date.read()));
                             time.set(diff.to_string())
                         }
                         Err(err) => println!("Error calculating diff: {:?}", err),

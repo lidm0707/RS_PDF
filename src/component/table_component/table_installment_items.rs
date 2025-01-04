@@ -1,11 +1,18 @@
-
 use dioxus::prelude::*;
 
-use crate::{database::{db_bank::db_select::select_labels_where, db_installment::db_select::select_installment}, entity::entity_installment::{SelectInstallment, SelectInstallmentItems}};
+use crate::{
+    database::{
+        db_bank::db_select::select_bank_where, db_installment::db_select::select_installment,
+    },
+    entity::entity_installment::{SelectInstallment, SelectInstallmentItems},
+};
 
 #[component]
-pub fn TableInstallmentItem(df_installment_items:Signal<Vec<SelectInstallmentItems>>,df_installment:Signal<Vec<SelectInstallment>>, id_table:Signal<i32>) -> Element {
-
+pub fn TableInstallmentItem(
+    df_installment_items: Signal<Vec<SelectInstallmentItems>>,
+    df_installment: Signal<Vec<SelectInstallment>>,
+    id_table: Signal<i32>,
+) -> Element {
     // pub id: i32,
     // pub date: String,
     // pub period: String,
@@ -43,8 +50,8 @@ pub fn TableInstallmentItem(df_installment_items:Signal<Vec<SelectInstallmentIte
                                     td {
                                         {
                                             let bank_id = installment.bank_id;
-                                            select_labels_where(bank_id).unwrap()[0].name.clone()
-                                            
+                                            select_bank_where(bank_id).unwrap()[0].name.clone()
+
                                         }
                                     }
                                     td { "{installment.amount}" }

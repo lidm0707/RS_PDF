@@ -1,9 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    component::{datepicker::PickerDiffMonth, table_component::table_credit::CreditTable},
-    database::db_select::select_credit,
-    entity::entity_credit::SelectCredit,
+    component:: table_component::table_credit::CreditTable, database::db_credit::db_select::select_credit, entity::entity_credit::SelectCredit
 };
 
 #[derive(PartialEq, Clone, Props)]

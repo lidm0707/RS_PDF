@@ -1,6 +1,7 @@
 use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
+use rust_pdf::page::page_cash::content_cash;
 use rust_pdf::page::page_credit::content_credit;
 use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_installment::content_installment;
@@ -25,6 +26,7 @@ pub enum Content {
     Raw,
     Upload,
     INSTALLMENT,
+    CASH,
 }
 
 #[component]
@@ -62,6 +64,12 @@ fn App() -> Element {
             },
             name: "UPLOAD",
           }
+          MenuButton {
+            onclick: move |_| {
+                show_content.set(Content::CASH);
+            },
+            name: "CASH",
+          }
         }
 
         match *show_content.read() {
@@ -83,6 +91,16 @@ fn App() -> Element {
             Content::INSTALLMENT =>{
               rsx! {
                 content_installment{}
+              }
+            }
+            Content::INSTALLMENT => {
+              rsx! {
+                content_installment {}
+              }
+            }
+            Content::CASH => {
+              rsx! {
+                content_cash{}
               }
             }
         }

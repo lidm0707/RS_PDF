@@ -1,20 +1,25 @@
 use dioxus::prelude::*;
 
-use crate::{database::{db_label::db_select::select_labels_name_where, db_payment::db_select::select_payment_type_where}, entity::entity_credit::SelectCredit};
+use crate::{database::db_label::db_select::select_labels_name_where, entity::entity_cash::SelectCash};
 
+    // pub id: i32,
+    // pub date: String,
+    // pub period: String,
+    // pub type_cash: String,
+    // pub label_id: i32,
+    // pub amount: f64,
 #[component]
-pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
+pub fn CashTable(data_table: Signal<Vec<SelectCash>>) -> Element {
     rsx! {
         div { class: "table-container",
             table {
                 thead {
                     tr {
                         th { {"DATE"} }
-                        th { {"CTX"} }
-                        th { {"AMOUNT"} }
-                        th { {"LABEL"} }
                         th { {"PERIOD"} }
-                        th { {"CHANNEL"} }
+                        th { {"TYPE"} }
+                        th { {"LABEL"} }
+                        th { {"AMOUNT"} }
                     }
                 }
                 tbody {
@@ -26,7 +31,8 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                                 rsx! {
                                     tr {
                                         td { "{raw.date}" }
-                                        td { "{raw.ctx}" }
+                                        td { "{raw.period}" }
+                                        td { "{raw.type_cash}" }
                                         td { class: "text-right", "{r2}" }
                                         td {
                                             {
@@ -34,13 +40,7 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                                                 select_labels_name_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
-                                        td { "{raw.period}" }
-                                        td {
-                                            {
-                                                let id_input = raw.payment_type_id.clone() as i32;
-                                                select_payment_type_where(id_input).unwrap()[0].chanel.clone()
-                                            }
-                                        }
+                                    
                                     }
                                 }
                             })

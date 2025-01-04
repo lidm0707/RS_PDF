@@ -12,8 +12,7 @@ diesel::table! {
         id -> Integer,
         date -> Date,
         period -> Text,
-        #[sql_name = "type"]
-        type_ -> Text,
+        type_cash -> Text,
         label_id -> Integer,
         amount -> Double,
     }
