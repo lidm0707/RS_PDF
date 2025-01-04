@@ -17,15 +17,13 @@ pub fn select_credit() -> Result<Vec<SelectCredit>, anyhow::Error> {
     Ok(results)
 }
 
-pub fn select_credit_groupby_label(
-    p: String,
-) -> Result<Vec<GroupBySumCredit>, anyhow::Error> {
+pub fn select_credit_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCredit>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
 
-   credits
-        .filter(period.eq(p))
-        .group_by(label_id)
-        .select((label_id, sum(amount)))
+    credits
+        .filter(period.ge(start).and(period.le(end)))
+        .group_by((label_id, period))
+        .select((label_id, period, sum(amount)))
         .load::<GroupBySumCredit>(&mut conn)
         .map_err(Into::into)
 }

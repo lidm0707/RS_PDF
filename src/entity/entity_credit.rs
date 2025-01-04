@@ -32,6 +32,7 @@ pub struct SelectCredit {
 #[diesel(table_name = crate::database::schema::credits)]
 pub struct GroupBySumCredit {
     pub label_id: i32,
+    pub period: String,
     pub amount: Option<f64>,
     
 }
