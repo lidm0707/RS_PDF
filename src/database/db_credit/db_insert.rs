@@ -2,7 +2,7 @@ use crate::{
     database::db_connect::connect_database,
     entity::entity_credit::*,
 };
-use diesel::{RunQueryDsl, SelectableHelper};
+use diesel::prelude::*;
 
 
 pub fn insert_credit(
