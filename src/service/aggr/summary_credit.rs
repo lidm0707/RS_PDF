@@ -21,9 +21,9 @@ pub fn data_sumary_credit(start: &str, end: &str) -> Result<Vec<GroupBySumCredit
     Ok(data)
 }
 
-pub fn sort_label_credit(data: Vec<GroupBySumCredit>) -> Result<Vec<(u32, f64)>,anyhow::Error> {
+pub fn sort_label_credit(data: &Vec<GroupBySumCredit>) -> Result<Vec<(i32, f64)>,anyhow::Error> {
 
-    let mut aggregated: HashMap<u32, f64> = HashMap::new();
+    let mut aggregated: HashMap<i32, f64> = HashMap::new();
 
     for entry in data {
         if let Some(amount) = entry.amount {
@@ -32,7 +32,7 @@ pub fn sort_label_credit(data: Vec<GroupBySumCredit>) -> Result<Vec<(u32, f64)>,
                 .or_insert(0.0) += amount;
         }
     }
-    let mut sorted: Vec<(u32, f64)> = aggregated.into_iter().collect();
+    let mut sorted: Vec<(i32, f64)> = aggregated.into_iter().collect();
     sorted.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
     Ok(sorted)
 }

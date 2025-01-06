@@ -3,6 +3,7 @@ use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
 use rust_pdf::page::page_cash::content_cash;
 use rust_pdf::page::page_credit::content_credit;
+use rust_pdf::page::page_dashboad::content_dashboard_credit;
 use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_installment::content_installment;
 use rust_pdf::page::page_upload::content_upload;
@@ -100,7 +101,7 @@ fn App() -> Element {
             }
             Content::Dashboard => {
               rsx! {
-                // content_cash{}
+                content_dashboard_credit{}
               }
             }
         }

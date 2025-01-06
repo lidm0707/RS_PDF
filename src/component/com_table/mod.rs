@@ -4,3 +4,4 @@ pub mod table_credit;
 pub mod table_installment;
 pub mod table_installment_items;
 pub mod table_cash;
+pub mod table_credit_dashboard;
