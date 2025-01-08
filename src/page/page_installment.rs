@@ -5,7 +5,7 @@ use crate::{
             table_installment::TableInstallment, table_installment_items::TableInstallmentItem,
         },
     },
-    database::{
+    repo::{
         db_bank::db_select::select_bank,
         db_installment::{
             db_insert::{insert_installment, insert_installment_items},

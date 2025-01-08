@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{database::db_label::db_select::select_labels_name_where, entity::entity_cash::SelectCash};
+use crate::{repo::db_label::db_select::select_labels_name_where, entity::entity_cash::SelectCash};
 
     // pub id: i32,
     // pub date: String,

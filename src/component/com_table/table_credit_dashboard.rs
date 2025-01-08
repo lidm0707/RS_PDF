@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{database::{db_label::db_select::select_labels_name_where, db_payment::db_select::select_payment_type_where}};
+use crate::{repo::{db_label::db_select::select_labels_name_where, db_payment::db_select::select_payment_type_where}};
 
 #[component]
 pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>) -> Element {

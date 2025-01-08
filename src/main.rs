@@ -43,6 +43,12 @@ fn App() -> Element {
           }
           MenuButton {
             onclick: move |_| {
+                show_content.set(Content::Dashboard);
+            },
+            name: "Dashboard",
+          }
+          MenuButton {
+            onclick: move |_| {
                 show_content.set(Content::Label);
             },
             name: "LABEL",

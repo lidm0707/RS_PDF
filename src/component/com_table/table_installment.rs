@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    database::{
+    repo::{
         db_installment::db_select::select_installment_items_where,
         db_label::db_select::select_labels_name_where,
     },

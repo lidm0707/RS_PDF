@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
     component::upload::FileUpload,
-    database::{
+    repo::{
         db_label::db_select::{select_labels_name, select_labels_name_where},
         db_payment::db_select::select_payment_type_where,
     },

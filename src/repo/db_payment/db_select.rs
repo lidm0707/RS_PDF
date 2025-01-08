@@ -1,9 +1,9 @@
 
-use self::database::schema::payment_type::dsl::*;
+use self::repo::schema::payment_type::dsl::*;
 use crate::entity::entity_payment::*;
 use crate::*;
 use anyhow;
-use database::db_connect::connect_database;
+use repo::db_connect::connect_database;
 use diesel::prelude::*;
 
 pub fn select_payment_type_where(input_id: i32) -> Result<Vec<SelectPaymentType>, anyhow::Error> {

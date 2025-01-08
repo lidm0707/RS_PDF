@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    database::db_label::{
+    repo::db_label::{
         db_delete::{delete_label, delete_label_name},
         db_select::{count_labels_where, select_labels_name, select_labels_where},
     },

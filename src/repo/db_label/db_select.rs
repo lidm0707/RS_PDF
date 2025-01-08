@@ -1,10 +1,10 @@
 
-use self::database::schema::labels::dsl::*;
-use self::database::schema::labels_name::dsl::{*, id as labels_name_id};
+use self::repo::schema::labels::dsl::*;
+use self::repo::schema::labels_name::dsl::{*, id as labels_name_id};
 use crate::entity::entity_credit::*;
 use crate::*;
 use anyhow;
-use database::db_connect::connect_database;
+use repo::db_connect::connect_database;
 use diesel::prelude::*;
 use entity::entity_label::{SelectLabels, SelectLabelsName};
 

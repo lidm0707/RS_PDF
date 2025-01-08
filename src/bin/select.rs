@@ -1,4 +1,4 @@
-use rust_pdf::database::db_credit::db_select::select_credit;
+use rust_pdf::repo::db_credit::db_select::select_credit;
 
 
 fn main() {

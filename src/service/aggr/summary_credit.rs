@@ -1,5 +1,5 @@
 use crate::{
-    database::db_credit::db_select::select_credit_groupby_label,
+    repo::db_credit::db_select::select_credit_groupby_label,
     entity::entity_credit::GroupBySumCredit,
 };
 use anyhow;
@@ -7,6 +7,9 @@ use std::{cmp::Ordering, collections::HashMap};
 
 pub fn data_sumary_credit(start: &str, end: &str) -> Result<Vec<GroupBySumCredit>, anyhow::Error> {
     let mut data: Vec<GroupBySumCredit> = select_credit_groupby_label(start, end).unwrap();
+    // payment 1 = pay all 2 = installment check
+    // I think if amount is current should show payment 1 and 2
+    // in the futer show form installment
     data.sort_by(|a, b| {
         let period_cmp = b.period.cmp(&a.period);
         if period_cmp == Ordering::Equal {

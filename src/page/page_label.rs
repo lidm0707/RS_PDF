@@ -1,5 +1,5 @@
 use crate::{
-    component::com_table::table_label::LabelTable, database::db_label::{db_insert::{insert_label, insert_label_name}, db_select::{select_labels_name, select_labels_where}}, entity::entity_label::{SelectLabels, SelectLabelsName}
+    component::com_table::table_label::LabelTable, repo::db_label::{db_insert::{insert_label, insert_label_name}, db_select::{select_labels_name, select_labels_where}}, entity::entity_label::{SelectLabels, SelectLabelsName}
 };
 use dioxus::prelude::*;
 

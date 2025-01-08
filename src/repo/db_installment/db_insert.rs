@@ -1,6 +1,6 @@
-use crate::database::db_connect::connect_database;
-use crate::database::schema::installment::dsl::*;
-use crate::database::schema::installment_items::dsl::*;
+use crate::repo::db_connect::connect_database;
+use crate::repo::schema::installment::dsl::*;
+use crate::repo::schema::installment_items::dsl::*;
 use crate::entity::entity_installment::*;
 use diesel::prelude::*;
 

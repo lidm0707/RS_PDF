@@ -1,8 +1,8 @@
-use self::database::schema::bank::dsl::*;
+use self::repo::schema::bank::dsl::*;
 use crate::entity::entity_bank::*;
 use crate::*;
 use anyhow;
-use database::db_connect::connect_database;
+use repo::db_connect::connect_database;
 use diesel::prelude::*;
 
 pub fn select_bank() -> Result<Vec<SelectBank>, anyhow::Error> {

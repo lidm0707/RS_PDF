@@ -69,6 +69,6 @@
     @apply odd:bg-white even:bg-gray-100 hover:bg-orange-400;
   }
   td {
-    @apply px-12 py-7 border-x-2 border-stone-400;
+    @apply px-3 py-2 border-x-2 border-stone-400;
   }
 }

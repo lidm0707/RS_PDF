@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::{
-    database::{
+    repo::{
         db_bank::db_select::select_bank_where, db_installment::db_select::select_installment,
     },
     entity::entity_installment::{SelectInstallment, SelectInstallmentItems},

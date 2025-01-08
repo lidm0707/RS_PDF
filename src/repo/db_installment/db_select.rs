@@ -1,9 +1,9 @@
-use self::database::schema::installment::dsl::*;
-use self::database::schema::installment_items::dsl::{*, id as installment_items_id};
+use self::repo::schema::installment::dsl::*;
+use self::repo::schema::installment_items::dsl::{*, id as installment_items_id};
 use crate::entity::entity_installment::*;
 use crate::*;
 use anyhow;
-use database::db_connect::connect_database;
+use repo::db_connect::connect_database;
 use diesel::prelude::*;
 
 pub fn select_installment() -> Result<Vec<SelectInstallment>, anyhow::Error> {

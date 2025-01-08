@@ -1,5 +1,5 @@
-use crate::database::db_connect::connect_database;
-use crate::database::schema::cash::dsl::*;
+use crate::repo::db_connect::connect_database;
+use crate::repo::schema::cash::dsl::*;
 use crate::entity::entity_cash::*;
 use diesel::prelude::*;
 

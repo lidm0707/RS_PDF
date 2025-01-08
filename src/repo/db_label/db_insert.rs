@@ -1,11 +1,11 @@
 use crate::{
-    database::db_connect::connect_database,
+    repo::db_connect::connect_database,
     entity::{entity_credit::*, entity_label::*},
 };
 use diesel::{RunQueryDsl, SelectableHelper};
 
 pub fn insert_label(id_label: i32, abb_ctx: String) -> SelectLabels {
-    use crate::database::schema::labels;
+    use crate::repo::schema::labels;
     let mut conn = connect_database();
 
     let new_post = InsertLabels { id_label, abb_ctx };
@@ -18,7 +18,7 @@ pub fn insert_label(id_label: i32, abb_ctx: String) -> SelectLabels {
 }
 
 pub fn insert_label_name(label: String) -> SelectLabelsName {
-    use crate::database::schema::labels_name;
+    use crate::repo::schema::labels_name;
     let mut conn = connect_database();
 
     let new_post = InsertLabelsName { label };

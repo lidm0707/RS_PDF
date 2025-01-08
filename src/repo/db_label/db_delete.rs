@@ -1,8 +1,8 @@
 use diesel::prelude::*;
 
-use crate::database::db_connect::connect_database;
-use crate::database::schema::labels_name::dsl::{*,id as id_LN};
-use crate::database::schema::labels::dsl::{*,id as id_L};
+use crate::repo::db_connect::connect_database;
+use crate::repo::schema::labels_name::dsl::{*,id as id_LN};
+use crate::repo::schema::labels::dsl::{*,id as id_L};
 
 pub fn delete_label( label_id: i32) -> Result<(), anyhow::Error> {
     let mut conn = connect_database();

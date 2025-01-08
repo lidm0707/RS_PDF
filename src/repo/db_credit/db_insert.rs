@@ -1,5 +1,5 @@
 use crate::{
-    database::db_connect::connect_database,
+    repo::db_connect::connect_database,
     entity::entity_credit::*,
 };
 use diesel::prelude::*;
@@ -13,7 +13,7 @@ pub fn insert_credit(
     period: String,
     payment_type_id: i32,
 ) -> SelectCredit {
-    use crate::database::schema::credits;
+    use crate::repo::schema::credits;
     let new_post = InsertCredit {
         date,
         ctx,

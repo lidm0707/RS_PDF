@@ -1,9 +1,9 @@
-use self::database::schema::credits::dsl::*;
+use self::repo::schema::credits::dsl::*;
 use crate::entity::entity_credit::*;
 use crate::*;
 use anyhow;
-use database::db_connect::connect_database;
-use diesel::dsl::sum;
+use repo::db_connect::connect_database;
+use diesel::dsl::*;
 use diesel::prelude::*;
 
 pub fn select_credit() -> Result<Vec<SelectCredit>, anyhow::Error> {
@@ -18,8 +18,9 @@ pub fn select_credit() -> Result<Vec<SelectCredit>, anyhow::Error> {
 }
 
 pub fn select_credit_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCredit>, anyhow::Error> {
+    //payment_type:i32
     let mut conn: SqliteConnection = connect_database();
-
+    //.and(payment_type_id.eq(payment_type))
     credits
         .filter(period.ge(start).and(period.le(end)))
         .group_by((label_id, period))
@@ -27,4 +28,7 @@ pub fn select_credit_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySum
         .load::<GroupBySumCredit>(&mut conn)
         .map_err(Into::into)
 }
+
+
+
 

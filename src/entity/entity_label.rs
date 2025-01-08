@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 #[derive(Insertable, Debug)]
-#[diesel(table_name = crate::database::schema::labels)]
+#[diesel(table_name = crate::repo::schema::labels)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct InsertLabels {
     pub id_label: i32,
@@ -9,7 +9,7 @@ pub struct InsertLabels {
 }
 
 #[derive(Queryable, Selectable, Debug , Clone )]
-#[diesel(table_name = crate::database::schema::labels)]
+#[diesel(table_name = crate::repo::schema::labels)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectLabels {
     pub id: i32,
@@ -19,14 +19,14 @@ pub struct SelectLabels {
 
 
 #[derive(Insertable, Debug)]
-#[diesel(table_name = crate::database::schema::labels_name)]
+#[diesel(table_name = crate::repo::schema::labels_name)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct InsertLabelsName {
     pub label: String,
 }
 
 #[derive(Queryable, Selectable, Debug , Clone )]
-#[diesel(table_name = crate::database::schema::labels_name)]
+#[diesel(table_name = crate::repo::schema::labels_name)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectLabelsName {
     pub id: i32,
