@@ -1,12 +1,21 @@
-use dioxus::prelude::*;
+use std::collections::HashMap;
+
 use chrono::prelude::*;
+use dioxus::prelude::*;
 
 use crate::{
-    component::{com_date::datepicker::PickerDate, com_select::select_custome::select_onchang, com_table::table_credit_dashboard::CreditDashboardTable}, 
-    controller::con_dashboard::con_dash_credit::get_dashboard_credit, 
-    repo::db_credit::db_select::select_credit, 
-    entity::entity_credit::SelectCredit, 
-    service::date::{date_format::format_period, now::thai_now}
+    component::{
+        com_date::datepicker::PickerDate,
+        com_select::select_custome::select_onchang,
+        com_table::{
+            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable,
+        },
+    },
+    controller::con_dashboard::{
+        con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit,
+    },
+    entity::entity_credit::SelectCredit,
+    service::date::now::thai_now,
 };
 
 #[derive(PartialEq, Clone, Props)]
@@ -21,30 +30,28 @@ pub fn content_dashboard_credit() -> Element {
     let mut start = use_signal(|| "2025-01".to_string());
     let mut end = use_signal(|| "2025-12".to_string());
 
-    let mut data_table: Signal<Vec<(String, Vec<Option<f64>>)>> = use_signal(|| {
-        get_dashboard_credit(&start.read(), &end.read()).unwrap()
-    });
+    let mut data_table: Signal<Vec<(String, Vec<Option<f64>>)>> =
+        use_signal(|| get_dashboard_credit(&start.read(), &end.read()).unwrap());
+
+    let mut data_table_cash: Signal<Vec<(String, Vec<Option<f64>>)>> =
+        use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
 
     // Update `start` and `end` whenever `year` or `month` changes
-  
 
-        use_effect(move || {
-            let year_val = year.read();
-            let month_val = month.read();
+    use_effect(move || {
+        let year_val = year.read();
+        let month_val = month.read();
 
-            // Format the start and end period based on selected month and year
-            let new_start = format!("{year_val}-{month_val:0>2}");
-            let new_end = format!("{year_val}-12");
+        // Format the start and end period based on selected month and year
+        let new_start = format!("{year_val}-{month_val:0>2}");
+        let new_end = format!("{year_val}-12");
 
-            start.set(new_start);
-            end.set(new_end);
+        start.set(new_start);
+        end.set(new_end);
 
-            data_table.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
-
-        });
-    
-
-
+        data_table.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
+        data_table_cash.set(get_dashboard_cash(&start.read(), &end.read()).unwrap());
+    });
 
     let now_thai = thai_now();
     let arr_year: Vec<i32> = (now_thai.year() - 5..=now_thai.year() + 5).collect();
@@ -92,6 +99,7 @@ pub fn content_dashboard_credit() -> Element {
             }
 
             CreditDashboardTable { data_table }
+            CashDashboardTable { data_table: data_table_cash }
         }
     }
 }

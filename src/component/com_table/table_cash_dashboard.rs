@@ -1,9 +1,8 @@
 use dioxus::prelude::*;
-
-use crate::{repo::{db_label::db_select::select_labels_name_where, db_payment::db_select::select_payment_type_where}};
+use std::collections::HashMap;
 
 #[component]
-pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>) -> Element {
+pub fn CashDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>) -> Element {
     let data = data_table.read(); // Read the value of the signal
 
     rsx! {

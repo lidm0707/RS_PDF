@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
 use rust_pdf::repo::{
-    db_cash::db_select::select_groupby_label, db_credit::db_select::select_credit_groupby_label,
+    db_cash::db_select::select_cash_groupby_label, db_credit::db_select::select_credit_groupby_label
 };
 
 fn main() {
     let (start, end) = ("2025-02", "2025-03");
-    let data_cash = select_groupby_label(start, end).unwrap_or_else(|err| {
+    let data_cash = select_cash_groupby_label(start, end).unwrap_or_else(|err| {
         eprintln!("Error loading cash data: {:?}", err);
         vec![]
     });

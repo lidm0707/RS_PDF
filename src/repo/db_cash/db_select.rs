@@ -18,7 +18,7 @@ pub fn select_cash() -> Result<Vec<SelectCash>, anyhow::Error> {
 
 
 
-pub fn select_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCash>, anyhow::Error> {
+pub fn select_cash_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCash>, anyhow::Error> {
     //payment_type:i32
     let mut conn: SqliteConnection = connect_database();
     //.and(payment_type_id.eq(payment_type))

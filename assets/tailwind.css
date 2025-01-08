@@ -890,6 +890,22 @@ td {
   height: fit-content;
 }
 
+.h-3\/6 {
+  height: 50%;
+}
+
+.h-2\/6 {
+  height: 33.333333%;
+}
+
+.h-2\/5 {
+  height: 40%;
+}
+
+.h-1\/5 {
+  height: 20%;
+}
+
 .w-1\/6 {
   width: 16.666667%;
 }

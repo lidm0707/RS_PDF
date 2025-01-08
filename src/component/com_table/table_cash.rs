@@ -11,7 +11,7 @@ use crate::{repo::db_label::db_select::select_labels_name_where, entity::entity_
 #[component]
 pub fn CashTable(data_table: Signal<Vec<SelectCash>>) -> Element {
     rsx! {
-        div { class: "table-container",
+        div { class: "table-container ",
             table {
                 thead {
                     tr {
