@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 //     rsx!{
 //         div {
 //             id: "modal",
-//             class: "fixed inset-0  place-items-center place-content-center  bg-black bg-opacity-50",
+//             class: "fixed z-50	  place-items-center place-content-center  bg-black bg-opacity-50",
 //             visibility: if *show_modal.read() { "visible" } else { "hidden" },
 //             div { class: "h-fit bg-white rounded-lg shadow-lg max-w-md w-full p-6",
 //                 div {

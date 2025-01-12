@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{repo::db_label::db_select::select_labels_name_where, entity::entity_cash::SelectCash};
+use crate::{controller::con_db::con_get_label::get_label_where,  entity::entity_cash::SelectCash};
 
     // pub id: i32,
     // pub date: String,
@@ -37,7 +37,7 @@ pub fn CashTable(data_table: Signal<Vec<SelectCash>>) -> Element {
                                         td {
                                             {
                                                 let input_id = raw.label_id.clone() as i32;
-                                                select_labels_name_where(input_id).unwrap()[0].label.clone()
+                                                get_label_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
                                     

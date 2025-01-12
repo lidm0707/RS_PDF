@@ -60,7 +60,7 @@ pub fn content_installment() -> Element {
         div {
             id: "modal",
             visibility: if *show_modal.read() { "visible" } else { "hidden" },
-            class: "fixed inset-0  place-items-center place-content-center  bg-black bg-opacity-50",
+            class: "modal",
             div { class: "h-fit bg-white rounded-lg shadow-lg max-w-md w-full p-6",
                 div {
                     div { class: " flex items-center justify-between mb-4",

@@ -6,3 +6,4 @@ pub mod table_installment_items;
 pub mod table_cash;
 pub mod table_credit_dashboard;
 pub mod table_cash_dashboard;
+pub mod table_net_dashboard;

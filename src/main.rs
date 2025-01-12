@@ -78,7 +78,6 @@ fn app() -> Element {
             name: "CASH",
           }
         }
-
         match *show_content.read() {
             Content::Label => {
                 rsx! {
@@ -95,22 +94,23 @@ fn app() -> Element {
                   content_upload {}
                 }
             }
-            Content::Installment =>{
-              rsx! {
-                content_installment{}
-              }
+            Content::Installment => {
+                rsx! {
+                  content_installment {}
+                }
             }
             Content::Cash => {
-              rsx! {
-                content_cash{}
-              }
+                rsx! {
+                  content_cash {}
+                }
             }
             Content::Dashboard => {
-              rsx! {
-                content_dashboard_credit{}
-              }
+                rsx! {
+                  content_dashboard_credit {}
+                }
             }
         }
       }
     }
+    
 }

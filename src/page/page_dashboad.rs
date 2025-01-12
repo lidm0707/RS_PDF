@@ -8,11 +8,11 @@ use crate::{
         com_date::datepicker::PickerDate,
         com_select::select_custome::select_onchang,
         com_table::{
-            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable,
+            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable, table_net_dashboard::NetDashboardTable,
         },
     },
     controller::con_dashboard::{
-        con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit,
+        con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit, con_dash_net::get_dashboard_net,
     },
     entity::entity_credit::SelectCredit,
     service::date::now::thai_now,
@@ -35,6 +35,8 @@ pub fn content_dashboard_credit() -> Element {
 
     let mut data_table_cash: Signal<Vec<(String, Vec<Option<f64>>)>> =
         use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
+    let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
+    use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
 
     // Update `start` and `end` whenever `year` or `month` changes
 
@@ -51,6 +53,7 @@ pub fn content_dashboard_credit() -> Element {
 
         data_table.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
         data_table_cash.set(get_dashboard_cash(&start.read(), &end.read()).unwrap());
+        data_table_net.set(get_dashboard_net(&start.read(), &end.read()).unwrap());
     });
 
     let now_thai = thai_now();
@@ -97,6 +100,8 @@ pub fn content_dashboard_credit() -> Element {
                     },
                 }
             }
+            p{"NET"}
+            NetDashboardTable{ data_table:data_table_net }
             p{"CREDIT"}
             CreditDashboardTable { data_table }
             p{"CASH"}

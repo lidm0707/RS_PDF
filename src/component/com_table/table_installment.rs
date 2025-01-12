@@ -1,11 +1,8 @@
 use dioxus::prelude::*;
 
 use crate::{
-    repo::{
-        db_installment::db_select::select_installment_items_where,
-        db_label::db_select::select_labels_name_where,
-    },
-    entity::entity_installment::{SelectInstallment, SelectInstallmentItems},
+    controller::con_db::con_get_label::get_label_where, entity::entity_installment::{SelectInstallment, SelectInstallmentItems}, repo::
+        db_installment::db_select::select_installment_items_where
 };
 // /    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| select_installment_items_where(*id_table.read()).expect("Failed to load labels"));
 
@@ -51,7 +48,7 @@ pub fn TableInstallment(
                                     td {
                                         {
                                             let input_id = installment.label_id.clone() as i32;
-                                            select_labels_name_where(input_id).unwrap()[0].label.clone()
+                                            get_label_where(input_id).unwrap()[0].label.clone()
                                         }
                                     }
                                     td { "{installment.amount}" }

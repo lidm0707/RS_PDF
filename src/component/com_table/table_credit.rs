@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::{repo::{db_label::db_select::select_labels_name_where, db_payment::db_select::select_payment_type_where}, entity::entity_credit::SelectCredit};
+use crate::{controller::con_db::con_get_label::get_label_where, entity::entity_credit::SelectCredit, repo::db_payment::db_select::select_payment_type_where};
 
 #[component]
 pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
@@ -31,7 +31,7 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                                         td {
                                             {
                                                 let input_id = raw.label_id.clone() as i32;
-                                                select_labels_name_where(input_id).unwrap()[0].label.clone()
+                                                get_label_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
                                         td { "{raw.period}" }

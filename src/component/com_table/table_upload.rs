@@ -1,11 +1,10 @@
 use dioxus::prelude::*;
 
 use crate::{
-    component::upload::FileUpload,
-    repo::{
-        db_label::db_select::{select_labels_name, select_labels_name_where},
+    component::upload::FileUpload, controller::con_db::con_get_label::get_label_where, repo::{
+        db_label::db_select::select_labels_name,
         db_payment::db_select::select_payment_type_where,
-    },
+    }
 };
 
 #[component]
@@ -34,7 +33,7 @@ pub fn UploadTable(file_upload: FileUpload) -> Element {
                             .map(|(i, raw)| {
                                 let r2 = format!("{:.2}", raw.amount);
                                 let l_id = raw.label_id as i32;
-                                let label_name = select_labels_name_where(l_id)
+                                let label_name = get_label_where(l_id)
                                     .unwrap()[0]
                                     .label
                                     .clone();
