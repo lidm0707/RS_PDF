@@ -4,8 +4,8 @@ use rust_pdf::component::menu::MenuButton;
 use rust_pdf::page::page_cash::content_cash;
 use rust_pdf::page::page_credit::content_credit;
 use rust_pdf::page::page_dashboad::content_dashboard_credit;
-use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_installment::content_installment;
+use rust_pdf::page::page_label::content_label;
 use rust_pdf::page::page_upload::content_upload;
 
 fn main() {
@@ -18,7 +18,7 @@ fn main() {
                 // .with_disable_context_menu(true)
                 .with_window(window),
         )
-        .launch(App);
+        .launch(app);
     // dioxus::launch(App);
 }
 
@@ -32,7 +32,7 @@ pub enum Content {
 }
 
 #[component]
-fn App() -> Element {
+fn app() -> Element {
     let mut show_content = use_signal(|| Content::Dashboard);
     rsx! {
       document::Link { rel: "stylesheet", href: asset!("/assets/tailwind.css") }

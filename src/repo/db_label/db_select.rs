@@ -1,7 +1,6 @@
 
 use self::repo::schema::labels::dsl::*;
 use self::repo::schema::labels_name::dsl::{*, id as labels_name_id};
-use crate::entity::entity_credit::*;
 use crate::*;
 use anyhow;
 use repo::db_connect::connect_database;

@@ -813,8 +813,20 @@ td {
   position: fixed;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .inset-0 {
   inset: 0px;
+}
+
+.bottom-0 {
+  bottom: 0px;
+}
+
+.top-0 {
+  top: 0px;
 }
 
 .mb-2 {
@@ -857,6 +869,14 @@ td {
   margin-top: 0.75rem;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .block {
   display: block;
 }
@@ -877,6 +897,14 @@ td {
   display: none;
 }
 
+.h-1\/6 {
+  height: 16.666667%;
+}
+
+.h-2\/6 {
+  height: 33.333333%;
+}
+
 .h-4\/6 {
   height: 66.666667%;
 }
@@ -890,20 +918,8 @@ td {
   height: fit-content;
 }
 
-.h-3\/6 {
-  height: 50%;
-}
-
-.h-2\/6 {
-  height: 33.333333%;
-}
-
 .h-2\/5 {
   height: 40%;
-}
-
-.h-1\/5 {
-  height: 20%;
 }
 
 .w-1\/6 {
@@ -971,6 +987,16 @@ td {
   border-radius: 0.375rem;
 }
 
+.rounded-l-lg {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.rounded-r-lg {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
 .border {
   border-width: 1px;
 }
@@ -1023,6 +1049,16 @@ td {
   padding: 1.5rem;
 }
 
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1034,6 +1070,11 @@ td {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 .font-semibold {

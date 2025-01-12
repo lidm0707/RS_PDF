@@ -8,3 +8,4 @@ database.db
 .DS_Store
 **/*.rs.bk
 /node_modules
+.vscode

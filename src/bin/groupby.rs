@@ -2,9 +2,6 @@
 
 // use rust_pdf::{database::db_credit::db_select::select_credit_groupby_label, entity::entity_credit::GroupBySumCredit};
 
-
-
-
 // pub fn format_and_sort_period_label_data(
 //     data: Vec<GroupBySumCredit>,
 // ) -> HashMap<String, Vec<(u32, f64)>> {
@@ -31,8 +28,11 @@
 //     sorted_period_data
 // }
 
+use rust_pdf::repo::db_dashboard::db_select::union_installment_credit;
+
 //println!("{:?}",format_and_sort_period_label_data(select_credit_groupby_label("2025-02","2025-03").unwrap()));
-    fn main(){
-        todo!()
-    }
-    
+fn main() {
+    let strat = "2025-01";
+    let end = "2025-02";
+    println!("{:?}",union_installment_credit(strat,end));
+}

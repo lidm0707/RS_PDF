@@ -28,11 +28,10 @@ pub struct SelectCredit {
 
 
 
-#[derive(Queryable, Selectable, Debug)]
-#[diesel(table_name = crate::repo::schema::credits)]
+#[derive(Queryable, Debug)]
 pub struct GroupBySumCredit {
-    pub label_id: i32,
     pub period: String,
+    pub label_id: i32,
     pub amount: Option<f64>,
     
 }

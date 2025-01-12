@@ -15,7 +15,7 @@ pub struct InsertInstallment {
     pub total: f64,
 }
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Selectable, Identifiable,Debug)]
 #[diesel(table_name = crate::repo::schema::installment)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectInstallment {
@@ -41,9 +41,10 @@ pub struct InsertInstallmentItems {
     pub installment_id: i32,
 }
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Selectable,Identifiable, Debug)]
 #[diesel(table_name = crate::repo::schema::installment_items)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+#[diesel(belongs_to(SelectInstallment))]
 pub struct SelectInstallmentItems {
     pub id: i32,
     pub date: String,
@@ -52,3 +53,8 @@ pub struct SelectInstallmentItems {
     pub amount:f64,
     pub installment_id: i32,
 }
+
+
+
+
+

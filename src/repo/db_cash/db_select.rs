@@ -5,6 +5,7 @@ use anyhow;
 use repo::db_connect::connect_database;
 use diesel::prelude::*;
 use diesel::dsl::*;
+use repo::schema::installment_items::bank_id;
 
 pub fn select_cash() -> Result<Vec<SelectCash>, anyhow::Error> {
     let mut conn = connect_database();
@@ -24,7 +25,7 @@ pub fn select_cash_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCa
     //.and(payment_type_id.eq(payment_type))
     cash
         .filter(period.ge(start).and(period.le(end)))
-        .group_by((label_id, period))
+        .group_by((label_id, period ))
         .select((label_id, period, sum(amount)))
         .load::<GroupBySumCash>(&mut conn)
         .map_err(Into::into)

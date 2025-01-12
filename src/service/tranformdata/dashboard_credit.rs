@@ -20,6 +20,7 @@ pub fn table_period_credit(
     let row: Vec<String> = generate_month_range(start, end).unwrap();
 
     // Step 4: Create a table sorted by head
+    // แก้
     let mut table: Vec<(String, Vec<Option<f64>>)> = row
         .iter()
         .map(|month| {

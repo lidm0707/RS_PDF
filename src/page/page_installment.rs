@@ -4,20 +4,17 @@ use crate::{
         com_table::{
             table_installment::TableInstallment, table_installment_items::TableInstallmentItem,
         },
-    },
-    repo::{
+    }, entity::{
+        entity_installment::{SelectInstallment, SelectInstallmentItems},
+        entity_label::SelectLabelsName,
+    }, repo::{
         db_bank::db_select::select_bank,
         db_installment::{
             db_insert::{insert_installment, insert_installment_items},
             db_select::{select_installment, select_installment_items_where},
         },
         db_label::db_select::select_labels_name,
-    },
-    entity::{
-        entity_installment::{SelectInstallment, SelectInstallmentItems},
-        entity_label::SelectLabelsName,
-    },
-    service::date::{add::month_add, date_format::format_date, now::thai_now},
+    }, service::date::{add::month_add, date_format::{format_date, format_period}, now::thai_now}
 };
 use chrono::prelude::*;
 use dioxus::prelude::*;
@@ -97,11 +94,14 @@ pub fn content_installment() -> Element {
                         println!("{:?}", master);
                         let t = time.read().parse::<i32>().unwrap();
                         for i in 0..t {
+                            let new_period = month_add(start_date.clone().read().to_string().as_str(), (i).to_string().as_str());
+                            let new_period = format_period(&new_period);
                             if let Some(value) = evt.data.values().get(&i.to_string()) {
                                 println!("{:?}", value.as_value());
+                                println!("{:?}", new_period);
                                 let check_item = insert_installment_items(
                                     start_date.read().clone(),
-                                    period.read().clone(),
+                                    new_period,
                                     bank_id.read().clone(),
                                     value.as_value().to_string().parse::<f64>().unwrap(),
                                     master.id,

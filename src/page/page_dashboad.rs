@@ -97,8 +97,9 @@ pub fn content_dashboard_credit() -> Element {
                     },
                 }
             }
-
+            p{"CREDIT"}
             CreditDashboardTable { data_table }
+            p{"CASH"}
             CashDashboardTable { data_table: data_table_cash }
         }
     }
