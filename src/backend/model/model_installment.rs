@@ -1,3 +1,4 @@
+#[derive(Debug,Clone)]
 pub struct ModelInstallment {
     pub id: i32,
     pub date_start: String,
@@ -10,6 +11,7 @@ pub struct ModelInstallment {
 }
 
 
+#[derive(Debug,Clone)]
 
 pub struct ModelInstallmentItems {
     pub id: i32,

@@ -29,11 +29,8 @@ pub fn data_sumary_cash(
             .or_insert(entry.amount.unwrap_or(0.0));
     }
 
-    // Process credit data
     for entry in data_credit {
-        // Ensure valid `label_id` even if it's defaulting to 0
-        let mut label_id = entry.label_id  ; // Default label_id to 0 if not present
-        label_id = 0;
+        let label_id = 0;
         let period_entry = period_map
             .entry(entry.period.clone())
             .or_insert_with(HashMap::new);
@@ -60,11 +57,11 @@ pub fn sort_label_cash(
 
     // Convert aggregated HashMap into a Vec and sort by amount (descending)
     let mut sorted: Vec<(i32, f64)> = aggregated.into_iter().collect();
-    
+
     // Custom sorting: if label_id is 0, prioritize it at the top
     sorted.sort_by(|a, b| {
         if a.0 == 0 {
-            std::cmp::Ordering::Less  // Move label_id 0 to the top
+            std::cmp::Ordering::Less // Move label_id 0 to the top
         } else if b.0 == 0 {
             std::cmp::Ordering::Greater // Keep other values below
         } else {

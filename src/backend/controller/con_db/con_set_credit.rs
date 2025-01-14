@@ -1,5 +1,5 @@
 use crate::backend::{
-    entity::entity_credit::SelectCredit, repo::db_credit::db_insert::insert_credit,
+    model::model_credit::ModelCredit, service::sv_data::sv_set_credit::sv_set_credit,
 };
 
 pub fn set_credit(
@@ -9,7 +9,7 @@ pub fn set_credit(
     label_id: i32,
     period: String,
     payment_type_id: i32,
-) -> SelectCredit {
-    let result = insert_credit(date, ctx, amount, label_id, period, payment_type_id);
+) -> ModelCredit {
+    let result = sv_set_credit(date, ctx, amount, label_id, period, payment_type_id);
     result
 }

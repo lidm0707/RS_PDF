@@ -1,6 +1,6 @@
 use crate::{
     backend::repo::db_connect::connect_database,
-    backend::entity::{entity_credit::*, entity_label::*},
+    backend::entity::entity_label::*,
 };
 use diesel::{RunQueryDsl, SelectableHelper};
 

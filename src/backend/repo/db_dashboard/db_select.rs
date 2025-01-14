@@ -69,13 +69,13 @@ pub fn union_credit_installment_label(
 
     let credit_table = credits::table
         .filter(credits::period.ge(start).and(credits::period.le(end)))
-        .group_by((credits::label_id))
+        .group_by(credits::label_id)
         .select((credits::label_id, sum(credits::amount)));
 
     let installment_table = installment_items::table
         .inner_join(installment::table)
         .filter(real_installment.or(future_installment))
-        .group_by((installment::label_id))
+        .group_by(installment::label_id)
         .select((
             installment::label_id,
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
@@ -120,7 +120,7 @@ pub fn summary_revernue(
 
     let credit_table = credits::table
         .filter(credits::period.ge(start).and(credits::period.le(end)))
-        .group_by((credits::period))
+        .group_by(credits::period)
         .select((
             credits::period,
             sql::<Text>("'OUT-COME'"),
@@ -130,7 +130,7 @@ pub fn summary_revernue(
     let installment_table = installment_items::table
         .inner_join(installment::table)
         .filter(real_installment.or(future_installment))
-        .group_by(( installment_items::period))
+        .group_by(installment_items::period)
         .select((
    
             installment_items::period,

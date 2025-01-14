@@ -1,18 +1,7 @@
-use crate::backend::{model::model_credit::ModelCredit, repo::db_credit::db_select::select_credit};
+use crate::backend::{model::model_credit::ModelCredit, service::sv_data::sv_get_credit::sv_get_credit};
 
-pub fn con_get_credit() -> Result<Vec<ModelCredit>, anyhow::Error> {
-    let raw_data = select_credit().unwrap();
-    let result = raw_data
-        .into_iter()
-        .map(|raw| ModelCredit {
-            id: raw.id,
-            date: raw.date,
-            ctx: raw.ctx,
-            amount: raw.amount,
-            label_id: raw.label_id,
-            period: raw.period,
-            payment_type_id: raw.payment_type_id,
-        })
-        .collect();
+pub fn get_credit() -> Result<Vec<ModelCredit>, anyhow::Error> {
+    let result = sv_get_credit().unwrap();
+
     Ok(result)
 }

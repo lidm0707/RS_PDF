@@ -1,13 +1,10 @@
 use crate::backend::{
     model::model_label::{ModelLabels, ModelLabelsName},
-    repo::db_label::{
-        db_delete::delete_label,
-        db_insert::{insert_label, insert_label_name},
-    },
+    service::sv_data::sv_set_label::{sv_remove_label, sv_set_label, sv_set_label_name},
 };
 
 pub fn set_label(id_label: i32, abb_ctx: String) -> ModelLabels {
-    let raw_data = insert_label(id_label, abb_ctx);
+    let raw_data = sv_set_label(id_label, abb_ctx);
     let result = ModelLabels {
         id: raw_data.id,
         id_label: raw_data.id_label,
@@ -18,7 +15,7 @@ pub fn set_label(id_label: i32, abb_ctx: String) -> ModelLabels {
 }
 
 pub fn set_label_name(label: String) -> ModelLabelsName {
-    let raw_data =  insert_label_name(label);
+    let raw_data = sv_set_label_name(label);
     let result = ModelLabelsName {
         id: raw_data.id,
         label: raw_data.label,
@@ -28,5 +25,5 @@ pub fn set_label_name(label: String) -> ModelLabelsName {
 }
 
 pub fn remove_label(label_id: i32) {
-    let _ = delete_label(label_id).unwrap();
+    let _ = sv_remove_label(label_id);
 }

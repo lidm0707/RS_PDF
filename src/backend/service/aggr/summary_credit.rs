@@ -1,5 +1,5 @@
 use crate::{
-    backend::entity::entity_credit::GroupBySumCredit, backend::repo::{db_credit::db_select::select_credit_groupby_label, db_dashboard::db_select::union_installment_credit}
+    backend::entity::entity_credit::GroupBySumCredit, backend::repo::db_dashboard::db_select::union_installment_credit
 };
 use anyhow;
 use std::{cmp::Ordering, collections::HashMap};

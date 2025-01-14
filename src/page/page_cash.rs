@@ -58,7 +58,7 @@ pub fn content_cash() -> Element {
                     class: "",
                     onsubmit: move |evt| {
                         println!("date_signal: {:?}", evt.values());
-                        set_cash(
+                        let _ = set_cash(
                             date_signal.read().clone(),
                             period.read().clone(),
                             evt.values()["type"].as_value(),

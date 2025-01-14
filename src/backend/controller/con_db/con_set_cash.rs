@@ -1,4 +1,4 @@
-use crate::backend::{entity::entity_cash::SelectCash, repo::db_cash::db_insert::insert_cash};
+use crate::backend::{model::model_cash::ModelCash, service::sv_data::sv_set_cash::sv_set_cash};
 
 pub fn set_cash(
     date_value: String,
@@ -6,13 +6,14 @@ pub fn set_cash(
     type_cash_value: String,
     label_id_value: i32,
     amount_value: f64,
-) -> Result<SelectCash, anyhow::Error> {
-    let result = insert_cash(
+) -> Result<ModelCash, anyhow::Error> {
+    let result = sv_set_cash(
         date_value,
         period_value,
         type_cash_value,
         label_id_value,
         amount_value,
-    );
+    )
+    .unwrap();
     Ok(result)
 }
