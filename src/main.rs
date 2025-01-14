@@ -1,12 +1,7 @@
 use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
-use rust_pdf::page::page_cash::content_cash;
-use rust_pdf::page::page_credit::content_credit;
-use rust_pdf::page::page_dashboad::content_dashboard_credit;
-use rust_pdf::page::page_installment::content_installment;
-use rust_pdf::page::page_label::content_label;
-use rust_pdf::page::page_upload::content_upload;
+use rust_pdf::page::*;
 
 fn main() {
     let window = tao::window::WindowBuilder::new()
@@ -81,32 +76,32 @@ fn app() -> Element {
         match *show_content.read() {
             Content::Label => {
                 rsx! {
-                  content_label {}
+                  page_label::content_label{}
                 }
             }
             Content::Raw => {
                 rsx! {
-                  content_credit {}
+                  page_credit::content_credit{}
                 }
             }
             Content::Upload => {
                 rsx! {
-                  content_upload {}
+                  page_upload::content_upload {}
                 }
             }
             Content::Installment => {
                 rsx! {
-                  content_installment {}
+                  page_installment::content_installment {}
                 }
             }
             Content::Cash => {
                 rsx! {
-                  content_cash {}
+                  page_cash::content_cash {}
                 }
             }
             Content::Dashboard => {
                 rsx! {
-                  content_dashboard_credit {}
+                  page_dashboad::content_dashboard{}
                 }
             }
         }

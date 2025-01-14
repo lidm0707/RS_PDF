@@ -1,15 +1,17 @@
 use dioxus::prelude::*;
 
-use crate::{
-    controller::con_db::con_get_label::get_label_where, entity::entity_installment::{SelectInstallment, SelectInstallmentItems}, repo::
-        db_installment::db_select::select_installment_items_where
-};
+use crate::backend::{
+        controller::con_db::{
+            con_get_installment::get_installment_items_where, con_get_label::get_label_name_where,
+        },
+        model::model_installment::{ModelInstallment, ModelInstallmentItems},
+    };
 // /    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| select_installment_items_where(*id_table.read()).expect("Failed to load labels"));
 
 #[component]
 pub fn TableInstallment(
-    df_installment: Signal<Vec<SelectInstallment>>,
-    df_installment_items: Signal<Vec<SelectInstallmentItems>>,
+    df_installment: Signal<Vec<ModelInstallment>>,
+    df_installment_items: Signal<Vec<ModelInstallmentItems>>,
     id_table: Signal<i32>,
 ) -> Element {
     rsx! {
@@ -38,9 +40,9 @@ pub fn TableInstallment(
                                             println!("{}", ins_id);
                                             id_table.set(ins_id);
                                             df_installment_items
-                                                .set(select_installment_items_where(ins_id).expect("Failed to load labels"));
+                                                .set(get_installment_items_where(ins_id).expect("Failed to load labels"));
                                         },
-                                        "{installment.date_stard}"
+                                        "{installment.date_start}"
                                     }
                                     td { "{installment.date_end}" }
                                     td { "{installment.time}" }
@@ -48,7 +50,7 @@ pub fn TableInstallment(
                                     td {
                                         {
                                             let input_id = installment.label_id.clone() as i32;
-                                            get_label_where(input_id).unwrap()[0].label.clone()
+                                            get_label_name_where(input_id).unwrap()[0].label.clone()
                                         }
                                     }
                                     td { "{installment.amount}" }

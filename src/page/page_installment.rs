@@ -1,47 +1,47 @@
 use crate::{
+    backend::controller::{
+        con_date_handle::{
+            con_date_aggr::set_month_add,
+            con_format_date::{get_format_date, get_format_period},
+            con_now::get_thai_now,
+        },
+        con_db::{
+            con_get_bank::get_bank,
+            con_get_installment::{get_installment, get_installment_items_where},
+            con_get_label::get_label_name,
+            con_set_installment::{set_installment, set_installment_items},
+        },
+    },
     component::{
         com_date::datepickermonth::PickerDiffMonth,
         com_table::{
             table_installment::TableInstallment, table_installment_items::TableInstallmentItem,
         },
-    }, entity::{
-        entity_installment::{SelectInstallment, SelectInstallmentItems},
-        entity_label::SelectLabelsName,
-    }, repo::{
-        db_bank::db_select::select_bank,
-        db_installment::{
-            db_insert::{insert_installment, insert_installment_items},
-            db_select::{select_installment, select_installment_items_where},
-        },
-        db_label::db_select::select_labels_name,
-    }, service::date::{add::month_add, date_format::{format_date, format_period}, now::thai_now}
+    },
 };
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
-
 pub fn content_installment() -> Element {
-    let mut show_modal: Signal<bool> = use_signal(|| false);
-    let mut updated_data: Signal<Vec<SelectLabelsName>> =
-        use_signal(|| select_labels_name().expect("Failed to load labels"));
+    let mut show_modal = use_signal(|| false);
+    let mut updated_data = use_signal(|| get_label_name().expect("Failed to load labels"));
     let now = format!(
         "{:02}/{:02}/{}",
         1,
-        thai_now().month(),
-        &thai_now().year().to_string()[2..4]
+        get_thai_now().month(),
+        &get_thai_now().year().to_string()[2..4]
     );
-    let mut start_date: Signal<String> = use_signal(|| format_date(&now));
-    let mut end_date: Signal<String> = use_signal(|| format_date(&now));
+    let mut start_date: Signal<String> = use_signal(|| get_format_date(&now));
+    let mut end_date: Signal<String> = use_signal(|| get_format_date(&now));
     let mut time: Signal<String> = use_signal(|| "1".to_string());
     let mut period: Signal<String> = use_signal(|| "".to_string());
     let mut total: Signal<f64> = use_signal(|| 0.00);
     let mut static_price: Signal<f64> = use_signal(|| 0.00);
     let mut diff = use_signal(|| 0.00);
     let mut id_table: Signal<i32> = use_signal(|| 0);
-    let mut df_installment: Signal<Vec<SelectInstallment>> =
-        use_signal(|| select_installment().expect("Failed to load labels"));
-    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| {
-        select_installment_items_where(*id_table.read()).expect("Failed to load labels")
+    let mut df_installment = use_signal(|| get_installment().expect("Failed to load labels"));
+    let mut df_installment_items = use_signal(|| {
+        get_installment_items_where(*id_table.read()).expect("Failed to load labels")
     });
 
     let time_for_payment =
@@ -82,7 +82,7 @@ pub fn content_installment() -> Element {
                         println!("{:?}", evt);
                         println!("{:?}", "");
                         println!("{:?}", time.read());
-                        let master = insert_installment(
+                        let master = set_installment(
                             start_date.clone().read().to_string(),
                             end_date.clone().read().to_string(),
                             time.read().parse::<i32>().unwrap(),
@@ -94,12 +94,12 @@ pub fn content_installment() -> Element {
                         println!("{:?}", master);
                         let t = time.read().parse::<i32>().unwrap();
                         for i in 0..t {
-                            let new_period = month_add(start_date.clone().read().to_string().as_str(), (i).to_string().as_str());
-                            let new_period = format_period(&new_period);
+                            let new_period = set_month_add(start_date.clone().read().to_string().as_str(), (i).to_string().as_str());
+                            let new_period = get_format_period(&new_period);
                             if let Some(value) = evt.data.values().get(&i.to_string()) {
                                 println!("{:?}", value.as_value());
                                 println!("{:?}", new_period);
-                                let check_item = insert_installment_items(
+                                let check_item = set_installment_items(
                                     start_date.read().clone(),
                                     new_period,
                                     bank_id.read().clone(),
@@ -110,8 +110,8 @@ pub fn content_installment() -> Element {
                             }
                         }
                         show_modal.set(false);
-                        updated_data.set(select_labels_name().expect("Failed to load labels"));
-                        df_installment.set(select_installment().expect("Failed to load labels"));
+                        updated_data.set(get_label_name().expect("Failed to load labels"));
+                        df_installment.set(get_installment().expect("Failed to load labels"));
                     },
                     div { class: "",
                         PickerDiffMonth {
@@ -144,7 +144,7 @@ pub fn content_installment() -> Element {
                                     println!("{} ", evt.value());
                                 },
                                 {
-                                    select_bank()
+                                    get_bank()
                                         .unwrap()
                                         .iter()
                                         .map(|x| {
@@ -166,7 +166,7 @@ pub fn content_installment() -> Element {
                                     println!("{} ", evt.value());
                                 },
                                 {
-                                    select_labels_name()
+                                    get_label_name()
                                         .unwrap()
                                         .iter()
                                         .map(|x| {
@@ -242,7 +242,7 @@ pub fn content_installment() -> Element {
                             let in_time = time_clone.parse::<f64>().unwrap_or(0.00);
                             (0..time_clone.parse::<i32>().unwrap_or(0))
                                 .map(move |time| {
-                                    let date_time = month_add(
+                                    let date_time = set_month_add(
                                         start_date.clone().read().as_ref(),
                                         &time.to_string(),
                                     );

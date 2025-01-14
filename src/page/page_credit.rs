@@ -1,16 +1,10 @@
 use dioxus::prelude::*;
 
-use crate::{
-    component:: com_table::table_credit::CreditTable, repo::db_credit::db_select::select_credit, entity::entity_credit::SelectCredit
-};
+use crate::{backend::controller::con_db::con_get_credit::con_get_credit, component:: com_table::table_credit::CreditTable};
 
-#[derive(PartialEq, Clone, Props)]
-pub struct TableRaw {
-    pub data: Signal<Vec<SelectCredit>>,
-}
 
 pub fn content_credit() -> Element {
-    let data_table: Signal<Vec<SelectCredit>> = use_signal(|| select_credit().unwrap());
+    let data_table= use_signal(|| con_get_credit().unwrap());
 
     rsx! {
         div { class: "content",

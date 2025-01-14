@@ -1,24 +1,21 @@
-use crate::{model::model_pdf::TranformLine, service::pdf::read_pdf::read_credit_kbank};
 use dioxus::prelude::*;
 use dioxus_elements::FileEngine;
 use std::sync::Arc;
 
-#[derive(PartialEq, Clone, Props)]
-pub struct FileUpload {
-    pub data:Signal<Vec<TranformLine>>,
-}
-
+use crate::backend::{
+    controller::con_pdf::read_pdf::set_credit_kbank, model::model_pdf::TranformLine,
+};
 
 #[component]
-pub fn BtnUplaod(file_upload:FileUpload) -> Element {
-    let mut files_uploaded = file_upload.data;
-    let mut pass_file = use_signal(|| String::new());
+pub fn BtnUplaod(file_upload: Signal<Vec<TranformLine>>) -> Element {
+    let mut files_uploaded = file_upload;
+    let mut pass_file: Signal<String> = use_signal(|| String::new());
     let mut err_show = use_signal(|| String::new());
 
     let read_files = move |file_engine: Arc<dyn FileEngine>| async move {
         let files = file_engine.files();
         for file_name in &files {
-            match read_credit_kbank(file_name, pass_file.read().as_ref()) {
+            match set_credit_kbank(file_name, pass_file.read().as_ref()) {
                 Ok(line) => {
                     files_uploaded.clear();
                     err_show.set(String::new());
@@ -79,8 +76,8 @@ pub fn BtnUplaod(file_upload:FileUpload) -> Element {
                         name: "textreader",
                         onchange: upload_files,
                     }
-                
-                
+
+
             }
         }
     }

@@ -1,17 +1,20 @@
 use crate::{
-    component::com_table::table_label::LabelTable, repo::db_label::{db_insert::{insert_label, insert_label_name}, db_select::{select_labels_name, select_labels_where}}, entity::entity_label::{SelectLabels, SelectLabelsName}
+    backend::controller::con_db::{
+        con_get_label::{get_label_name, get_labels_where},
+        con_set_label::{set_label, set_label_name},
+    },
+    component::com_table::table_label::LabelTable,
 };
 use dioxus::prelude::*;
 
 pub fn content_label() -> Element {
-    let mut show_modal: Signal<bool> = use_signal(|| false);
-    let mut id_show: Signal<i32> = use_signal(|| 0);
-    let mut updated_data: Signal<Vec<SelectLabelsName>> =
-        use_signal(|| select_labels_name().expect("Failed to load labels"));
-    let mut table_ctx: Signal<Vec<SelectLabels>> =
-        use_signal(|| select_labels_where(*id_show.read()).expect("Failed to load labels"));
-        //impl FnMut(i32)
-    
+    let mut show_modal = use_signal(|| false);
+    let mut id_show = use_signal(|| 0);
+    let mut updated_data = use_signal(|| get_label_name().expect("Failed to load labels"));
+    let mut table_ctx =
+        use_signal(|| get_labels_where(*id_show.read()).expect("Failed to load labels"));
+    //impl FnMut(i32)
+
     let set_id_show: Callback<i32> = use_callback(move |id: i32| {
         id_show.set(id);
     });
@@ -40,9 +43,9 @@ pub fn content_label() -> Element {
                         class: "",
                         onsubmit: move |evt| {
                             let label_name: String = evt.data.values()["label"].as_value();
-                            insert_label_name(label_name);
+                            set_label_name(label_name);
                             show_modal.set(false);
-                            updated_data.set(select_labels_name().expect("Failed to load labels"));
+                            updated_data.set(get_label_name().expect("Failed to load labels"));
                         },
                         div {
                             div { class: "flex justify-center",
@@ -78,10 +81,10 @@ pub fn content_label() -> Element {
                                 .as_value()
                                 .parse()
                                 .unwrap_or("".to_string());
-                            insert_label(id_label, abb_ctx);
+                            set_label(id_label, abb_ctx);
                             show_modal.set(false);
                             table_ctx
-                                .set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                                .set(get_labels_where(*id_show.read()).expect("Failed to load labels"));
                         },
                         div {
                             div { class: "flex justify-center",

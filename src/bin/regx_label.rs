@@ -1,4 +1,4 @@
-use rust_pdf::service::pdf::check_label::search_labels;
+use rust_pdf::backend::service::pdf::check_label::search_labels;
 
 fn main(){
     println!("{:?}",search_labels("xxx PAYPAL *VPNISE xxx"));

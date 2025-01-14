@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::controller::con_db::con_get_label::get_label_where;
+use crate::backend::controller::con_db::con_get_label::get_label_name_where;
 
 
 #[component]
@@ -23,7 +23,7 @@ pub fn CashDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>) -
                                                 row_data
                                                     .iter()
                                                     .map(|data| {
-                                                        let string_label = get_label_where(data.unwrap() as i32)
+                                                        let string_label = get_label_name_where(data.unwrap() as i32)
                                                             .unwrap()
                                                             .first()
                                                             .map(|label| label.label.clone())

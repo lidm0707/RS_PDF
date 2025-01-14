@@ -1,16 +1,14 @@
 use dioxus::prelude::*;
 
-use crate::{
-    repo::{
-        db_bank::db_select::select_bank_where, db_installment::db_select::select_installment,
-    },
-    entity::entity_installment::{SelectInstallment, SelectInstallmentItems},
+use crate::backend::{
+    controller::con_db::{con_get_bank::get_bank_where, con_get_installment::get_installment},
+    model::model_installment::{ModelInstallment, ModelInstallmentItems},
 };
 
 #[component]
 pub fn TableInstallmentItem(
-    df_installment_items: Signal<Vec<SelectInstallmentItems>>,
-    df_installment: Signal<Vec<SelectInstallment>>,
+    df_installment_items: Signal<Vec<ModelInstallmentItems>>,
+    df_installment: Signal<Vec<ModelInstallment>>,
     id_table: Signal<i32>,
 ) -> Element {
     // pub id: i32,
@@ -42,7 +40,7 @@ pub fn TableInstallmentItem(
                                             id_table.set(0i32);
                                             id_table.read();
                                             println!("{}", id_table.read());
-                                            df_installment.set(select_installment().expect("Failed to load labels"));
+                                            df_installment.set(get_installment().expect("Failed to load labels"));
                                         },
                                         "{installment.date}"
                                     }
@@ -50,8 +48,7 @@ pub fn TableInstallmentItem(
                                     td {
                                         {
                                             let bank_id = installment.bank_id;
-                                            select_bank_where(bank_id).unwrap()[0].name.clone()
-
+                                            get_bank_where(bank_id).unwrap()[0].name.clone()
                                         }
                                     }
                                     td { "{installment.amount}" }

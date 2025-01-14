@@ -1,4 +1,4 @@
-use rust_pdf::repo::db_dashboard::db_select::union_installment_credit;
+use rust_pdf::backend::repo::db_dashboard::db_select::union_installment_credit;
 
 
 fn main(){

@@ -6,35 +6,35 @@
 // label_id -> Integer,
 // amount -> Double,
 
-use dioxus::prelude::*;
 use chrono::prelude::*;
+use dioxus::prelude::*;
 
 use crate::{
-    component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
-    repo::{
-        db_cash::{db_insert::insert_cash, db_select::select_cash},
-        db_label::db_select::select_labels_name,
+    backend::controller::{
+        con_date_handle::{
+            con_format_date::{get_format_date, get_format_period},
+            con_now::get_thai_now,
+        },
+        con_db::{
+            con_get_label::get_label_name, con_get_cash::get_cash, con_set_cash::set_cash,
+        },
     },
-    entity::{entity_cash::SelectCash, entity_credit::SelectCredit}, service::date::{date_format::{format_date, format_period}, now::thai_now},
+    component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
 };
 
-#[derive(PartialEq, Clone, Props)]
-pub struct TableRaw {
-    pub data: Signal<Vec<SelectCredit>>,
-}
 
 pub fn content_cash() -> Element {
     let now = format!(
         "{:02}/{:02}/{}",
-        thai_now().day(),
-        thai_now().month(),
-        &thai_now().year().to_string()[2..4]
+        get_thai_now().day(),
+        get_thai_now().month(),
+        &get_thai_now().year().to_string()[2..4]
     );
-    let mut data_table: Signal<Vec<SelectCash>> = use_signal(|| select_cash().unwrap());
+    let mut data_table = use_signal(|| get_cash().unwrap());
     let mut show_modal: Signal<bool> = use_signal(|| false);
     let mut label_id: Signal<i32> = use_signal(|| 1);
-    let mut date_signal: Signal<String> = use_signal(|| format_date(&now));
-    let mut period: Signal<String> = use_signal(|| format_period(&date_signal.read()));
+    let mut date_signal: Signal<String> = use_signal(|| get_format_date(&now));
+    let mut period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
 
     rsx! {
         div {
@@ -58,7 +58,7 @@ pub fn content_cash() -> Element {
                     class: "",
                     onsubmit: move |evt| {
                         println!("date_signal: {:?}", evt.values());
-                        insert_cash(
+                        set_cash(
                             date_signal.read().clone(),
                             period.read().clone(),
                             evt.values()["type"].as_value(),
@@ -71,7 +71,7 @@ pub fn content_cash() -> Element {
                                 }
                             },
                         );
-                        data_table.set(select_cash().unwrap());
+                        data_table.set(get_cash().unwrap());
                         show_modal.set(false);
                         println!("label_name: {:?}", evt);
                     },
@@ -105,7 +105,7 @@ pub fn content_cash() -> Element {
                                         println!("{} ", evt.value());
                                     },
                                     {
-                                        select_labels_name()
+                                        get_label_name()
                                             .unwrap()
                                             .iter()
                                             .map(|x| {

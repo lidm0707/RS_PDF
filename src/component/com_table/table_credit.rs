@@ -1,9 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::{controller::con_db::con_get_label::get_label_where, entity::entity_credit::SelectCredit, repo::db_payment::db_select::select_payment_type_where};
+use crate::backend::{controller::con_db::{con_get_label::get_label_name_where, con_get_payment::get_payment_type_where}, model::model_credit::ModelCredit};
 
 #[component]
-pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
+pub fn CreditTable(data_table: Signal<Vec<ModelCredit>>) -> Element {
     rsx! {
         div { class: "table-container",
             table {
@@ -31,14 +31,14 @@ pub fn CreditTable(data_table: Signal<Vec<SelectCredit>>) -> Element {
                                         td {
                                             {
                                                 let input_id = raw.label_id.clone() as i32;
-                                                get_label_where(input_id).unwrap()[0].label.clone()
+                                                get_label_name_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
                                         td { "{raw.period}" }
                                         td {
                                             {
                                                 let id_input = raw.payment_type_id.clone() as i32;
-                                                select_payment_type_where(id_input).unwrap()[0].chanel.clone()
+                                                get_payment_type_where(id_input).unwrap()[0].chanel.clone()
                                             }
                                         }
                                     }

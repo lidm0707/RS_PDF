@@ -1,14 +1,15 @@
 use dioxus::prelude::*;
 
-use crate::{
-    component::upload::FileUpload, controller::con_db::con_get_label::get_label_where, repo::{
-        db_label::db_select::select_labels_name,
-        db_payment::db_select::select_payment_type_where,
-    }
+use crate::backend::{
+    controller::con_db::{
+        con_get_label::{get_label_name, get_label_name_where},
+        con_get_payment::get_payment_type_where,
+    },
+    model::model_pdf::TranformLine,
 };
 
 #[component]
-pub fn UploadTable(file_upload: FileUpload) -> Element {
+pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
     rsx! {
         div { class: "table-container",
             table {
@@ -25,7 +26,6 @@ pub fn UploadTable(file_upload: FileUpload) -> Element {
                 tbody {
                     {
                         file_upload
-                            .data
                             .read()
                             .clone()
                             .iter()
@@ -33,7 +33,7 @@ pub fn UploadTable(file_upload: FileUpload) -> Element {
                             .map(|(i, raw)| {
                                 let r2 = format!("{:.2}", raw.amount);
                                 let l_id = raw.label_id as i32;
-                                let label_name = get_label_where(l_id)
+                                let label_name = get_label_name_where(l_id)
                                     .unwrap()[0]
                                     .label
                                     .clone();
@@ -47,11 +47,11 @@ pub fn UploadTable(file_upload: FileUpload) -> Element {
                                                 value: "{label_name}",
                                                 onchange: move |evt| {
                                                     println!("{} - {:?}", i, evt.value());
-                                                    let mut data = file_upload.data.write();
+                                                    let mut data = file_upload.write();
                                                     data[i].label_id = evt.value().parse::<i32>().unwrap() as i64;
                                                 },
                                                 {
-                                                    select_labels_name()
+                                                    get_label_name()
                                                         .unwrap()
                                                         .iter()
                                                         .map(|x| {
@@ -66,7 +66,7 @@ pub fn UploadTable(file_upload: FileUpload) -> Element {
                                         td {
                                             {
                                                 let id_input = raw.payment_type_id.clone() as i32;
-                                                select_payment_type_where(id_input).unwrap()[0].chanel.clone()
+                                                get_payment_type_where(id_input).unwrap()[0].chanel.clone()
                                             }
                                         }
                                     }

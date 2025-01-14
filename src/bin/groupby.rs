@@ -28,7 +28,10 @@
 //     sorted_period_data
 // }
 
-use rust_pdf::{controller::con_dashboard::{con_dash_credit::get_dashboard_credit, con_dash_net::get_dashboard_net}, repo::db_dashboard::db_select::{summary_revernue, union_installment_credit}, service::aggr::summary_net_period::data_summary_net};
+use rust_pdf::backend::{
+    controller::con_dashboard::con_dash_net::get_dashboard_net,
+    repo::db_dashboard::db_select::summary_revernue,
+};
 
 //println!("{:?}",format_and_sort_period_label_data(select_credit_groupby_label("2025-02","2025-03").unwrap()));
 fn main() {
@@ -36,6 +39,6 @@ fn main() {
     let end = "2025-05";
     // println!("{:?}",union_installment_credit(start,end));
     // println!("{:?}",get_dashboard_net(start,end));
-    println!("{:?}",get_dashboard_net(start, end));
-    println!("{:?}",summary_revernue(start, end));
+    println!("{:?}", get_dashboard_net(start, end));
+    println!("{:?}", summary_revernue(start, end));
 }

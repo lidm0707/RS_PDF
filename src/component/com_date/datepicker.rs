@@ -2,7 +2,9 @@
 
 use dioxus::prelude::*;
 
-use crate::service::date::date_format::format_period;
+use crate::backend::controller::con_date_handle::con_format_date::get_format_period;
+
+
 
 
 #[component]
@@ -17,7 +19,7 @@ pub fn PickerDate(date:Signal<String>,period:Signal<String>) ->Element {
                 value: date.read().to_string(),
                 onchange: move |event| {
                     date.set(event.value());
-                    period.set(format_period(&date.read()));
+                    period.set(get_format_period(&date.read()));
                 },
             }
         }

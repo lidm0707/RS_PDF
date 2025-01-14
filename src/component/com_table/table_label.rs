@@ -1,18 +1,18 @@
 use dioxus::prelude::*;
 
-use crate::{
-    repo::db_label::{
-        db_delete::{delete_label, delete_label_name},
-        db_select::{count_labels_where, select_labels_name, select_labels_where},
+use crate::backend::{
+    controller::con_db::{
+        con_get_label::{get_count_labels_where, get_label_name, get_labels_where},
+        con_set_label::remove_label,
     },
-    entity::entity_label::{SelectLabels, SelectLabelsName},
+    model::model_label::{ModelLabels, ModelLabelsName},
 };
 
 #[component]
 pub fn LabelTable(
-    updated_data: Signal<Vec<SelectLabelsName>>,
+    updated_data: Signal<Vec<ModelLabelsName>>,
     id_show: Signal<i32>,
-    table_ctx: Signal<Vec<SelectLabels>>,
+    table_ctx: Signal<Vec<ModelLabels>>,
     set_id_show: Callback<i32>,
 ) -> Element {
     rsx! {
@@ -33,7 +33,7 @@ pub fn LabelTable(
                                 .iter()
                                 .map(|label| {
                                     let id = label.id.clone();
-                                    let amount = count_labels_where(id).expect("Failed to load labels");
+                                    let amount = get_count_labels_where(id).expect("Failed to load labels");
                                     rsx! {
                                         tr { id: "{label.id}",
                                             td {
@@ -48,9 +48,9 @@ pub fn LabelTable(
                                                     class: "btnEdit",
                                                     onclick: move |_| {
                                                         if amount == 0 {
-                                                            let _ = delete_label_name(id.clone());
+                                                            let _ = remove_label(id.clone());
                                                             let _ = &mut updated_data
-                                                                .set(select_labels_name().expect("Failed to load labels"));
+                                                                .set(get_label_name().expect("Failed to load labels"));
                                                         } else {
                                                             println!("{}", amount);
                                                             println!("can't delete");
@@ -74,7 +74,7 @@ pub fn LabelTable(
                     tbody {
                         {
                             let _ = table_ctx
-                                .set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                                .set(get_labels_where(*id_show.read()).expect("Failed to load labels"));
                             table_ctx
                                 .iter()
                                 .map(|label| {
@@ -92,9 +92,9 @@ pub fn LabelTable(
                                                 button {
                                                     class: "btnEdit",
                                                     onclick: move |_| {
-                                                        let _ = delete_label(id.clone());
+                                                        let _ = remove_label(id.clone());
                                                         let _ = &mut table_ctx
-                                                            .set(select_labels_where(*id_show.read()).expect("Failed to load labels"));
+                                                            .set(get_labels_where(*id_show.read()).expect("Failed to load labels"));
                                                         let id_value = *id_show.read();
                                                         set_id_show.call(id_value);
 

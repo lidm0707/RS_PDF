@@ -1,29 +1,24 @@
-use std::collections::HashMap;
-
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
 use crate::{
+    backend::controller::{
+        con_dashboard::{
+            con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit,
+            con_dash_net::get_dashboard_net,
+        },
+        con_date_handle::con_now::get_thai_now,
+    },
     component::{
-        com_date::datepicker::PickerDate,
         com_select::select_custome::select_onchang,
         com_table::{
-            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable, table_net_dashboard::NetDashboardTable,
+            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable,
+            table_net_dashboard::NetDashboardTable,
         },
     },
-    controller::con_dashboard::{
-        con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit, con_dash_net::get_dashboard_net,
-    },
-    entity::entity_credit::SelectCredit,
-    service::date::now::thai_now,
 };
 
-#[derive(PartialEq, Clone, Props)]
-pub struct TableRaw {
-    pub data: Signal<Vec<SelectCredit>>,
-}
-
-pub fn content_dashboard_credit() -> Element {
+pub fn content_dashboard() -> Element {
     let mut month = use_signal(|| "1".to_string()); // Default to January
     let mut year = use_signal(|| "2025".to_string()); // Default to 2025
 
@@ -36,7 +31,7 @@ pub fn content_dashboard_credit() -> Element {
     let mut data_table_cash: Signal<Vec<(String, Vec<Option<f64>>)>> =
         use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
     let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
-    use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
+        use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
 
     // Update `start` and `end` whenever `year` or `month` changes
 
@@ -56,7 +51,7 @@ pub fn content_dashboard_credit() -> Element {
         data_table_net.set(get_dashboard_net(&start.read(), &end.read()).unwrap());
     });
 
-    let now_thai = thai_now();
+    let now_thai = get_thai_now();
     let arr_year: Vec<i32> = (now_thai.year() - 5..=now_thai.year() + 5).collect();
 
     rsx! {
@@ -100,11 +95,11 @@ pub fn content_dashboard_credit() -> Element {
                     },
                 }
             }
-            p{"NET"}
-            NetDashboardTable{ data_table:data_table_net }
-            p{"CREDIT"}
+            p { "NET" }
+            NetDashboardTable { data_table: data_table_net }
+            p { "CREDIT" }
             CreditDashboardTable { data_table }
-            p{"CASH"}
+            p { "CASH" }
             CashDashboardTable { data_table: data_table_cash }
         }
     }

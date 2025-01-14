@@ -1,15 +1,11 @@
 use dioxus::prelude::*;
 
-use crate::{controller::con_db::con_get_label::get_label_where,  entity::entity_cash::SelectCash};
+use crate::backend::{
+    controller::con_db::con_get_label::get_label_name_where, model::model_cash::ModelCash,
+};
 
-    // pub id: i32,
-    // pub date: String,
-    // pub period: String,
-    // pub type_cash: String,
-    // pub label_id: i32,
-    // pub amount: f64,
 #[component]
-pub fn CashTable(data_table: Signal<Vec<SelectCash>>) -> Element {
+pub fn CashTable(data_table: Signal<Vec<ModelCash>>) -> Element {
     rsx! {
         div { class: "table-container ",
             table {
@@ -37,7 +33,7 @@ pub fn CashTable(data_table: Signal<Vec<SelectCash>>) -> Element {
                                         td {
                                             {
                                                 let input_id = raw.label_id.clone() as i32;
-                                                get_label_where(input_id).unwrap()[0].label.clone()
+                                                get_label_name_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
                                     

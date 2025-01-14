@@ -2,7 +2,8 @@
 
 use dioxus::prelude::*;
 
-use crate::service::date::{date_format::format_period, diff::diff_month};
+use crate::backend::controller::con_date_handle::{con_date_aggr::set_date_diff, con_format_date::get_format_period};
+
 
 
 #[component]
@@ -18,9 +19,9 @@ pub fn PickerDiffMonth(start_date:Signal<String>,end_date:Signal<String>,time:Si
                 onchange: move |event| {
                     start_date.set(event.value());
                     println!("{:?}", start_date.read());
-                    match diff_month(start_date.read().clone(), end_date.read().clone()) {
+                    match set_date_diff(&start_date.read().clone(), &end_date.read().clone()) {
                         Ok(diff) => {
-                            period.set(format_period(&start_date.read()));
+                            period.set(get_format_period(&start_date.read()));
                             time.set(diff.to_string())
                         }
                         Err(_) => println!("Error calculating diff"),
@@ -35,9 +36,9 @@ pub fn PickerDiffMonth(start_date:Signal<String>,end_date:Signal<String>,time:Si
                 onchange: move |event| {
                     end_date.set(event.value());
                     println!("{:?}", end_date.read());
-                    match diff_month(start_date.read().clone(), end_date.read().clone()) {
+                    match set_date_diff(&start_date.read().clone(), &end_date.read().clone()) {
                         Ok(diff) => {
-                            period.set(format_period(&start_date.read()));
+                            period.set(get_format_period(&start_date.read()));
                             time.set(diff.to_string())
                         }
                         Err(err) => println!("Error calculating diff: {:?}", err),

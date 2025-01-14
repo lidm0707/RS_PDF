@@ -3,24 +3,28 @@ use dioxus::prelude::*;
 use num_format::{Locale, ToFormattedString};
 
 use crate::{
-    component::{
-        com_table::table_upload::UploadTable,
-        upload::{BtnUplaod, FileUpload},
-    }, repo::{db_credit::db_insert::insert_credit, db_label::db_select::select_labels_name}, model::model_pdf::TranformLine, service::date::now::thai_now
+    backend::{
+        controller::{
+            con_date_handle::con_now::get_thai_now,
+            con_db::{con_get_label::get_label_name, con_set_credit::set_credit},
+        },
+        model::model_pdf::TranformLine,
+    },
+    component::{com_table::table_upload::UploadTable, upload::BtnUplaod},
 };
 
 pub fn content_upload() -> Element {
     let mut files_uploaded = use_signal(|| Vec::<TranformLine>::new());
     // runtime if vec emty and direct index as i[0] is break!!
-    let now_thai = thai_now();
+    let now_thai = get_thai_now();
     let arr_year: Vec<i32> = (now_thai.year() - 5..=now_thai.year() + 5).collect();
-    let mut year: Signal<i32> = use_signal(move || now_thai.year());
-    let mut month: Signal<u32> = use_signal(move || now_thai.month());
+    let mut year = use_signal(move || now_thai.year());
+    let mut month = use_signal(move || now_thai.month());
 
     let chang_yy = use_callback(move |evt: Event<FormData>| {
         let tem_yy = evt.value().parse::<i32>().unwrap();
         let _ = year.set(tem_yy);
-        let temp = files_uploaded.read().clone();
+        let temp: Vec<_> = files_uploaded.read().clone();
         let tran = temp
             .iter()
             .enumerate()
@@ -63,7 +67,7 @@ pub fn content_upload() -> Element {
             }
         })
     };
-    let label_name = use_signal(|| select_labels_name().unwrap());
+    let label_name = use_signal(|| get_label_name().unwrap());
 
     let format_thai = move |number_f64: f64| {
         let whole_part = (number_f64.trunc() as u64).to_formatted_string(&Locale::th);
@@ -83,11 +87,11 @@ pub fn content_upload() -> Element {
                     label_name
                         .read()
                         .iter()
-                        .map(| x| {
+                        .map(|x| {
                             rsx! {
                                 div { class: "summary-items",
                                     div { class: "p-3 text-center",
-                                    "{x.label}"
+                                        "{x.label}"
                                         div { class: "text-right each-summary-item", {format_thai(sum_by_gorupby_label(x.id))} }
                                         div { class: "text-right each-summary-item",
                                             {format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount) * 100.0)}
@@ -99,7 +103,7 @@ pub fn content_upload() -> Element {
                 }
             }
             div { class: "control",
-                BtnUplaod { file_upload: FileUpload { data: files_uploaded } }
+                BtnUplaod { file_upload: files_uploaded  }
                 select {
                     class: "select",
                     onchange: move |evt| {
@@ -158,7 +162,7 @@ pub fn content_upload() -> Element {
                                     let label_id = line.label_id as i32;
                                     let period = line.period.clone();
                                     let payment_type_id = line.payment_type_id as i32;
-                                    insert_credit(date, ctx, amount, label_id, period, payment_type_id);
+                                    set_credit(date, ctx, amount, label_id, period, payment_type_id);
                                 });
                         }
                         files_uploaded.set(Vec::<TranformLine>::new());
@@ -166,7 +170,7 @@ pub fn content_upload() -> Element {
                     {"SAVE"}
                 }
             }
-            UploadTable { file_upload: FileUpload { data: files_uploaded } }
+            UploadTable { file_upload: files_uploaded}
         }
     }
 }

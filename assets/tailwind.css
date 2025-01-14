@@ -651,14 +651,7 @@ td {
   overflow-y: scroll;
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
-}
-
-.main::-webkit-scrollbar {
-  display: none;
-}
-
-.main {
-  /* overflow-hidden */
+  /* overflow-hidden  no-scrollbar*/
 }
 
 .modal {

@@ -4,8 +4,8 @@
 
 @layer components {
   .main {
-    @apply flex bg-gray-100 w-screen h-screen overflow-y-scroll no-scrollbar;
-    /* overflow-hidden */
+    @apply flex bg-gray-100 w-screen h-screen overflow-y-scroll ;
+    /* overflow-hidden  no-scrollbar*/ 
   }
   .modal{
     @apply fixed z-50 place-items-center place-content-center  bg-black bg-opacity-50 h-screen w-screen;

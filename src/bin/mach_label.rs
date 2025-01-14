@@ -1,5 +1,5 @@
 use anyhow;
-use rust_pdf::service::pdf::check_label::search_labels;
+use rust_pdf::backend::service::pdf::check_label::search_labels;
 
 
 fn main() -> Result<(), anyhow::Error> {
