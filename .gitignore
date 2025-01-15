@@ -9,3 +9,4 @@ database.db
 **/*.rs.bk
 /node_modules
 .vscode
+/src/bin

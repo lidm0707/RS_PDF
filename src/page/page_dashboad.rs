@@ -19,21 +19,18 @@ use crate::{
 };
 
 pub fn content_dashboard() -> Element {
-    let mut month = use_signal(|| "1".to_string()); // Default to January
-    let mut year = use_signal(|| "2025".to_string()); // Default to 2025
+    let mut month = use_signal(|| get_thai_now().month().to_string()); // Default to January
+    let mut year = use_signal(|| get_thai_now().year().to_string()); // Default to 2025
 
-    let mut start = use_signal(|| "2025-01".to_string());
-    let mut end = use_signal(|| "2025-12".to_string());
+    let mut start = use_signal(|| format!("{}-{}", year, month).to_string());
+    let mut end = use_signal(|| format!("{}-12", year).to_string());
 
-    let mut data_table: Signal<Vec<(String, Vec<Option<f64>>)>> =
+    let mut data_table_credit: Signal<Vec<(String, Vec<Option<f64>>)>> =
         use_signal(|| get_dashboard_credit(&start.read(), &end.read()).unwrap());
-
     let mut data_table_cash: Signal<Vec<(String, Vec<Option<f64>>)>> =
         use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
     let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
         use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
-
-    // Update `start` and `end` whenever `year` or `month` changes
 
     use_effect(move || {
         let year_val = year.read();
@@ -46,7 +43,7 @@ pub fn content_dashboard() -> Element {
         start.set(new_start);
         end.set(new_end);
 
-        data_table.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
+        data_table_credit.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
         data_table_cash.set(get_dashboard_cash(&start.read(), &end.read()).unwrap());
         data_table_net.set(get_dashboard_net(&start.read(), &end.read()).unwrap());
     });
@@ -98,7 +95,7 @@ pub fn content_dashboard() -> Element {
             p { "NET" }
             NetDashboardTable { data_table: data_table_net }
             p { "CREDIT" }
-            CreditDashboardTable { data_table }
+            CreditDashboardTable {  data_table: data_table_credit}
             p { "CASH" }
             CashDashboardTable { data_table: data_table_cash }
         }

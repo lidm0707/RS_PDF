@@ -1,15 +1,14 @@
-
 use self::backend::repo::schema::*;
 use crate::*;
 use anyhow;
 use diesel::dsl::{sql, sum};
 use diesel::prelude::*;
 
-use diesel::sql_types::Text;
 use backend::entity::entity_credit::GroupBySumCredit;
 use backend::repo::db_connect::connect_database;
 use backend::service::date::date_format::format_period;
 use backend::service::date::now::thai_now_string;
+use diesel::sql_types::Text;
 
 pub fn union_installment_credit(
     start: &str,
@@ -91,18 +90,14 @@ pub fn union_credit_installment_label(
 pub fn summary_revernue(
     start: &str,
     end: &str,
-) -> Result<Vec<(String,String, Option<f64>)>, anyhow::Error> {
+) -> Result<Vec<(String, String, Option<f64>)>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
     let preriod_now = format_period(&thai_now_string());
 
     let cash = cash::table
         .filter(cash::period.ge(start).and(cash::period.le(end)))
         .group_by((cash::period, cash::type_cash))
-        .select((
-            cash::period,
-            cash::type_cash,
-            sum(cash::amount),
-        ));
+        .select((cash::period, cash::type_cash, sum(cash::amount)));
 
     let real_installment = installment_items::bank_id.eq(1).and(
         installment_items::period
@@ -132,19 +127,15 @@ pub fn summary_revernue(
         .filter(real_installment.or(future_installment))
         .group_by(installment_items::period)
         .select((
-   
             installment_items::period,
             sql::<Text>("'OUT-COME'"),
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
         ));
 
-    let results =
-        installment_table
-            .union(credit_table)
-            .union(cash)
-            .load::<( String, String, Option<f64>)>(&mut conn)?;
-
-    
+    let results = cash
+        .union(credit_table)
+        .union(installment_table)
+        .load::<(String, String, Option<f64>)>(&mut conn)?;
 
     Ok(results)
 }

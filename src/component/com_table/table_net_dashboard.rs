@@ -21,18 +21,15 @@ pub fn NetDashboardTable(data_table: Signal<Vec<(String, f64, f64)>>) -> Element
                                             td { "NET" }
                                         }
                                     }
-                                } else {
-                                    tbody {
-                                        tr {
-                                            // Apply the style to the first row
-                                            class: "",
-                                            td { "{month}" } // Display the month
-                                            td { "{re}" }
-                                            td { "{ex}" }
-                                            td { class: if re - ex > 0.0 { "text-green-500" } else { "text-red-500" } ,"{re - ex}"}
-                                            
-                                        }
-                                    
+                                }
+                                tbody {
+                                    tr {
+                                        // Apply the style to the first row
+                                        class: "",
+                                        td { "{month}" } // Display the month
+                                        td { "{re}" }
+                                        td { "{ex}" }
+                                        td { class: if re - ex > 0.0 { "text-green-500" } else { "text-red-500" }, "{re - ex}" }
                                     }
                                 }
                             }

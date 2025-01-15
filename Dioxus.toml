@@ -7,6 +7,9 @@ name = "rust_pdf"
 # The static resource path
 asset_dir = "./assets"
 
+# [bundle]
+# publisher = "my example publisher"
+# identifier = "com.example.app"
 
 [web.app]
 

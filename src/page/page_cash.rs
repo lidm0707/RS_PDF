@@ -1,24 +1,16 @@
-// id -> Integer,
-// date -> Date,
-// period -> Text,
-// #[sql_name = "type"]
-// type_ -> Text,
-// label_id -> Integer,
-// amount -> Double,
-
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
 use crate::{
-    backend::controller::{
+    backend::{controller::{
         con_date_handle::{
             con_format_date::{get_format_date, get_format_period},
             con_now::get_thai_now,
         },
         con_db::{
-            con_get_label::get_label_name, con_get_cash::get_cash, con_set_cash::set_cash,
+            con_get_cash::get_cash, con_get_label::get_label_name, con_set_cash::set_cash
         },
-    },
+    }, model::model_cash::ModelCash},
     component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
 };
 
@@ -30,7 +22,7 @@ pub fn content_cash() -> Element {
         get_thai_now().month(),
         &get_thai_now().year().to_string()[2..4]
     );
-    let mut data_table = use_signal(|| get_cash().unwrap());
+    let mut data_table: Signal<Vec<ModelCash>> = use_signal(|| get_cash().unwrap());
     let mut show_modal: Signal<bool> = use_signal(|| false);
     let mut label_id: Signal<i32> = use_signal(|| 1);
     let mut date_signal: Signal<String> = use_signal(|| get_format_date(&now));
