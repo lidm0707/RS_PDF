@@ -2,7 +2,6 @@ use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
 use rust_pdf::page::*;
-
 fn main() {
     let window = tao::window::WindowBuilder::new()
         .with_resizable(true)

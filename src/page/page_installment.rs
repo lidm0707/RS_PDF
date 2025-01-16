@@ -22,6 +22,7 @@ use crate::{
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
+#[allow(unused_mut)]
 pub fn content_installment() -> Element {
     let mut show_modal = use_signal(|| false);
     let mut updated_data = use_signal(|| get_label_name().expect("Failed to load labels"));
@@ -43,7 +44,6 @@ pub fn content_installment() -> Element {
     let mut df_installment_items = use_signal(|| {
         get_installment_items_where(*id_table.read()).expect("Failed to load labels")
     });
-
     let time_for_payment =
         move |full: (String, String)| match (full.0.parse::<f64>(), full.1.parse::<i32>()) {
             (Ok(p), Ok(t)) if t != 0 => {

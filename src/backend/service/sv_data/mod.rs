@@ -8,3 +8,5 @@ pub mod sv_set_cash;
 pub mod sv_set_credit;
 pub mod sv_set_installment;
 pub mod sv_set_label;
+pub mod sv_get_plan_credit;
+pub mod sv_set_plan_credit;

@@ -77,6 +77,24 @@ diesel::table! {
 }
 
 diesel::table! {
+    planing_cash (id) {
+        id -> Integer,
+        period -> Text,
+        label_id -> Integer,
+        amount -> Double,
+    }
+}
+
+diesel::table! {
+    planing_credit (id) {
+        id -> Integer,
+        period -> Text,
+        label_id -> Integer,
+        amount -> Double,
+    }
+}
+
+diesel::table! {
     setting_hotkey (id) {
         id -> Integer,
         #[sql_name = "type"]
@@ -104,6 +122,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     labels,
     labels_name,
     payment_type,
+    planing_cash,
+    planing_credit,
     setting_hotkey,
     setting_pass_pdf,
 );

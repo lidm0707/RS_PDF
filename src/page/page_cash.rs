@@ -14,7 +14,7 @@ use crate::{
     component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
 };
 
-
+#[allow(unused_mut)]
 pub fn content_cash() -> Element {
     let now = format!(
         "{:02}/{:02}/{}",

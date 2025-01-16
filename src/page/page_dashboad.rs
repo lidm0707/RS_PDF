@@ -18,6 +18,7 @@ use crate::{
     },
 };
 
+#[allow(unused_mut)]
 pub fn content_dashboard() -> Element {
     let mut month = use_signal(|| get_thai_now().month().to_string()); // Default to January
     let mut year = use_signal(|| get_thai_now().year().to_string()); // Default to 2025
