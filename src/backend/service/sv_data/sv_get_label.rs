@@ -12,6 +12,8 @@ pub fn sv_get_label_name_where(input_id: i32) -> Result<Vec<ModelLabelsName>, an
         .map(|raw| ModelLabelsName {
             id: raw.id,
             label: raw.label,
+             ord:raw.ord,
+             show_able:raw.show_able,
         })
         .collect();
 
@@ -25,6 +27,8 @@ pub fn sv_get_label_name() -> Result<Vec<ModelLabelsName>, anyhow::Error> {
         .map(|raw| ModelLabelsName {
             id: raw.id,
             label: raw.label,
+            ord:raw.ord,
+            show_able:raw.show_able,
         })
         .collect();
 

@@ -1,14 +1,14 @@
 use self::backend::repo::schema::*;
 use crate::*;
 use anyhow;
-use diesel::dsl::{sql, sum};
+use diesel::dsl::{max, sql, sum, Nullable};
 use diesel::prelude::*;
 
 use backend::entity::entity_credit::GroupBySumCredit;
 use backend::repo::db_connect::connect_database;
 use backend::service::date::date_format::format_period;
 use backend::service::date::now::thai_now_string;
-use diesel::sql_types::Text;
+use diesel::sql_types::{Double, Integer, Text};
 
 pub fn union_installment_credit(
     start: &str,
@@ -40,6 +40,8 @@ pub fn union_installment_credit(
             installment::label_id,
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
         ));
+
+
 
     let results = installment_table
         .union(credit_table)
@@ -79,6 +81,25 @@ pub fn union_credit_installment_label(
             installment::label_id,
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
         ));
+
+
+    //     let subquery_plan = planing_credit::table
+    //     .filter(
+    //         planing_credit::period
+    //             .ge(start)
+    //             .and(planing_credit::period.le(end)),
+    //     )
+    //     .group_by((planing_credit::period, planing_credit::label_id))
+    //     .select(max(planing_credit::id).nullable());
+
+    // let planing_table = planing_credit::table
+    //     .filter(planing_credit::id.nullable().eq_any(subquery_plan))
+    //     .select((
+            
+    //         planing_credit::label_id,
+    //         sql::<Double>("0.00").nullable(), // Ensure it's treated as a nullable integer
+
+    //     ));
 
     let results = installment_table
         .union(credit_table)

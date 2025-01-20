@@ -23,6 +23,8 @@ pub struct SelectLabels {
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct InsertLabelsName {
     pub label: String,
+    pub ord:i32,
+    pub show_able:bool,
 }
 
 #[derive(Queryable, Selectable, Debug , Clone )]
@@ -31,4 +33,6 @@ pub struct InsertLabelsName {
 pub struct SelectLabelsName {
     pub id: i32,
     pub label: String,
+    pub ord:i32,
+    pub show_able:bool,
 }

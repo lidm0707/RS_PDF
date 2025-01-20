@@ -1,23 +1,20 @@
--- DROP TABLE IF EXISTS labels;
--- DROP TABLE IF EXISTS raws;
--- DROP TABLE IF EXISTS credits;
 CREATE TABLE
     labels_name (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        label TEXT NOT NULL
+        label TEXT NOT NULL,
+        ord INTEGER NOT NULL ,
+        show_able BOOL NOT NULL
     );
 
 CREATE TABLE
     labels (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         id_label INTEGER NOT NULL,
-        abb_ctx TEXT NOT NULL,
-        order INTEGER NOT NULL,
-        show_able BOOL NOT NULL,
+        abb_ctx TEXT NOT NULL
     );
 
 INSERT INTO
-    labels_name (label)
+    labels_name (label,ord,show_able)
 VALUES
     ('FOOD', 1, 1),
     ('OTHER', 2, 1),

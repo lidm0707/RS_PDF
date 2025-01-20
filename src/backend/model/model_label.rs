@@ -1,6 +1,8 @@
 pub struct ModelLabelsName {
     pub id: i32,
     pub label: String,
+    pub ord:i32,
+    pub show_able:bool,
 }
 
 

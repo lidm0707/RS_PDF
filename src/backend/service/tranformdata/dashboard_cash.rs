@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
-use crate::backend::service::{
+use crate::backend::{entity::entity_label::SelectLabelsName, repo::db_label::db_select::select_labels_name, service::{
     aggr::summary_cash::{data_sumary_cash, sort_label_cash},
     date::period_vec::generate_month_range,
-};
+}};
 
 pub fn table_period_cash(
     start: &str,
@@ -13,11 +13,23 @@ pub fn table_period_cash(
     let df: HashMap<String, HashMap<i32, f64>> = data_sumary_cash(start, end)?;
 
     // Step 2: Generate the head (sorted labels)
-    let head: Vec<i32> = sort_label_cash(&df)?
-        .iter()
-        .map(|(label_id, _)| *label_id) // Extract label IDs
+    // let head: Vec<i32> = sort_label_cash(&df)?
+    //     .iter()
+    //     .map(|(label_id, _)| *label_id) // Extract label IDs
+    //     .collect();
+
+    let mut filtered_data: Vec<SelectLabelsName> = select_labels_name()
+        .unwrap()
+        .into_iter()
+        .filter(|d| d.show_able) // Keep only `show_able == true`
         .collect();
 
+    // Sort the filtered data by `ord`
+    let _ = &mut filtered_data.sort_by_key(|d| d.ord);
+
+    // Extract the `id` values from the sorted data
+    let mut head: Vec<i32> = filtered_data.into_iter().map(|d| d.id).collect();
+    // let _ = &mut head.insert(0, 0); // for show credit
     // Step 3: Generate the row (month range)
     let row: Vec<String> = generate_month_range(start, end).unwrap();
 
@@ -46,20 +58,20 @@ pub fn table_period_cash(
     );
     table.insert(0, first_row);
 
-    // Step 6: Insert the last row (Total row)
-    let last: Vec<f64> = sort_label_cash(&df)?
-        .iter()
-        .map(|(_, amount)| *amount) // Extract amounts from the sorted data
-        .collect();
+    // // Step 6: Insert the last row (Total row)
+    // let last: Vec<f64> = sort_label_cash(&df)?
+    //     .iter()
+    //     .map(|(_, amount)| *amount) // Extract amounts from the sorted data
+    //     .collect();
 
-    let last_row = (
-        "TOTAL".to_string(),
-        last.iter()
-            .map(|&amount| Some(amount))
-            .collect::<Vec<Option<f64>>>(),
-    );
+    // let last_row = (
+    //     "TOTAL".to_string(),
+    //     last.iter()
+    //         .map(|&amount| Some(amount))
+    //         .collect::<Vec<Option<f64>>>(),
+    // );
 
-    table.push(last_row);
+    // table.push(last_row);
 
     Ok(table)
 }

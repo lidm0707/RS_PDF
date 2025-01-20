@@ -22,6 +22,8 @@ pub fn sv_set_label_name(label: String) -> ModelLabelsName {
     let result = ModelLabelsName {
         id: raw_data.id,
         label: raw_data.label,
+        ord:raw_data.ord,
+        show_able:raw_data.show_able,
     };
 
     result

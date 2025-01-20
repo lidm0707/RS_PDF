@@ -66,6 +66,8 @@ diesel::table! {
     labels_name (id) {
         id -> Integer,
         label -> Text,
+        ord -> Integer,
+        show_able -> Bool,
     }
 }
 

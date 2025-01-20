@@ -15,7 +15,7 @@ pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>)
             let mut new_labels = Vec::new();
             for (i, (_, row_data)) in data_table.iter().enumerate() {
                 if i == 0 {
-                    for (temp_data) in row_data.iter() {
+                    for temp_data in row_data.iter() {
                         if let Some(value) = temp_data {
                             new_labels.push(*value as i32);
                         }
@@ -77,6 +77,7 @@ pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>)
                                                                     onclick: move |_| {
                                                                         editing_cells.write().clear();
                                                                         editing_cells.write().push((new_id.clone(), l_id));
+                                                                        
                                                                         println!("{:?}", editing_cells);
                                                                         println!("{:?}", arr_label);
                                                                     },

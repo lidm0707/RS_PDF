@@ -1,19 +1,19 @@
+use std::collections::HashMap;
+
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
 use crate::{
     backend::controller::{
         con_dashboard::{
-            con_dash_cash::get_dashboard_cash, con_dash_credit::get_dashboard_credit,
-            con_dash_net::get_dashboard_net,
+            con_dash_cash::get_dashboard_cash, con_dash_cash_credit::get_dashboard_cash_credit, con_dash_credit::get_dashboard_credit, con_dash_net::get_dashboard_net
         },
         con_date_handle::con_now::get_thai_now,
     },
     component::{
         com_select::select_custome::select_onchang,
         com_table::{
-            table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable,
-            table_net_dashboard::NetDashboardTable,
+            table_cash_credit_dashboard::CashCreditDashboardTable, table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable, table_net_dashboard::NetDashboardTable
         },
     },
 };
@@ -32,6 +32,8 @@ pub fn content_dashboard() -> Element {
         use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
     let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
         use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
+        let mut data_table_cash_credit: Signal<Vec<(String, HashMap<i32, HashMap<String, f64>>)>> =
+        use_signal(|| get_dashboard_cash_credit(&start.read(), &end.read()));
 
     use_effect(move || {
         let year_val = year.read();
@@ -43,7 +45,7 @@ pub fn content_dashboard() -> Element {
 
         start.set(new_start);
         end.set(new_end);
-
+        data_table_cash_credit.set(get_dashboard_cash_credit(&start.read(), &end.read()));
         data_table_credit.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
         data_table_cash.set(get_dashboard_cash(&start.read(), &end.read()).unwrap());
         data_table_net.set(get_dashboard_net(&start.read(), &end.read()).unwrap());
@@ -93,10 +95,12 @@ pub fn content_dashboard() -> Element {
                     },
                 }
             }
+            p { "test" }
+            CashCreditDashboardTable { data_table: data_table_cash_credit }
             p { "NET" }
             NetDashboardTable { data_table: data_table_net }
             p { "CREDIT" }
-            CreditDashboardTable {  data_table: data_table_credit}
+            CreditDashboardTable { data_table: data_table_credit }
             p { "CASH" }
             CashDashboardTable { data_table: data_table_cash }
         }
