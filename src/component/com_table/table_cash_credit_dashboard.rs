@@ -82,8 +82,8 @@ pub fn CashCreditDashboardTable(
                                                                                 div { "{plan}" }
                                                                             }
                                                                         } else {
-                                                                            div {
-                                                                                input {
+                                                                            div {class:"justify-items-end",
+                                                                                input { class:"w-24",
                                                                                     onchange: move |evt| {
                                                                                         let format_onchange = format_id1.clone();
                                                                                         editing_cells.write().retain(|cell| *cell != (format_onchange));
