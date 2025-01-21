@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use std::collections::HashMap;
+use std::{collections::HashMap, rc::Rc};
 
 use crate::backend::controller::con_db::{
     con_get_label::get_label_name, con_get_plan_credit::get_plan_credit_where,
@@ -50,15 +50,17 @@ pub fn CashCreditDashboardTable(
                                                     let total = cash + credit;
                                                     let plan = get_plan_credit_where(&period_clone, data.id);
                                                     let format_id = format!("{}```{}", period_clone, data.id);
-                                                    let format_id1 = format!("{}```{}", period_clone, data.id);
-                                                    let is_editing = editing_cells.read().contains(&format_id);
+                                                    let rc_format_id = Rc::new(format_id);
+                                                    let rc_format_id_1 = Rc::clone(&rc_format_id);
+                                                    let rc_format_id_2 = Rc::clone(&rc_format_id);
+                                                    let is_editing = editing_cells.read().contains(&Rc::clone(&rc_format_id).to_string());
                                                     let plan_value = get_plan_credit_where(&period_clone, data.id);
                                                     rsx! {
                                                         td {
                                                             class: " w-fit",
                                                             onclick: move |_| {
                                                                 editing_cells.write().clear();
-                                                                editing_cells.write().push(format_id.clone());
+                                                                editing_cells.write().push(rc_format_id_1.to_string());
                                                                 println!("{:?}", editing_cells);
                                                             },
                                                             div { class: "flex",
@@ -85,7 +87,7 @@ pub fn CashCreditDashboardTable(
                                                                             div {class:"justify-items-end",
                                                                                 input { class:"w-24",
                                                                                     onchange: move |evt| {
-                                                                                        let format_onchange = format_id1.clone();
+                                                                                        let format_onchange = rc_format_id_2.to_string();
                                                                                         editing_cells.write().retain(|cell| *cell != (format_onchange));
                                                                                         set_plan_credit(
                                                                                             period_onchange.to_string(),

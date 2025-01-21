@@ -18,12 +18,12 @@ pub fn select_cash() -> Result<Vec<SelectCash>, anyhow::Error> {
 
 
 
-pub fn select_cash_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCash>, anyhow::Error> {
+pub fn select_cash_out_groupby_label(start:&str,end:&str) -> Result<Vec<GroupBySumCash>, anyhow::Error> {
     //payment_type:i32
     let mut conn: SqliteConnection = connect_database();
     //.and(payment_type_id.eq(payment_type))
     cash
-        .filter(period.ge(start).and(period.le(end)))
+        .filter(period.ge(start).and(period.le(end)).and(type_cash.eq("OUT-COME")))
         .group_by((label_id, period ))
         .select((label_id, period, sum(amount)))
         .load::<GroupBySumCash>(&mut conn)

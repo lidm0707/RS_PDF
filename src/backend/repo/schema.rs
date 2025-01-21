@@ -97,6 +97,13 @@ diesel::table! {
 }
 
 diesel::table! {
+    revenue_type (id) {
+        id -> Integer,
+        category -> Text,
+    }
+}
+
+diesel::table! {
     setting_hotkey (id) {
         id -> Integer,
         #[sql_name = "type"]
@@ -115,6 +122,13 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    version (id) {
+        id -> Integer,
+        ver -> Text,
+    }
+}
+
 diesel::allow_tables_to_appear_in_same_query!(
     bank,
     cash,
@@ -126,6 +140,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     payment_type,
     planing_cash,
     planing_credit,
+    revenue_type,
     setting_hotkey,
     setting_pass_pdf,
+    version,
 );

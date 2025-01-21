@@ -20,7 +20,7 @@ pub fn CashTable(data_table: Signal<Vec<ModelCash>>) -> Element {
                 }
                 tbody {
                     {
-                        &mut data_table
+                        data_table
                             .iter()
                             .map(|raw| {
                                 let r2 = format!("{:.2}", raw.amount);
@@ -36,7 +36,6 @@ pub fn CashTable(data_table: Signal<Vec<ModelCash>>) -> Element {
                                                 get_label_name_where(input_id).unwrap()[0].label.clone()
                                             }
                                         }
-                                    
                                     }
                                 }
                             })

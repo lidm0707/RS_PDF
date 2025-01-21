@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::backend::repo::{
-    db_cash::db_select::select_cash_groupby_label, db_dashboard::db_select::union_installment_credit,
+    db_cash::db_select::select_cash_out_groupby_label, db_dashboard::db_select::union_installment_credit,
 };
 
 pub fn data_sumary_cash_credit(
@@ -9,7 +9,7 @@ pub fn data_sumary_cash_credit(
     end: &str,
 ) -> Result<HashMap<String, HashMap<i32, HashMap<String, f64>>>, anyhow::Error> {
     // Fetch cash and credit data
-    let data_cash = select_cash_groupby_label(start, end)
+    let data_cash = select_cash_out_groupby_label(start, end)
         .map_err(|err| anyhow::anyhow!("Error loading cash data: {:?}", err))?;
     let data_credit = union_installment_credit(start, end)
         .map_err(|err| anyhow::anyhow!("Error loading credit data: {:?}", err))?;

@@ -9,3 +9,4 @@ pub mod db_label;
 pub mod db_dashboard;
 pub mod setting_schema;
 pub mod db_plan_credit;
+pub mod db_revenue_type;

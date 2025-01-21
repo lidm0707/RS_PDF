@@ -22,7 +22,6 @@ use crate::{
 use chrono::prelude::*;
 use dioxus::prelude::*;
 
-#[allow(unused_mut)]
 pub fn content_installment() -> Element {
     let mut show_modal = use_signal(|| false);
     let mut updated_data = use_signal(|| get_label_name().expect("Failed to load labels"));
@@ -32,16 +31,16 @@ pub fn content_installment() -> Element {
         get_thai_now().month(),
         &get_thai_now().year().to_string()[2..4]
     );
-    let mut start_date: Signal<String> = use_signal(|| get_format_date(&now));
-    let mut end_date: Signal<String> = use_signal(|| get_format_date(&now));
-    let mut time: Signal<String> = use_signal(|| "1".to_string());
-    let mut period: Signal<String> = use_signal(|| "".to_string());
+    let  start_date: Signal<String> = use_signal(|| get_format_date(&now));
+    let  end_date: Signal<String> = use_signal(|| get_format_date(&now));
+    let  time: Signal<String> = use_signal(|| "1".to_string());
+    let  period: Signal<String> = use_signal(|| "".to_string());
     let mut total: Signal<f64> = use_signal(|| 0.00);
     let mut static_price: Signal<f64> = use_signal(|| 0.00);
     let mut diff = use_signal(|| 0.00);
-    let mut id_table: Signal<i32> = use_signal(|| 0);
+    let  id_table: Signal<i32> = use_signal(|| 0);
     let mut df_installment = use_signal(|| get_installment().expect("Failed to load labels"));
-    let mut df_installment_items = use_signal(|| {
+    let  df_installment_items = use_signal(|| {
         get_installment_items_where(*id_table.read()).expect("Failed to load labels")
     });
     let time_for_payment =
@@ -94,7 +93,10 @@ pub fn content_installment() -> Element {
                         println!("{:?}", master);
                         let t = time.read().parse::<i32>().unwrap();
                         for i in 0..t {
-                            let new_period = set_month_add(start_date.clone().read().to_string().as_str(), (i).to_string().as_str());
+                            let new_period = set_month_add(
+                                start_date.clone().read().to_string().as_str(),
+                                (i).to_string().as_str(),
+                            );
                             let new_period = get_format_period(&new_period);
                             if let Some(value) = evt.data.values().get(&i.to_string()) {
                                 println!("{:?}", value.as_value());
@@ -310,7 +312,7 @@ pub fn content_installment() -> Element {
                         id_table,
                     }
                 }
-
+            
             }
         }
     }

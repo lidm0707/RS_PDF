@@ -77,14 +77,13 @@ pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>)
                                                                     onclick: move |_| {
                                                                         editing_cells.write().clear();
                                                                         editing_cells.write().push((new_id.clone(), l_id));
-                                                                        
                                                                         println!("{:?}", editing_cells);
                                                                         println!("{:?}", arr_label);
                                                                     },
                                                                     div { "{pure}" }
                                                                     {
                                                                         let month = month.clone();
-                                                                        let mut plan_value = get_plan_credit_where(&month, l_id);
+                                                                        let plan_value = get_plan_credit_where(&month, l_id);
                                                                         println!("{:?}", plan_value);
                                                                         let new_id_in = new_id.clone();
                                                                         rsx! {
@@ -100,8 +99,6 @@ pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>)
                                                                                             l_id.clone(),
                                                                                             evt.value().clone().parse::<f64>().unwrap(),
                                                                                         );
-                                                                                        let get_value = get_plan_credit_where(&month, l_id);
-                                                                                        plan_value = get_value;
                                                                                     },
                                                                                     value: "{plan_value}",
                                                                                 }

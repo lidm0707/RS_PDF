@@ -1,8 +1,19 @@
 CREATE TABLE
+    version (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        ver TEXT NOT NULL
+    );
+
+INSERT INTO
+    version (ver)
+VALUES
+    ('0.0.1');
+
+CREATE TABLE
     labels_name (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         label TEXT NOT NULL,
-        ord INTEGER NOT NULL ,
+        ord INTEGER NOT NULL,
         show_able BOOL NOT NULL
     );
 
@@ -14,7 +25,7 @@ CREATE TABLE
     );
 
 INSERT INTO
-    labels_name (label,ord,show_able)
+    labels_name (label, ord, show_able)
 VALUES
     ('FOOD', 1, 1),
     ('OTHER', 2, 1),
@@ -105,6 +116,20 @@ INSERT INTO
 VALUES
     ('T1 UCHOOSE'),
     ('KASIKORN');
+
+CREATE TABLE
+    revenue_type (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        category TEXT NOT NULL
+    );
+
+
+INSERT INTO
+    revenue_type (category)
+VALUES
+    ('SALARY'),
+    ('EXTRA'),
+    ('REFUND');
 
 CREATE TABLE
     cash (

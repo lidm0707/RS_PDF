@@ -6,3 +6,4 @@ pub mod model_payment_type;
 pub mod model_pdf;
 pub mod model_label;
 pub mod model_plan_credit;
+pub mod model_revenue_type;

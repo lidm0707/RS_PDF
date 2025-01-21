@@ -6,30 +6,26 @@ use dioxus::prelude::*;
 use crate::{
     backend::controller::{
         con_dashboard::{
-            con_dash_cash::get_dashboard_cash, con_dash_cash_credit::get_dashboard_cash_credit, con_dash_credit::get_dashboard_credit, con_dash_net::get_dashboard_net
+             con_dash_cash_credit::get_dashboard_cash_credit, con_dash_net::get_dashboard_net
         },
         con_date_handle::con_now::get_thai_now,
     },
     component::{
         com_select::select_custome::select_onchang,
         com_table::{
-            table_cash_credit_dashboard::CashCreditDashboardTable, table_cash_dashboard::CashDashboardTable, table_credit_dashboard::CreditDashboardTable, table_net_dashboard::NetDashboardTable
+            table_cash_credit_dashboard::CashCreditDashboardTable, table_net_dashboard::NetDashboardTable
         },
     },
 };
 
-#[allow(unused_mut)]
 pub fn content_dashboard() -> Element {
-    let mut month = use_signal(|| get_thai_now().month().to_string()); // Default to January
-    let mut year = use_signal(|| get_thai_now().year().to_string()); // Default to 2025
+    let  month = use_signal(|| get_thai_now().month().to_string()); // Default to January
+    let  year = use_signal(|| get_thai_now().year().to_string()); // Default to 2025
 
     let mut start = use_signal(|| format!("{}-{}", year, month).to_string());
     let mut end = use_signal(|| format!("{}-12", year).to_string());
 
-    let mut data_table_credit: Signal<Vec<(String, Vec<Option<f64>>)>> =
-        use_signal(|| get_dashboard_credit(&start.read(), &end.read()).unwrap());
-    let mut data_table_cash: Signal<Vec<(String, Vec<Option<f64>>)>> =
-        use_signal(|| get_dashboard_cash(&start.read(), &end.read()).unwrap());
+
     let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
         use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
         let mut data_table_cash_credit: Signal<Vec<(String, HashMap<i32, HashMap<String, f64>>)>> =
@@ -46,8 +42,6 @@ pub fn content_dashboard() -> Element {
         start.set(new_start);
         end.set(new_end);
         data_table_cash_credit.set(get_dashboard_cash_credit(&start.read(), &end.read()));
-        data_table_credit.set(get_dashboard_credit(&start.read(), &end.read()).unwrap());
-        data_table_cash.set(get_dashboard_cash(&start.read(), &end.read()).unwrap());
         data_table_net.set(get_dashboard_net(&start.read(), &end.read()).unwrap());
     });
 
@@ -99,10 +93,7 @@ pub fn content_dashboard() -> Element {
             CashCreditDashboardTable { data_table: data_table_cash_credit }
             p { "NET" }
             NetDashboardTable { data_table: data_table_net }
-            p { "CREDIT" }
-            CreditDashboardTable { data_table: data_table_credit }
-            p { "CASH" }
-            CashDashboardTable { data_table: data_table_cash }
+
         }
     }
 }

@@ -2,19 +2,22 @@ use chrono::prelude::*;
 use dioxus::prelude::*;
 
 use crate::{
-    backend::{controller::{
-        con_date_handle::{
-            con_format_date::{get_format_date, get_format_period},
-            con_now::get_thai_now,
+    backend::{
+        controller::{
+            con_date_handle::{
+                con_format_date::{get_format_date, get_format_period},
+                con_now::get_thai_now,
+            },
+            con_db::{
+                con_get_cash::get_cash, con_get_label::get_label_name,
+                con_get_revenue_type::con_get_revenue_type, con_set_cash::set_cash,
+            },
         },
-        con_db::{
-            con_get_cash::get_cash, con_get_label::get_label_name, con_set_cash::set_cash
-        },
-    }, model::model_cash::ModelCash},
+        model::model_cash::ModelCash,
+    },
     component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
 };
 
-#[allow(unused_mut)]
 pub fn content_cash() -> Element {
     let now = format!(
         "{:02}/{:02}/{}",
@@ -25,8 +28,10 @@ pub fn content_cash() -> Element {
     let mut data_table: Signal<Vec<ModelCash>> = use_signal(|| get_cash().unwrap());
     let mut show_modal: Signal<bool> = use_signal(|| false);
     let mut label_id: Signal<i32> = use_signal(|| 1);
-    let mut date_signal: Signal<String> = use_signal(|| get_format_date(&now));
-    let mut period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
+    let  date_signal: Signal<String> = use_signal(|| get_format_date(&now));
+    let  period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
+    let mut selected_type: Signal<String> = use_signal(|| "OUT-COME".to_string());
+    let revernur_type = use_signal(|| con_get_revenue_type().unwrap());
 
     rsx! {
         div {
@@ -81,8 +86,14 @@ pub fn content_cash() -> Element {
                         div { class: "flex ",
                             label { class: "mr-2 w-1/6", {"TYPE"} }
                             select {
+
                                 class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
                                 name: "type", // Add name attribute to capture data
+                                onchange: move |evt| {
+                                    selected_type.set(evt.value());
+                                    println!("Selected type: {}", evt.value());
+                                },
+
                                 option { value: "OUT-COME", {"OUT-COME"} }
                                 option { value: "IN-COME", {"IN-COME"} }
                             }
@@ -90,21 +101,42 @@ pub fn content_cash() -> Element {
                         div {
                             div { class: "flex ",
                                 label { class: "w-1/6 w-1/6", {"label"} }
-                                select {
-                                    class: "border-b w-fit  mr-2 ml-2 mb-2",
-                                    onchange: move |evt| {
-                                        label_id.set(evt.value().parse::<i32>().unwrap());
-                                        println!("{} ", evt.value());
-                                    },
-                                    {
-                                        get_label_name()
-                                            .unwrap()
-                                            .iter()
-                                            .map(|x| {
-                                                rsx! {
-                                                    option { value: "{x.id}", "{x.label}" }
-                                                }
-                                            })
+                                if *selected_type.read() == "IN-COME".to_string() {
+                                    select {
+                                        class: "border-b w-fit  mr-2 ml-2 mb-2",
+                                        onchange: move |evt| {
+                                            label_id.set(evt.value().parse::<i32>().unwrap());
+                                            println!("{} ", evt.value());
+                                        },
+                                        {
+                                            revernur_type
+                                                .iter()
+                                                .map(|re_type| {
+                                                    let name_type = &re_type.category;
+                                                    let re_type_id = re_type.id;
+                                                    rsx! {
+                                                        option { value: "{re_type_id}", "{name_type}" }
+                                                    }
+                                                })
+                                        }
+                                    }
+                                } else {
+                                    select {
+                                        class: "border-b w-fit  mr-2 ml-2 mb-2",
+                                        onchange: move |evt| {
+                                            label_id.set(evt.value().parse::<i32>().unwrap());
+                                            println!("{} ", evt.value());
+                                        },
+                                        {
+                                            get_label_name()
+                                                .unwrap()
+                                                .iter()
+                                                .map(|x| {
+                                                    rsx! {
+                                                        option { value: "{x.id}", "{x.label}" }
+                                                    }
+                                                })
+                                        }
                                     }
                                 }
                             }
