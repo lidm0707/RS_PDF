@@ -78,8 +78,8 @@ mod tests {
         let end = "2025-01-31";
         
         // Mock the database function calls
-        let data_cash = mock_select_cash_groupby_label(start, end).unwrap();
-        let data_credit = mock_select_credit_groupby_label(start, end).unwrap();
+        let _data_cash = mock_select_cash_groupby_label(start, end).unwrap();
+        let _data_credit = mock_select_credit_groupby_label(start, end).unwrap();
     
         // Call the function to get the summary data
         let result = data_sumary_cash(start, end).unwrap();
@@ -104,7 +104,7 @@ mod tests {
         credit_map.insert(0, 150.0);
         
         // Insert credit into the existing period
-        let mut category_map = expected_result.entry("2025-01".to_string()).or_insert_with(HashMap::new);
+        let category_map = expected_result.entry("2025-01".to_string()).or_insert_with(HashMap::new);
         category_map.insert("credit".to_string(), credit_map);
     
         // Assert the result matches the expected output
