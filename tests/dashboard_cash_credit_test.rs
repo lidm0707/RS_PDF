@@ -11,14 +11,14 @@ struct MockEntry {
     pub amount: Option<f64>,
 }
 
-fn mock_select_cash_groupby_label(start: &str, end: &str) -> Result<Vec<MockEntry>, anyhow::Error> {
+fn mock_select_cash_groupby_label(_start: &str, _end: &str) -> Result<Vec<MockEntry>, anyhow::Error> {
     Ok(vec![
         MockEntry { period: "2025-01".to_string(), label_id: 1, amount: Some(100.0) },
         MockEntry { period: "2025-01".to_string(), label_id: 2, amount: Some(200.0) },
     ])
 }
 
-fn mock_select_credit_groupby_label(start: &str, end: &str) -> Result<Vec<MockEntry>, anyhow::Error> {
+fn mock_select_credit_groupby_label(_start: &str, _end: &str) -> Result<Vec<MockEntry>, anyhow::Error> {
     Ok(vec![
         MockEntry { period: "2025-01".to_string(), label_id: 0, amount: Some(150.0) },
     ])

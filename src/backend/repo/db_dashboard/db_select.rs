@@ -1,14 +1,14 @@
 use self::backend::repo::schema::*;
 use crate::*;
 use anyhow;
-use diesel::dsl::{max, sql, sum, Nullable};
+use diesel::dsl::{sql, sum};
 use diesel::prelude::*;
 
 use backend::entity::entity_credit::GroupBySumCredit;
 use backend::repo::db_connect::connect_database;
 use backend::service::date::date_format::format_period;
 use backend::service::date::now::thai_now_string;
-use diesel::sql_types::{Double, Integer, Text};
+use diesel::sql_types::Text;
 
 pub fn union_installment_credit(
     start: &str,
