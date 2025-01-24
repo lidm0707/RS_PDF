@@ -26,7 +26,7 @@ pub fn content_dashboard() -> Element {
     let mut end = use_signal(|| format!("{}-12", year).to_string());
 
 
-    let mut data_table_net: Signal<Vec<(String, f64, f64)>> =
+    let mut data_table_net: Signal<Vec<(String, (f64,f64,f64), f64)>> =
         use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
         let mut data_table_cash_credit: Signal<Vec<(String, HashMap<i32, HashMap<String, f64>>)>> =
         use_signal(|| get_dashboard_cash_credit(&start.read(), &end.read()));

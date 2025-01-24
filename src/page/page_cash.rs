@@ -31,7 +31,7 @@ pub fn content_cash() -> Element {
     let  date_signal: Signal<String> = use_signal(|| get_format_date(&now));
     let  period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
     let mut selected_type: Signal<String> = use_signal(|| "OUT-COME".to_string());
-    let revernur_type = use_signal(|| con_get_revenue_type().unwrap());
+    let revernue_type = use_signal(|| con_get_revenue_type().unwrap());
 
     rsx! {
         div {
@@ -60,6 +60,7 @@ pub fn content_cash() -> Element {
                             period.read().clone(),
                             evt.values()["type"].as_value(),
                             label_id.read().clone(),
+                            Some(evt.values()["note"].as_value()),
                             match evt.values()["amount"].as_value().to_string().parse::<f64>() {
                                 Ok(amount) => amount,
                                 Err(e) => {
@@ -109,7 +110,7 @@ pub fn content_cash() -> Element {
                                             println!("{} ", evt.value());
                                         },
                                         {
-                                            revernur_type
+                                            revernue_type
                                                 .iter()
                                                 .map(|re_type| {
                                                     let name_type = &re_type.category;
@@ -139,6 +140,15 @@ pub fn content_cash() -> Element {
                                         }
                                     }
                                 }
+                            }
+                        }
+                        div { class: "flex ",
+                            label { class: "mr-2 w-1/6", {"NOTE"} }
+                            input {
+                                class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
+                                name: "note", // Add name attribute to capture data
+                                r#type: "text",
+                                value: "",
                             }
                         }
                         div { class: "flex ",

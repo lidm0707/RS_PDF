@@ -2,4 +2,4 @@
 dx serve  
 
 
-npx tailwindcss -i ./assets/input.css -o ./assets/tailwind.css --watch
+npx tailwindcss -i ./assets/input.css -o ./assets/output.css --watch

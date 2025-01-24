@@ -5,6 +5,7 @@ pub fn sv_set_cash(
     period_value: String,
     type_cash_value: String,
     label_id_value: i32,
+    note_value: Option<String>,
     amount_value: f64,
 ) -> Result<ModelCash, anyhow::Error> {
     let raw_data = insert_cash(
@@ -12,6 +13,7 @@ pub fn sv_set_cash(
         period_value,
         type_cash_value,
         label_id_value,
+        note_value,
         amount_value,
     );
 
@@ -21,6 +23,7 @@ pub fn sv_set_cash(
         period: raw_data.period,
         type_cash: raw_data.type_cash,
         label_id: raw_data.label_id,
+        note:raw_data.note,
         amount: raw_data.amount,
     };
 

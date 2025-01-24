@@ -14,6 +14,7 @@ diesel::table! {
         period -> Text,
         type_cash -> Text,
         label_id -> Integer,
+        note -> Nullable<Text>,
         amount -> Double,
     }
 }

@@ -1,7 +1,9 @@
 use dioxus::desktop::{tao, LogicalPosition};
 use dioxus::prelude::*;
 use rust_pdf::component::menu::MenuButton;
-use rust_pdf::page::*;
+use rust_pdf::page::{
+    page_cash, page_credit, page_dashboad, page_installment, page_label, page_upload,
+};
 fn main() {
     let window = tao::window::WindowBuilder::new()
         .with_resizable(true)
@@ -13,7 +15,7 @@ fn main() {
                 .with_window(window),
         )
         .launch(app);
-    // dioxus::launch(App);
+    // dioxus::launch(app);
 }
 
 pub enum Content {
@@ -25,11 +27,10 @@ pub enum Content {
     Dashboard,
 }
 
-#[component]
 fn app() -> Element {
     let mut show_content = use_signal(|| Content::Dashboard);
     rsx! {
-      document::Link { rel: "stylesheet", href: asset!("/assets/tailwind.css") }
+      document::Link { rel: "stylesheet", href: asset!("/assets/output.css") }
       div { class: "main",
         div { class: "menu",
           div {
@@ -106,5 +107,4 @@ fn app() -> Element {
         }
       }
     }
-    
 }

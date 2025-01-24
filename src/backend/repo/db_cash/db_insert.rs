@@ -9,6 +9,7 @@ pub fn insert_cash(
     period_value: String,
     type_cash_value: String,
     label_id_value: i32,
+    note_value:Option<String> ,
     amount_value: f64,
 ) -> SelectCash {
     let mut conn = connect_database();
@@ -18,6 +19,7 @@ pub fn insert_cash(
         period: period_value,
         type_cash: type_cash_value,
         label_id: label_id_value,
+        note:note_value,
         amount: amount_value,
  
     };

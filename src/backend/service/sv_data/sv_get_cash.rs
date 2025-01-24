@@ -16,6 +16,7 @@ pub fn sv_get_cash() -> Result<Vec<ModelCash>, anyhow::Error> {
             period: raw.period,
             type_cash: raw.type_cash,
             label_id: raw.label_id,
+            note:raw.note,
             amount: raw.amount,
         })
         .collect();

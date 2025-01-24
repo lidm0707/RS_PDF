@@ -1,13 +1,13 @@
 module.exports = {
-  mode: "all",
+  mode: "all", // This is not a valid option in Tailwind CSS 4.0.0. Remove it.
   content: [
-      // include all rust, html and css files in the src directory
-      "./src/**/*.{rs,html,css}",
-      // include all html files in the output (dist) directory
-      "./dist/**/*.html",
+    // Include all Rust, HTML, and CSS files in the src directory
+    "./src/**/*.{rs,html,css}",
+    // Include all HTML files in the output (dist) directory
+    "./dist/**/*.html",
   ],
   theme: {
-      extend: {},
+    extend: {}, // Extend the default theme if needed
   },
-  plugins: [],
-}
+  plugins: [], // Add any Tailwind plugins here
+};
