@@ -1,10 +1,15 @@
-use crate::{backend::model::model_pdf::Line, backend::service::{date::{date_format::format_date, now::thai_now}, pdf::check_label::search_labels}};
-use anyhow::Result;
+use crate::{
+    backend::model::model_pdf::Line,
+    backend::service::{
+        date::{date_format::format_date, now::thai_now},
+        pdf::check_label::search_labels,
+    },
+};
 use chrono::prelude::*;
 use pdfium_render::prelude::*;
 use regex::Regex;
 
-pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
+pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line, anyhow::Error> {
     let mut data = Line {
         date: Vec::new(),
         ctx: Vec::new(),
@@ -15,39 +20,50 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line> {
     };
 
     let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
-    let pdfium = Pdfium::default();
-
     let check_password = if password.is_empty() {
         None
     } else {
         Some(password)
     };
-    let pdf = pdfium.load_pdf_from_file(file_path, check_password)?;
 
-    let pages = pdf.pages();
-    let total_pages = pages.len();
-    println!("Total pages: {}", total_pages);
+    match Pdfium::bind_to_library(Pdfium::pdfium_platform_library_name_at_path("./")) {
+        Ok(bind) => {
+            let pdf_raw = Pdfium::new(bind);
+            let pdf = pdf_raw.load_pdf_from_file(file_path, check_password)?;
+            let pages = pdf.pages();
+            let total_pages = pages.len();
+            println!("Total pages: {}", total_pages);
 
-    for (index, page) in pages.iter().enumerate() {
-        if let Ok(text) = page.text() {
-            let content = text.all(); // Get all text from the page
-            let lines: Vec<&str> = content.lines().collect(); // Split content into lines
+            for (index, page) in pages.iter().enumerate() {
+                if let Ok(text) = page.text() {
+                    let content = text.all(); // Get all text from the page
+                    let lines: Vec<&str> = content.lines().collect(); // Split content into lines
 
-            for line in &lines {
-                // Print lines matching date format
-                if date_regex.is_match(line) {
-                    split_line(line, total_pages as u16, index as u16, &mut data)?;
+                    for line in &lines {
+                        // Print lines matching date format
+                        if date_regex.is_match(line) {
+                            split_line(line, total_pages as u16, index as u16, &mut data)?;
+                        }
+                    }
                 }
             }
         }
-    }
+        Err(err) => {
+            println!("{:?}", err)
+        }
+    };
 
     // Print debug information for the collected data
     println!("{:?}", data);
     Ok(data)
 }
 
-fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Result<()> {
+fn split_line(
+    line: &str,
+    total_pages: u16,
+    index: u16,
+    data: &mut Line,
+) -> Result<(), anyhow::Error> {
     let arr: Vec<&str> = line.trim().split_whitespace().collect();
 
     // Log line content for debugging
@@ -58,12 +74,12 @@ fn split_line(line: &str, total_pages: u16, index: u16, data: &mut Line) -> Resu
         println!("Skipping line: {} - insufficient data", line);
     } else {
         // Extract components
-        let date = arr[1].to_string(); 
-        let ctx = arr[2..arr.len() - 1].join(" "); 
-        let amount_str = arr.last().unwrap(); 
-        let (label_search_id ,payment_type_id)= search_labels(&ctx).unwrap().unwrap() ; // todo
-        ////////////////////////////////////////////////////////////////////////////////////
-        // Remove commas from the amount string
+        let date = arr[1].to_string();
+        let ctx = arr[2..arr.len() - 1].join(" ");
+        let amount_str = arr.last().unwrap();
+        let (label_search_id, payment_type_id) = search_labels(&ctx).unwrap().unwrap(); // todo
+                                                                                        ////////////////////////////////////////////////////////////////////////////////////
+                                                                                        // Remove commas from the amount string
         let sanitized_amount_str = amount_str.replace(",", "");
         let now_thai = thai_now();
         // Attempt to parse the amount as f64

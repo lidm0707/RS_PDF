@@ -5,7 +5,7 @@ use diesel::dsl::{sql, sum};
 use diesel::prelude::*;
 
 use backend::entity::entity_credit::GroupBySumCredit;
-use backend::repo::db_connect::connect_database;
+use backend::repo::db_connect::{connect_database, run_migrations};
 use backend::service::date::date_format::format_period;
 use backend::service::date::now::thai_now_string;
 use diesel::sql_types::{Integer, Text};
@@ -108,8 +108,11 @@ pub fn union_credit_installment_label(
 pub fn summary_revernue(
     start: &str,
     end: &str,
-) -> Result<Vec<(String, String,i32, Option<f64>)>, anyhow::Error> {
+) -> Result<Vec<(String, String, i32, Option<f64>)>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
+
+    let _ = run_migrations(&mut conn);
+
     let preriod_now = format_period(&thai_now_string());
 
     let cash = cash::table

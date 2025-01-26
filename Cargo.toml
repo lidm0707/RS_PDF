@@ -4,16 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-dotenvy = "0.15.7"
+# dotenvy = "0.15.7"
 anyhow = "1.0.95"
 pdfium-render = "0.8.26"
 regex = "1.11.1"
 diesel = { version = "2.2.6", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+diesel_migrations = "2.2.0"
 libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 dioxus = { version = "0.6.1", features = [] }
 manganis = "0.6.1"
 chrono = "0.4.39"
 num-format = "0.4.4"
+
 
 [features]
 default = ["desktop"]
