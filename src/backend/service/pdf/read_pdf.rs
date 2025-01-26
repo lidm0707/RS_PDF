@@ -26,7 +26,7 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line, anyhow
         Some(password)
     };
 
-    match Pdfium::bind_to_library(Pdfium::pdfium_platform_library_name_at_path("./")) {
+    match Pdfium::bind_to_library(Pdfium::pdfium_platform_library_name_at_path("./assets")) {
         Ok(bind) => {
             let pdf_raw = Pdfium::new(bind);
             let pdf = pdf_raw.load_pdf_from_file(file_path, check_password)?;
