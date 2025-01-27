@@ -8,11 +8,21 @@ diesel::table! {
 }
 
 diesel::table! {
-    cash (id) {
+    cash_in (id) {
         id -> Integer,
         date -> Date,
         period -> Text,
-        type_cash -> Text,
+        revenue_id -> Integer,
+        note -> Nullable<Text>,
+        amount -> Double,
+    }
+}
+
+diesel::table! {
+    cash_out (id) {
+        id -> Integer,
+        date -> Date,
+        period -> Text,
         label_id -> Integer,
         note -> Nullable<Text>,
         amount -> Double,
@@ -132,7 +142,8 @@ diesel::table! {
 
 diesel::allow_tables_to_appear_in_same_query!(
     bank,
-    cash,
+    cash_in,
+    cash_out,
     credits,
     installment,
     installment_items,

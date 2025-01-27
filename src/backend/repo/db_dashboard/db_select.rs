@@ -8,7 +8,7 @@ use backend::entity::entity_credit::GroupBySumCredit;
 use backend::repo::db_connect::{connect_database, run_migrations};
 use backend::service::date::date_format::format_period;
 use backend::service::date::now::thai_now_string;
-use diesel::sql_types::{Integer, Text};
+use diesel::sql_types::Integer;
 
 pub fn union_installment_credit(
     start: &str,
@@ -108,21 +108,20 @@ pub fn union_credit_installment_label(
 pub fn summary_revernue(
     start: &str,
     end: &str,
-) -> Result<Vec<(String, String, i32, Option<f64>)>, anyhow::Error> {
+) -> Result<Vec<(String, i32, Option<f64>)>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
 
     let _ = run_migrations(&mut conn);
 
     let preriod_now = format_period(&thai_now_string());
 
-    let cash = cash::table
-        .filter(cash::period.ge(start).and(cash::period.le(end)))
-        .group_by((cash::period, cash::label_id, cash::type_cash))
+    let cash_out = cash_out::table
+        .filter(cash_out::period.ge(start).and(cash_out::period.le(end)))
+        .group_by((cash_out::period, cash_out::label_id))
         .select((
-            cash::period,
-            cash::type_cash,
-            cash::label_id,
-            sum(cash::amount),
+            cash_out::period,
+            cash_out::label_id,
+            sum(cash_out::amount),
         ));
 
     let real_installment = installment_items::bank_id.eq(1).and(
@@ -144,7 +143,6 @@ pub fn summary_revernue(
         .group_by(credits::period)
         .select((
             credits::period,
-            sql::<Text>("'OUT-COME'"),
             sql::<Integer>("0"),
             sum(credits::amount),
         ));
@@ -155,15 +153,14 @@ pub fn summary_revernue(
         .group_by(installment_items::period)
         .select((
             installment_items::period,
-            sql::<Text>("'OUT-COME'"),
             sql::<Integer>("0"),
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
         ));
 
     let results =
-        cash.union(credit_table)
+        cash_out.union(credit_table)
             .union(installment_table)
-            .load::<(String, String, i32, Option<f64>)>(&mut conn)?;
+            .load::<(String, i32, Option<f64>)>(&mut conn)?;
 
     Ok(results)
 }

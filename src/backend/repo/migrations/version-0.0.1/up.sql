@@ -126,12 +126,21 @@ CREATE TABLE IF NOT EXISTS installment_items (
     installment_id INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS cash (
+CREATE TABLE IF NOT EXISTS cash_out (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     date DATE NOT NULL,
     period TEXT NOT NULL,
-    type_cash TEXT NOT NULL,
     label_id INTEGER NOT NULL,
+    note TEXT ,
+    amount DOUBLE NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS cash_in (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    date DATE NOT NULL,
+    period TEXT NOT NULL,
+    revenue_id INTEGER NOT NULL,
     note TEXT ,
     amount DOUBLE NOT NULL
 );

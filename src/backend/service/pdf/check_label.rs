@@ -25,5 +25,5 @@ pub fn search_labels(ctx: &str) -> Result<Option<(i32,i32)>, anyhow::Error> {
     }
 
     // ไม่พบการจับคู่
-    Ok(Some((0, 0)))
+    Ok(Some((0, 1)))
 }

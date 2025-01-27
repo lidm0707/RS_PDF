@@ -24,7 +24,7 @@ pub fn content_upload() -> Element {
     let chang_yy = use_callback(move |evt: Event<FormData>| {
         let tem_yy = evt.value().parse::<i32>().unwrap();
         let _ = year.set(tem_yy);
-        let temp: Vec<_> = files_uploaded.read().clone();
+        let temp = files_uploaded.read().clone();
         let tran = temp
             .iter()
             .enumerate()

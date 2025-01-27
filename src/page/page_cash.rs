@@ -9,11 +9,10 @@ use crate::{
                 con_now::get_thai_now,
             },
             con_db::{
-                con_get_cash::get_cash, con_get_label::get_label_name,
-                con_get_revenue_type::con_get_revenue_type, con_set_cash::set_cash,
+                con_get_cash_in::get_cash_in, con_get_cash_out::get_cash_out, con_get_label::get_label_name, con_get_revenue_type::con_get_revenue_type, con_set_cash_in::set_cash_in, con_set_cash_out::set_cash_out
             },
         },
-        model::model_cash::ModelCash,
+        model::{model_cash_in::ModelCashIn, model_cash_out::ModelCashOut},
     },
     component::{com_date::datepicker::PickerDate, com_table::table_cash::CashTable},
 };
@@ -25,11 +24,12 @@ pub fn content_cash() -> Element {
         get_thai_now().month(),
         &get_thai_now().year().to_string()[2..4]
     );
-    let mut data_table: Signal<Vec<ModelCash>> = use_signal(|| get_cash().unwrap());
+    let mut data_table_out: Signal<Vec<ModelCashOut>> = use_signal(|| get_cash_out().unwrap());
+    let mut data_table_in: Signal<Vec<ModelCashIn>> = use_signal(|| get_cash_in().unwrap());
     let mut show_modal: Signal<bool> = use_signal(|| false);
     let mut label_id: Signal<i32> = use_signal(|| 1);
-    let  date_signal: Signal<String> = use_signal(|| get_format_date(&now));
-    let  period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
+    let date_signal: Signal<String> = use_signal(|| get_format_date(&now));
+    let period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
     let mut selected_type: Signal<String> = use_signal(|| "OUT-COME".to_string());
     let revernue_type = use_signal(|| con_get_revenue_type().unwrap());
 
@@ -54,24 +54,43 @@ pub fn content_cash() -> Element {
                 form {
                     class: "",
                     onsubmit: move |evt| {
-                        println!("date_signal: {:?}", evt.values());
-                        let _ = set_cash(
-                            date_signal.read().clone(),
-                            period.read().clone(),
-                            evt.values()["type"].as_value(),
-                            label_id.read().clone(),
-                            Some(evt.values()["note"].as_value()),
-                            match evt.values()["amount"].as_value().to_string().parse::<f64>() {
-                                Ok(amount) => amount,
-                                Err(e) => {
-                                    println!("Failed to parse amount: {:?}", e);
-                                    0.00f64
-                                }
-                            },
-                        );
-                        data_table.set(get_cash().unwrap());
-                        show_modal.set(false);
-                        println!("label_name: {:?}", evt);
+                        if *selected_type.read() == "IN-COME".to_string() {
+                            println!("date_signal: {:?}", evt.values());
+                            let _ = set_cash_in(
+                                date_signal.read().clone(),
+                                period.read().clone(),
+                                label_id.read().clone(),
+                                Some(evt.values()["note"].as_value()),
+                                match evt.values()["amount"].as_value().to_string().parse::<f64>() {
+                                    Ok(amount) => amount,
+                                    Err(e) => {
+                                        println!("Failed to parse amount: {:?}", e);
+                                        0.00f64
+                                    }
+                                },
+                            );
+                            data_table_in.set(get_cash_in().unwrap());
+                            show_modal.set(false);
+                            println!("label_name: {:?}", evt);
+                        } else {
+                            println!("date_signal: {:?}", evt.values());
+                            let _ = set_cash_out(
+                                date_signal.read().clone(),
+                                period.read().clone(),
+                                label_id.read().clone(),
+                                Some(evt.values()["note"].as_value()),
+                                match evt.values()["amount"].as_value().to_string().parse::<f64>() {
+                                    Ok(amount) => amount,
+                                    Err(e) => {
+                                        println!("Failed to parse amount: {:?}", e);
+                                        0.00f64
+                                    }
+                                },
+                            );
+                            data_table_out.set(get_cash_out().unwrap());
+                            show_modal.set(false);
+                            println!("label_name: {:?}", evt);
+                        }
                     },
                     div {
                         div { class: "flex ",
@@ -182,7 +201,7 @@ pub fn content_cash() -> Element {
                     {"ADD"}
                 }
             }
-            CashTable { data_table }
+            CashTable { data_table_out, data_table_in }
         }
     }
 }

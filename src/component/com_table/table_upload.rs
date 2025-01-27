@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::backend::{
     controller::con_db::{
         con_get_label::{get_label_name, get_label_name_where},
-        con_get_payment::get_payment_type_where,
+        con_get_payment::{get_payment_type, get_payment_type_where},
     },
     model::model_pdf::TranformLine,
 };
@@ -33,10 +33,27 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                             .map(|(i, raw)| {
                                 let r2 = format!("{:.2}", raw.amount);
                                 let l_id = raw.label_id as i32;
-                                let label_name = get_label_name_where(l_id)
-                                    .unwrap()[0]
-                                    .label
-                                    .clone();
+                                let p_id = raw.payment_type_id as i32;
+                                let label_name = match get_label_name_where(l_id) {
+                                    Ok(labels) => {
+                                        if labels.is_empty() {
+                                            "Unknown".to_string()
+                                        } else {
+                                            labels.first().unwrap().label.clone()
+                                        }
+                                    }
+                                    Err(err) => panic!("{}", err),
+                                };
+                                let channel_name = match get_payment_type_where(p_id) {
+                                    Ok(labels) => {
+                                        if labels.is_empty() {
+                                            "Unknown".to_string()
+                                        } else {
+                                            labels.first().unwrap().chanel.clone()
+                                        }
+                                    }
+                                    Err(err) => panic!("{}", err),
+                                };
                                 rsx! {
                                     tr {
                                         td { "{raw.date}" }
@@ -65,8 +82,26 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                         td { "{raw.period}" }
                                         td {
                                             {
-                                                let id_input = raw.payment_type_id.clone() as i32;
-                                                get_payment_type_where(id_input).unwrap()[0].chanel.clone()
+                                                rsx! {
+                                                    select {
+                                                        value: "{channel_name}",
+                                                        onchange: move |evt| {
+                                                            println!("{} - {:?}", i, evt.value());
+                                                            let mut data = file_upload.write();
+                                                            data[i].payment_type_id = evt.value().parse::<i32>().unwrap() as i64;
+                                                        },
+                                                        {
+                                                            get_payment_type()
+                                                                .unwrap()
+                                                                .iter()
+                                                                .map(|x| {
+                                                                    rsx! {
+                                                                        option { value: "{x.id}", selected: "{label_name == x.chanel}", "{x.chanel}" }
+                                                                    }
+                                                                })
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::backend::repo::{
-    db_cash::db_select::select_cash_out_groupby_label, db_dashboard::db_select::union_installment_credit,
+    db_cash_out::db_select::select_cash_out_groupby_label, db_dashboard::db_select::union_installment_credit,
 };
 
 pub fn data_sumary_cash_credit(

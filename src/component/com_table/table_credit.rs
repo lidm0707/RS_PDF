@@ -23,23 +23,38 @@ pub fn CreditTable(data_table: Signal<Vec<ModelCredit>>) -> Element {
                             .iter()
                             .map(|raw| {
                                 let r2 = format!("{:.2}", raw.amount);
+                                let l_id = raw.label_id.clone() as i32;
+                                let p_id = raw.payment_type_id as i32;
+
+                                let label_name = match get_label_name_where(l_id) {
+                                    Ok(labels) => {
+                                        if labels.is_empty() {
+                                            "Unknown".to_string()
+                                        } else {
+                                            labels.first().unwrap().label.clone()
+                                        }
+                                    }
+                                    Err(err) => panic!("{}", err),
+                                };
+                                let channel_name = match get_payment_type_where(p_id) {
+                                    Ok(labels) => {
+                                        if labels.is_empty() {
+                                            "Unknown".to_string()
+                                        } else {
+                                            labels.first().unwrap().chanel.clone()
+                                        }
+                                    }
+                                    Err(err) => panic!("{}", err),
+                                };
                                 rsx! {
                                     tr {
                                         td { "{raw.date}" }
                                         td { "{raw.ctx}" }
                                         td { class: "text-right", "{r2}" }
-                                        td {
-                                            {
-                                                let input_id = raw.label_id.clone() as i32;
-                                                get_label_name_where(input_id).unwrap()[0].label.clone()
-                                            }
-                                        }
+                                        td {"{label_name}"}
                                         td { "{raw.period}" }
                                         td {
-                                            {
-                                                let id_input = raw.payment_type_id.clone() as i32;
-                                                get_payment_type_where(id_input).unwrap()[0].chanel.clone()
-                                            }
+                                            "{channel_name}"
                                         }
                                     }
                                 }

@@ -19,7 +19,14 @@ pub fn read_credit_kbank(file_path: &str, password: &str) -> Result<Line, anyhow
         payment_type_id: Vec::new(),
     };
 
-    let date_regex = Regex::new(r"^\d{2}/\d{2}/\d{2}").unwrap();
+    let date_regex = match Regex::new(r"^\d{2}/\d{2}/\d{2}") {
+        Ok(regex) => regex, // Use the compiled regex if successful
+        Err(err) => {
+            println!("Failed to compile regex: {}", err);
+            // Handle the error appropriately, e.g., by panicking or using a default regex
+            panic!("Regex compilation failed: {}", err);
+        }
+    };
     let check_password = if password.is_empty() {
         None
     } else {
@@ -76,7 +83,7 @@ fn split_line(
         // Extract components
         let date = arr[1].to_string();
         let ctx = arr[2..arr.len() - 1].join(" ");
-        let amount_str = arr.last().unwrap();
+        let amount_str = arr.last().unwrap_or(&"0.00");
         let (label_search_id, payment_type_id) = search_labels(&ctx).unwrap().unwrap(); // todo
                                                                                         ////////////////////////////////////////////////////////////////////////////////////
                                                                                         // Remove commas from the amount string

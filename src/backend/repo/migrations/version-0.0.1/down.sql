@@ -8,7 +8,9 @@ DROP TABLE installment;
 
 DROP TABLE installment_items;
 
-DROP TABLE cash;
+DROP TABLE cash_out;
+
+DROP TABLE cash_in;
 
 DROP TABLE setting_pass_pdf;
 
