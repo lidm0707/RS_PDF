@@ -1,43 +1,55 @@
 -- Create the table `version` if it does not exist
-CREATE TABLE IF NOT EXISTS version (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ver TEXT NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS version (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        ver TEXT NOT NULL
+    );
 
 -- Insert into `version` only if the data does not already exist
-INSERT OR IGNORE INTO version (ver) VALUES ('0.0.1');
+INSERT
+OR IGNORE INTO version (ver)
+VALUES
+    ('0.0.1');
 
 -- Create the table `labels_name` if it does not exist
-CREATE TABLE IF NOT EXISTS labels_name (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    label TEXT NOT NULL UNIQUE,
-    ord INTEGER NOT NULL,
-    show_able BOOL NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS labels_name (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        label TEXT NOT NULL UNIQUE,
+        ord INTEGER NOT NULL,
+        show_able BOOL NOT NULL
+    );
 
 -- Insert into `labels_name` only if the data does not already exist
-INSERT OR IGNORE INTO labels_name (label, ord, show_able)
+INSERT
+OR IGNORE INTO labels_name (label, ord, show_able)
 VALUES
     ('FOOD', 1, 1),
     ('OTHER', 2, 1),
-    ('GRAB', 3, 1),
-    ('MRT', 4, 1),
-    ('BTS', 5, 1),
-    ('COURSE', 6, 1),
-    ('YOUTUBE', 7, 1),
-    ('MASSAGE', 8, 1),
-    ('GOOGLE', 9, 1);
+    ('SAVING', 3, 1),
+    ('RMF/SSF', 4, 1),
+    ('CRPYTO', 5, 1),
+    ('STOCK', 6, 1),
+    ('GRAB', 7, 1),
+    ('MRT', 8, 1),
+    ('BTS', 9, 1),
+    ('COURSE', 10, 1),
+    ('YOUTUBE', 11, 1),
+    ('MASSAGE', 12, 1),
+    ('GOOGLE', 13, 1);
 
 -- Create the table `labels` if it does not exist
-CREATE TABLE IF NOT EXISTS labels (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    id_label INTEGER NOT NULL,
-    abb_ctx TEXT NOT NULL,
-    UNIQUE(id_label, abb_ctx) -- Avoid duplicate label-context pairs
-);
+CREATE TABLE
+    IF NOT EXISTS labels (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        id_label INTEGER NOT NULL,
+        abb_ctx TEXT NOT NULL,
+        UNIQUE (id_label, abb_ctx) -- Avoid duplicate label-context pairs
+    );
 
 -- Insert into `labels` only if the data does not already exist
-INSERT OR IGNORE INTO labels (id_label, abb_ctx)
+INSERT
+OR IGNORE INTO labels (id_label, abb_ctx)
 VALUES
     (1, 'AFTER YOU'),
     (1, 'NORMA BANGKOK'),
@@ -48,126 +60,140 @@ VALUES
     (1, 'MAN WONGNAI'),
     (2, 'SHOPEE'),
     (2, 'OPHTUS'),
-    (3, 'GRAB'),
-    (4, 'MRT-BEM'),
-    (5, 'BTS'),
-    (6, 'PAYPAL *VPNISE'),
-    (6, 'WWW.OMISE.CO'),
-    (7, 'GOOGLE YOUTUBE'),
-    (8, 'MASSAGE'),
-    (9, 'GOOGLE*CLOUD');
+    (7, 'GRAB'),
+    (8, 'MRT-BEM'),
+    (9, 'BTS'),
+    (10, 'PAYPAL *VPNISE'),
+    (10, 'WWW.OMISE.CO'),
+    (11, 'GOOGLE YOUTUBE'),
+    (12, 'MASSAGE'),
+    (13, 'GOOGLE*CLOUD');
 
 -- Create the table `payment_type` if it does not exist
-CREATE TABLE IF NOT EXISTS payment_type (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    chanel TEXT NOT NULL UNIQUE
-);
+CREATE TABLE
+    IF NOT EXISTS payment_type (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        chanel TEXT NOT NULL UNIQUE
+    );
 
 -- Insert into `payment_type` only if the data does not already exist
-INSERT OR IGNORE INTO payment_type (chanel)
+INSERT
+OR IGNORE INTO payment_type (chanel)
 VALUES
     ('credit'),
     ('installment'),
     ('cash');
 
 -- Create the table `bank` if it does not exist
-CREATE TABLE IF NOT EXISTS bank (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE
-);
+CREATE TABLE
+    IF NOT EXISTS bank (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE
+    );
 
 -- Insert into `bank` only if the data does not already exist
-INSERT OR IGNORE INTO bank (name)
+INSERT
+OR IGNORE INTO bank (name)
 VALUES
     ('T1 UCHOOSE'),
     ('KASIKORN');
 
 -- Create the table `revenue_type` if it does not exist
-CREATE TABLE IF NOT EXISTS revenue_type (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    category TEXT NOT NULL UNIQUE
-);
+CREATE TABLE
+    IF NOT EXISTS revenue_type (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        category TEXT NOT NULL UNIQUE
+    );
 
 -- Insert into `revenue_type` only if the data does not already exist
-INSERT OR IGNORE INTO revenue_type (category)
+INSERT
+OR IGNORE INTO revenue_type (category)
 VALUES
     ('SALARY'),
     ('EXTRA'),
     ('REFUND');
 
 -- Create other necessary tables with IF NOT EXISTS
-CREATE TABLE IF NOT EXISTS credits (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date DATE NOT NULL,
-    ctx TEXT NOT NULL,
-    amount DOUBLE NOT NULL,
-    label_id INTEGER NOT NULL,
-    period TEXT NOT NULL,
-    payment_type_id INTEGER NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS credits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        ctx TEXT NOT NULL,
+        amount DOUBLE NOT NULL,
+        label_id INTEGER NOT NULL,
+        period TEXT NOT NULL,
+        payment_type_id INTEGER NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS installment (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date_start DATE NOT NULL,
-    date_end DATE NOT NULL,
-    time INTEGER NOT NULL,
-    note TEXT NOT NULL,
-    label_id INTEGER NOT NULL,
-    amount DOUBLE NOT NULL,
-    total DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS installment (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date_start DATE NOT NULL,
+        date_end DATE NOT NULL,
+        time INTEGER NOT NULL,
+        note TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL,
+        total DOUBLE NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS installment_items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date DATE NOT NULL,
-    period TEXT NOT NULL,
-    bank_id INTEGER NOT NULL,
-    amount DOUBLE NOT NULL,
-    installment_id INTEGER NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS installment_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        period TEXT NOT NULL,
+        bank_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL,
+        installment_id INTEGER NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS cash_out (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date DATE NOT NULL,
-    period TEXT NOT NULL,
-    label_id INTEGER NOT NULL,
-    note TEXT ,
-    amount DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS cash_out (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        period TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        note TEXT,
+        amount DOUBLE NOT NULL
+    );
 
+CREATE TABLE
+    IF NOT EXISTS cash_in (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        date DATE NOT NULL,
+        period TEXT NOT NULL,
+        revenue_id INTEGER NOT NULL,
+        note TEXT,
+        amount DOUBLE NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS cash_in (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date DATE NOT NULL,
-    period TEXT NOT NULL,
-    revenue_id INTEGER NOT NULL,
-    note TEXT ,
-    amount DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS planing_cash (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
+        period TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS planing_cash (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
-    period TEXT NOT NULL,
-    label_id INTEGER NOT NULL,
-    amount DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS planing_credit (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
+        period TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS planing_credit (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
-    period TEXT NOT NULL,
-    label_id INTEGER NOT NULL,
-    amount DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS setting_pass_pdf (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        ctx TEXT NOT NULL,
+        type TEXT NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS setting_pass_pdf (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    ctx TEXT NOT NULL,
-    type TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS setting_hotkey (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    type TEXT NOT NULL,
-    label_id INTEGER NOT NULL,
-    amount DOUBLE NOT NULL
-);
+CREATE TABLE
+    IF NOT EXISTS setting_hotkey (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        type TEXT NOT NULL,
+        label_id INTEGER NOT NULL,
+        amount DOUBLE NOT NULL
+    );
