@@ -1,5 +1,4 @@
 use dioxus::prelude::*;
-use num_format::{Locale, ToFormattedString};
 use std::{collections::HashMap, rc::Rc};
 
 use crate::{
