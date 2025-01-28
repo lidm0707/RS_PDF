@@ -20,6 +20,8 @@ pub fn NetDashboardTable(data_table: Signal<Vec<(String, (f64, f64, f64), f64)>>
                             let refund = all_re.2;
                             let total = re + extra + refund;
                             let plan = get_plan_by_period(&month).1;
+                            let net_plan = total - plan;
+                            let net_acc = total - ex;
                             rsx! {
                                 if index == 0 {
                                     thead { class: "text-xs rounded-r-lg rounded-l-lg sticky top-0 px-6 py-3",
@@ -33,7 +35,7 @@ pub fn NetDashboardTable(data_table: Signal<Vec<(String, (f64, f64, f64), f64)>>
                                 }
                                 tbody {
                                     tr {
-                                        td { class: "w-25","{month}" } // Display the month
+                                        td { class: "w-25", "{month}" } // Display the month
                                         td { class: "w-40",
                                             div { class: "flex",
                                                 div { class: "flex justify-start mr-2 w-10",
@@ -78,10 +80,14 @@ pub fn NetDashboardTable(data_table: Signal<Vec<(String, (f64, f64, f64), f64)>>
                                                         div { "plan: " }
                                                     }
                                                 }
-                                                div { class: if re - ex > 0.0 { "flex justify-end text-green-500 w-30" } else { "flex justify-end text-red-500 w-30" },
+                                                div { class: "flex justify-end  w-30" ,
                                                     div { class: "justify-items-end ",
-                                                        div { "{format_with_separator(&(total - ex))}" }
-                                                        div { "{format_with_separator(&(total - plan))}" }
+                                                        div { class: if net_acc > 0.00 { "text-green-500" } else { "text-red-500" },
+                                                            "{format_with_separator(&net_acc)}"
+                                                        }
+                                                        div { class: if net_plan > 0.00 { "text-green-500" } else { "text-red-500" },
+                                                            "{format_with_separator(&net_plan)}"
+                                                        }
                                                     }
                                                 }
                                             }
