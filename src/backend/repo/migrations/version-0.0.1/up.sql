@@ -167,16 +167,9 @@ CREATE TABLE
         amount DOUBLE NOT NULL
     );
 
-CREATE TABLE
-    IF NOT EXISTS planing_cash (
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
-        period TEXT NOT NULL,
-        label_id INTEGER NOT NULL,
-        amount DOUBLE NOT NULL
-    );
 
 CREATE TABLE
-    IF NOT EXISTS planing_credit (
+    IF NOT EXISTS planing (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT NOT NULL,
         period TEXT NOT NULL,
         label_id INTEGER NOT NULL,

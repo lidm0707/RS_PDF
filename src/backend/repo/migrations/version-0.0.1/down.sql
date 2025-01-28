@@ -20,9 +20,7 @@ DROP TABLE payment_type;
 
 DROP TABLE bank;
 
-DROP TABLE planing_cash;
-
-DROP TABLE planing_credit;
+DROP TABLE planing;
 
 DROP TABLE version;
 

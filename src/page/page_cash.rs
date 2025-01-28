@@ -31,7 +31,6 @@ pub fn content_cash() -> Element {
     let date_signal: Signal<String> = use_signal(|| get_format_date(&now));
     let period: Signal<String> = use_signal(|| get_format_period(&date_signal.read()));
     let mut selected_type: Signal<String> = use_signal(|| "OUT-COME".to_string());
-    let revernue_type = use_signal(|| con_get_revenue_type().unwrap());
 
     rsx! {
         div {
@@ -129,7 +128,7 @@ pub fn content_cash() -> Element {
                                             println!("{} ", evt.value());
                                         },
                                         {
-                                            revernue_type
+                                            con_get_revenue_type().unwrap()
                                                 .iter()
                                                 .map(|re_type| {
                                                     let name_type = &re_type.category;

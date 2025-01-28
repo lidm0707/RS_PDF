@@ -90,16 +90,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    planing_cash (id) {
-        id -> Integer,
-        period -> Text,
-        label_id -> Integer,
-        amount -> Double,
-    }
-}
-
-diesel::table! {
-    planing_credit (id) {
+    planing (id) {
         id -> Integer,
         period -> Text,
         label_id -> Integer,
@@ -150,8 +141,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     labels,
     labels_name,
     payment_type,
-    planing_cash,
-    planing_credit,
+    planing,
     revenue_type,
     setting_hotkey,
     setting_pass_pdf,

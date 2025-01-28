@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::backend::{controller::con_db::{con_get_label::get_label_name_where, con_get_payment::get_payment_type_where}, model::model_credit::ModelCredit};
+use crate::{backend::{controller::con_db::{con_get_label::get_label_name_where, con_get_payment::get_payment_type_where}, model::model_credit::ModelCredit}, format::format_with_separator};
 
 #[component]
 pub fn CreditTable(data_table: Signal<Vec<ModelCredit>>) -> Element {
@@ -22,7 +22,7 @@ pub fn CreditTable(data_table: Signal<Vec<ModelCredit>>) -> Element {
                         &mut data_table
                             .iter()
                             .map(|raw| {
-                                let r2 = format!("{:.2}", raw.amount);
+                                let r2 = format_with_separator(&raw.amount);
                                 let l_id = raw.label_id.clone() as i32;
                                 let p_id = raw.payment_type_id as i32;
 

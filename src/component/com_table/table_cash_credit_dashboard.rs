@@ -1,21 +1,25 @@
 use dioxus::prelude::*;
+use num_format::{Locale, ToFormattedString};
 use std::{collections::HashMap, rc::Rc};
 
-use crate::backend::controller::con_db::{
-    con_get_label::get_label_name, con_get_plan_credit::get_plan_credit_where,
-    con_set_plan_credit::set_plan_credit,
+use crate::{
+    backend::controller::con_db::{
+        con_get_label::get_label_name, con_get_plan::get_plan_where,
+        con_set_plan_credit::set_plan_credit,
+    },
+    format::format_with_separator,
 };
 
 #[component]
 pub fn CashCreditDashboardTable(
     data_table: Signal<Vec<(String, HashMap<i32, HashMap<String, f64>>)>>,
+    editing_cells: Signal<Vec<String>>,
 ) -> Element {
     // Retrieve label names, handling potential errors
     let label_name = match get_label_name() {
         Ok(labels) => labels,
         Err(_) => vec![], // Fallback to an empty vector if labels cannot be retrieved
     };
-    let mut editing_cells = use_signal(|| Vec::<String>::new());
     rsx! {
         div { class: "table-container h-2/5 mb-10",
             table {
@@ -48,55 +52,55 @@ pub fn CashCreditDashboardTable(
                                                     let cash = main_data.get("cash").unwrap_or(&0.00);
                                                     let credit = main_data.get("credit").unwrap_or(&0.00);
                                                     let total = cash + credit;
-                                                    let plan = get_plan_credit_where(&period_clone, data.id);
+                                                    let plan = get_plan_where(&period_clone, data.id);
                                                     let format_id = format!("{}```{}", period_clone, data.id);
                                                     let rc_format_id = Rc::new(format_id);
                                                     let rc_format_id_1 = Rc::clone(&rc_format_id);
                                                     let rc_format_id_2 = Rc::clone(&rc_format_id);
-                                                    let is_editing = editing_cells.read().contains(&Rc::clone(&rc_format_id).to_string());
-                                                    let plan_value = get_plan_credit_where(&period_clone, data.id);
+                                                    let is_editing = editing_cells
+                                                        .read()
+                                                        .contains(&Rc::clone(&rc_format_id).to_string());
+                                                    let plan_value = get_plan_where(&period_clone, data.id);
                                                     rsx! {
                                                         td {
-                                                            class: " w-fit",
                                                             onclick: move |_| {
                                                                 editing_cells.write().clear();
                                                                 editing_cells.write().push(rc_format_id_1.to_string());
                                                                 println!("{:?}", editing_cells);
                                                             },
-                                                            div { class: "flex",
-                                                                div {
-                                                                    div { class: "flex justify-start mr-2",
-                                                                        div {
-                                                                            div { "CR" }
-                                                                            div { "CA" }
-                                                                            div { "TO" }
-                                                                            div { "PL" }
-                                                                        }
+                                                            div { class: "flex  w-full mr-2",
+                                                                div { class: "flex justify-start w-1/6",
+                                                                    div { class: "justify-items-start ",
+                                                                        div { "CR" }
+                                                                        div { "CA" }
+                                                                        div { "TO" }
+                                                                        div { "PL" }
                                                                     }
                                                                 }
-                                                                div { class: "flex justify-end w-full",
-                                                                    div { class:"justify-items-end",
-                                                                        div { "{credit}" }
-                                                                        div { "{cash}" }
-                                                                        div { "{total}" }
-                                                                        if !is_editing {
-                                                                            div {
-                                                                                div { "{plan}" }
-                                                                            }
-                                                                        } else {
-                                                                            div {class:"justify-items-end",
-                                                                                input { class:"w-24",
+                                                                div { class: "flex justify-end w-5/6",
+                                                                    div { class: "justify-items-end",
+                                                                        div { "{format_with_separator(&credit)}" }
+                                                                        div { "{format_with_separator(&cash)}" }
+                                                                        div { "{format_with_separator(&total)}" }
+                                                                        div {
+                                                                            if !is_editing {
+                                                                                "{format_with_separator(&plan)}"
+                                                                            } else {
+                                                                                input {
+                                                                                    class: "justify-items-end w-full",
                                                                                     onchange: move |evt| {
                                                                                         let format_onchange = rc_format_id_2.to_string();
                                                                                         editing_cells.write().retain(|cell| *cell != (format_onchange));
+                                                                                        let parsed_value = evt.value().clone().parse::<f64>().unwrap_or(0.0);
+                                                                                        let formatted_value = format!("{:.2}", parsed_value);
                                                                                         set_plan_credit(
                                                                                             period_onchange.to_string(),
                                                                                             data_id_onchange.clone(),
-                                                                                            evt.value().clone().parse::<f64>().unwrap(),
+                                                                                            formatted_value.parse::<f64>().unwrap(),
                                                                                         );
                                                                                     },
-                                                                                    value: "{plan_value}",
-                                                                                    initial_value: "{plan_value}",
+                                                                                    value: format_with_separator(&plan_value), // Ensure the value is properly formatted
+                                                                                    initial_value: format_with_separator(&plan_value), // Ensure the initial value is properly formatted
                                                                                 }
                                                                             }
                                                                         }

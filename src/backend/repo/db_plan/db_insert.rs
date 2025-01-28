@@ -1,5 +1,5 @@
-use self::backend::repo::schema::planing_credit::dsl::*;
-use crate::backend::entity::entity_plan_credit::*;
+use self::backend::repo::schema::planing::dsl::*;
+use crate::backend::entity::entity_plan::*;
 use crate::*;
 use backend::repo::db_connect::connect_database;
 use diesel::prelude::*;
@@ -17,7 +17,7 @@ pub fn insert_plan_credit(
         amount: amount_value,
     };
 
-    diesel::insert_into(planing_credit)
+    diesel::insert_into(planing)
         .values(new_post)
         .returning(SelectPlanCredit::as_returning())
         .get_result(&mut conn)

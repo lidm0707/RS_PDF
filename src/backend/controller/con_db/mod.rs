@@ -5,7 +5,7 @@ pub mod con_get_credit;
 pub mod con_get_installment;
 pub mod con_get_label;
 pub mod con_get_payment;
-pub mod con_get_plan_credit;
+pub mod con_get_plan;
 pub mod con_get_revenue_type;
 pub mod con_set_cash_out;
 pub mod con_set_credit;

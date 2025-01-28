@@ -5,7 +5,7 @@ pub mod sv_get_credit;
 pub mod sv_get_installment;
 pub mod sv_get_label;
 pub mod sv_get_payment;
-pub mod sv_get_plan_credit;
+pub mod sv_get_plan;
 pub mod sv_get_revenue_type;
 pub mod sv_set_cash_in;
 pub mod sv_set_cash_out;

@@ -1,9 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::backend::{
+use crate::{backend::{
     controller::con_db::{con_get_bank::get_bank_where, con_get_installment::get_installment},
     model::model_installment::{ModelInstallment, ModelInstallmentItems},
-};
+}, format::format_with_separator};
 
 #[component]
 pub fn TableInstallmentItem(
@@ -17,7 +17,6 @@ pub fn TableInstallmentItem(
     // pub bank_id:i32,
     // pub amount:f64,
     // pub installment_id: i32,
-
     rsx! {
         table {
             thead {
@@ -51,7 +50,7 @@ pub fn TableInstallmentItem(
                                             get_bank_where(bank_id).unwrap()[0].name.clone()
                                         }
                                     }
-                                    td { "{installment.amount}" }
+                                    td { "{format_with_separator(&installment.amount)}" }
                                 }
                             }
                         })

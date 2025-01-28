@@ -24,6 +24,7 @@ pub fn content_dashboard() -> Element {
 
     let mut start = use_signal(|| format!("{}-{}", year, month).to_string());
     let mut end = use_signal(|| format!("{}-12", year).to_string());
+    let  editing_cells: Signal<Vec<String>> = use_signal(|| Vec::<String>::new());
 
 
     let mut data_table_net: Signal<Vec<(String, (f64,f64,f64), f64)>> =
@@ -34,6 +35,7 @@ pub fn content_dashboard() -> Element {
     use_effect(move || {
         let year_val = year.read();
         let month_val = month.read();
+        let _ = editing_cells.read();
 
         // Format the start and end period based on selected month and year
         let new_start = format!("{year_val}-{month_val:0>2}");
@@ -90,7 +92,7 @@ pub fn content_dashboard() -> Element {
                 }
             }
             p { "test" }
-            CashCreditDashboardTable { data_table: data_table_cash_credit }
+            CashCreditDashboardTable { data_table: data_table_cash_credit , editing_cells }
             p { "NET" }
             NetDashboardTable { data_table: data_table_net }
 

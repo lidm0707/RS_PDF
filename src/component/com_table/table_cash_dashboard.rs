@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::backend::controller::con_db::con_get_label::get_label_name_where;
+use crate::{backend::controller::con_db::con_get_label::get_label_name_where, format::format_with_separator};
 
 
 #[component]
@@ -47,7 +47,7 @@ pub fn CashDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>) -
                                                     .iter()
                                                     .map(|data| {
                                                         let pure = data.unwrap_or(0.00f64);
-                                                        let cell_value = pure;
+                                                        let cell_value = format_with_separator(&pure);
                                                         rsx! {
                                                             td { "{cell_value}" }
                                                         }

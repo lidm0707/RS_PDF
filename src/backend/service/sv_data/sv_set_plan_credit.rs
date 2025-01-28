@@ -1,5 +1,5 @@
 use crate::backend::{
-    model::model_plan_credit::ModelPlanCredit, repo::db_plan_credit::db_insert::insert_plan_credit,
+    model::model_plan_credit::ModelPlanCredit, repo::db_plan::db_insert::insert_plan_credit,
 };
 
 pub fn sv_set_plan_credit(period: String, label_id: i32, amount: f64) -> ModelPlanCredit {

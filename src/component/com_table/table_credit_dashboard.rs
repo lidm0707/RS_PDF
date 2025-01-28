@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 use crate::backend::controller::con_db::{
-    con_get_label::get_label_name_where, con_get_plan_credit::get_plan_credit_where,
+    con_get_label::get_label_name_where, con_get_plan::get_plan_where,
     con_set_plan_credit::set_plan_credit,
 };
 #[component]
@@ -83,7 +83,7 @@ pub fn CreditDashboardTable(data_table: Signal<Vec<(String, Vec<Option<f64>>)>>)
                                                                     div { "{pure}" }
                                                                     {
                                                                         let month = month.clone();
-                                                                        let plan_value = get_plan_credit_where(&month, l_id);
+                                                                        let plan_value = get_plan_where(&month, l_id);
                                                                         println!("{:?}", plan_value);
                                                                         let new_id_in = new_id.clone();
                                                                         rsx! {

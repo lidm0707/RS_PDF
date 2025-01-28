@@ -1,6 +1,5 @@
 use chrono::prelude::*;
 use dioxus::prelude::*;
-use num_format::{Locale, ToFormattedString};
 
 use crate::{
     backend::{
@@ -10,7 +9,7 @@ use crate::{
         },
         model::model_pdf::TranformLine,
     },
-    component::{com_table::table_upload::UploadTable, upload::BtnUplaod},
+    component::{com_table::table_upload::UploadTable, upload::BtnUplaod}, format::format_with_separator,
 };
 
 pub fn content_upload() -> Element {
@@ -69,18 +68,13 @@ pub fn content_upload() -> Element {
     };
     let label_name = use_signal(|| get_label_name().unwrap());
 
-    let format_thai = move |number_f64: f64| {
-        let whole_part = (number_f64.trunc() as u64).to_formatted_string(&Locale::th);
-        let fractional_part = (number_f64.fract() * 100.0).round() as u64;
-        format!("{}.{:02}", whole_part, fractional_part)
-    };
     rsx! {
         div { class: "content",
             div { class: "summary",
                 div { class: "summary-items",
                     div { class: "p-3 text-center",
                         "AMOUNT"
-                        div { class: "text-right each-summary-item", {format_thai(sum_amount)} }
+                        div { class: "text-right each-summary-item", {format_with_separator(&sum_amount)} }
                     }
                 }
                 {
@@ -92,7 +86,7 @@ pub fn content_upload() -> Element {
                                 div { class: "summary-items",
                                     div { class: "p-3 text-center",
                                         "{x.label}"
-                                        div { class: "text-right each-summary-item", {format_thai(sum_by_gorupby_label(x.id))} }
+                                        div { class: "text-right each-summary-item", {format_with_separator(&sum_by_gorupby_label(x.id))} }
                                         div { class: "text-right each-summary-item",
                                             {format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount) * 100.0)}
                                         }

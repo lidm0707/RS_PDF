@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
 
-use crate::backend::{
+use crate::{backend::{
         controller::con_db::{
             con_get_installment::get_installment_items_where, con_get_label::get_label_name_where,
         },
         model::model_installment::{ModelInstallment, ModelInstallmentItems},
-    };
+    }, format::format_with_separator};
 // /    let mut df_installment_items: Signal<Vec<SelectInstallmentItems>> = use_signal(|| select_installment_items_where(*id_table.read()).expect("Failed to load labels"));
 
 #[component]
@@ -53,8 +53,8 @@ pub fn TableInstallment(
                                             get_label_name_where(input_id).unwrap()[0].label.clone()
                                         }
                                     }
-                                    td { "{installment.amount}" }
-                                    td { "{installment.total}" }
+                                    td { "{format_with_separator(&installment.amount)}" }
+                                    td { "{format_with_separator(&installment.total)}" }
                                 }
                             }
                         })

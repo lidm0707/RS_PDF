@@ -2,7 +2,7 @@ use diesel::prelude::*;
 
 
 #[derive(Insertable, Debug)]
-#[diesel(table_name = crate::backend::repo::schema::planing_credit)]
+#[diesel(table_name = crate::backend::repo::schema::planing)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 
 pub struct InsertPlanCredit {
@@ -14,7 +14,7 @@ pub struct InsertPlanCredit {
 
 
 #[derive(Queryable, Selectable, Debug, Clone)]
-#[diesel(table_name = crate::backend::repo::schema::planing_credit)]
+#[diesel(table_name = crate::backend::repo::schema::planing)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct SelectPlanCredit {
     pub id: i32,
