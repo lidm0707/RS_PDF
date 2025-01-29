@@ -13,6 +13,7 @@ use crate::{
 pub fn CashCreditDashboardTable(
     data_table: Signal<Vec<(String, HashMap<i32, HashMap<String, f64>>)>>,
     editing_cells: Signal<Vec<String>>,
+    extend:Signal<bool>,
 ) -> Element {
     // Retrieve label names, handling potential errors
     let label_name = match get_label_name() {
@@ -70,16 +71,16 @@ pub fn CashCreditDashboardTable(
                                                             div { class: "flex  w-full mr-2",
                                                                 div { class: "flex justify-start w-1/6",
                                                                     div { class: "justify-items-start ",
-                                                                        div { "CR" }
-                                                                        div { "CA" }
+                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CR" }
+                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CA" }
                                                                         div { "TO" }
                                                                         div { "PL" }
                                                                     }
                                                                 }
                                                                 div { class: "flex justify-end w-5/6",
                                                                     div { class: "justify-items-end",
-                                                                        div { "{format_with_separator(&credit)}" }
-                                                                        div { "{format_with_separator(&cash)}" }
+                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "{format_with_separator(&credit)}" }
+                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "{format_with_separator(&cash)}" }
                                                                         div { "{format_with_separator(&total)}" }
                                                                         div {
                                                                             if !is_editing {

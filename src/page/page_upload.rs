@@ -11,7 +11,7 @@ use crate::{
     },
     component::{com_table::table_upload::UploadTable, upload::BtnUplaod}, format::format_with_separator,
 };
-
+#[component]
 pub fn content_upload() -> Element {
     let mut files_uploaded = use_signal(|| Vec::<TranformLine>::new());
     // runtime if vec emty and direct index as i[0] is break!!

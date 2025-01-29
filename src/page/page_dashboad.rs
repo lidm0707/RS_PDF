@@ -14,18 +14,18 @@ use crate::{
         com_select::select_custome::select_onchang,
         com_table::{
             table_cash_credit_dashboard::CashCreditDashboardTable, table_net_dashboard::NetDashboardTable
-        },
+        }, menu::MenuButton,
     },
 };
-
+#[component]
 pub fn content_dashboard() -> Element {
     let  month = use_signal(|| get_thai_now().month().to_string()); // Default to January
     let  year = use_signal(|| get_thai_now().year().to_string()); // Default to 2025
+    let mut extend:Signal<bool> = use_signal(|| false);
 
     let mut start = use_signal(|| format!("{}-{}", year, month).to_string());
     let mut end = use_signal(|| format!("{}-12", year).to_string());
     let  editing_cells: Signal<Vec<String>> = use_signal(|| Vec::<String>::new());
-
 
     let mut data_table_net: Signal<Vec<(String, (f64,f64,f64), f64)>> =
         use_signal(|| get_dashboard_net(&start.read(), &end.read()).unwrap());
@@ -36,6 +36,7 @@ pub fn content_dashboard() -> Element {
         let year_val = year.read();
         let month_val = month.read();
         let _ = editing_cells.read();
+        let _ = extend.read();
 
         // Format the start and end period based on selected month and year
         let new_start = format!("{year_val}-{month_val:0>2}");
@@ -90,12 +91,23 @@ pub fn content_dashboard() -> Element {
                         }
                     },
                 }
+                MenuButton {
+                    name: "extend",
+                    onclick: move |_| {
+                        let b = *extend.read();
+                        extend.set(!b);
+                    },
+                }
+            
             }
-            p { "test" }
-            CashCreditDashboardTable { data_table: data_table_cash_credit , editing_cells }
+            p { "credit" }
+            CashCreditDashboardTable {
+                data_table: data_table_cash_credit,
+                editing_cells,
+                extend,
+            }
             p { "NET" }
             NetDashboardTable { data_table: data_table_net }
-
         }
     }
 }

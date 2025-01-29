@@ -6,7 +6,7 @@ use crate::{
     component::com_table::table_label::LabelTable,
 };
 use dioxus::prelude::*;
-
+#[component]
 pub fn content_label() -> Element {
     let mut show_modal = use_signal(|| false);
     let mut id_show = use_signal(|| 0);

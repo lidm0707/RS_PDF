@@ -29,6 +29,7 @@ pub enum Content {
 
 fn app() -> Element {
     let mut show_content = use_signal(|| Content::Dashboard);
+
     rsx! {
       document::Link { rel: "stylesheet", href: asset!("/assets/output.css") }
       div { class: "main",

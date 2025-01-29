@@ -21,7 +21,7 @@ use crate::{
 };
 use chrono::prelude::*;
 use dioxus::prelude::*;
-
+#[component]
 pub fn content_installment() -> Element {
     let mut show_modal = use_signal(|| false);
     let mut updated_data = use_signal(|| get_label_name().expect("Failed to load labels"));
