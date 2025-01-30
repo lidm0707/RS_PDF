@@ -40,7 +40,19 @@ pub fn CashCreditDashboardTable(
                             .map(|(period, label_map)| {
                                 rsx! {
                                     tr {
-                                        td { "{period}" }
+                                        td {
+                                            div { class: "flex w-20",
+                                                div { class: " w-15", "{period}" }
+                                                div { class: "flex justify-start w-5",
+                                                    div { class: "justify-items-start ",
+                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CR" }
+                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CA" }
+                                                        div { "TO" }
+                                                        div { "PL" }
+                                                    }
+                                                }
+                                            }
+                                        }
                                         {
                                             label_name
                                                 .iter()
@@ -69,15 +81,7 @@ pub fn CashCreditDashboardTable(
                                                                 println!("{:?}", editing_cells);
                                                             },
                                                             div { class: "flex  w-full mr-2",
-                                                                div { class: "flex justify-start w-1/6",
-                                                                    div { class: "justify-items-start ",
-                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CR" }
-                                                                        div { class: if *extend.read() { "" } else { "hidden" }, "CA" }
-                                                                        div { "TO" }
-                                                                        div { "PL" }
-                                                                    }
-                                                                }
-                                                                div { class: "flex justify-end w-5/6",
+                                                                div { class: "flex justify-end w-20",
                                                                     div { class: "justify-items-end",
                                                                         div { class: if *extend.read() { "" } else { "hidden" }, "{format_with_separator(&credit)}" }
                                                                         div { class: if *extend.read() { "" } else { "hidden" }, "{format_with_separator(&cash)}" }

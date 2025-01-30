@@ -35,7 +35,7 @@ fn app() -> Element {
       div { class: "main",
         div { class: "menu",
           div {
-            h5 { "Menu" }
+            h5 { "Menu V.1.0.0" }
           }
           MenuButton {
             onclick: move |_| {

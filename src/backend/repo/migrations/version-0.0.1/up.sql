@@ -28,15 +28,18 @@ VALUES
     ('OTHER', 2, 1),
     ('SAVING', 3, 1),
     ('RMF/SSF', 4, 1),
-    ('CRPYTO', 5, 1),
-    ('STOCK', 6, 1),
-    ('GRAB', 7, 1),
-    ('MRT', 8, 1),
-    ('BTS', 9, 1),
-    ('COURSE', 10, 1),
-    ('YOUTUBE', 11, 1),
-    ('MASSAGE', 12, 1),
-    ('GOOGLE', 13, 1);
+    ('GOLD', 5, 1),
+    ('CRPYTO', 6, 1),
+    ('STOCK', 7, 1),
+    ('TRANSPORT', 8, 1),
+    ('GRAB', 9, 1),
+    ('MRT', 10, 1),
+    ('BTS', 11, 1),
+    ('COURSE', 12, 1),
+    ('YOUTUBE', 13, 1),
+    ('MASSAGE', 14, 1),
+    ('GOOGLE', 15, 1),
+    ('INSTEAD', 16, 1);
 
 -- Create the table `labels` if it does not exist
 CREATE TABLE
@@ -60,14 +63,15 @@ VALUES
     (1, 'MAN WONGNAI'),
     (2, 'SHOPEE'),
     (2, 'OPHTUS'),
-    (7, 'GRAB'),
-    (8, 'MRT-BEM'),
-    (9, 'BTS'),
-    (10, 'PAYPAL *VPNISE'),
-    (10, 'WWW.OMISE.CO'),
-    (11, 'GOOGLE YOUTUBE'),
-    (12, 'MASSAGE'),
-    (13, 'GOOGLE*CLOUD');
+    (9, 'GRAB'),
+    (10, 'MRT-BEM'),
+    (11, 'BTS'),
+    (12, 'PAYPAL *VPNISE'),
+    (12, 'WWW.OMISE.CO'),
+    (13, 'GOOGLE YOUTUBE'),
+    (14, 'MASSAGE'),
+    (15, 'GOOGLE*CLOUD');
+    
 
 -- Create the table `payment_type` if it does not exist
 CREATE TABLE
