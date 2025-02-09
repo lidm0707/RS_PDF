@@ -25,6 +25,7 @@ pub fn CreditTable(data_table: Signal<Vec<ModelCredit>>) -> Element {
                                 let r2 = format_with_separator(&raw.amount);
                                 let l_id = raw.label_id.clone() as i32;
                                 let p_id = raw.payment_type_id as i32;
+                                let _table_id = raw.id;
 
                                 let label_name = match get_label_name_where(l_id) {
                                     Ok(labels) => {

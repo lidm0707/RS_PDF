@@ -50,7 +50,8 @@ pub fn PickerDiffMonth(start_date:Signal<String>,end_date:Signal<String>,time:Si
                         end_date.set("2023-01-01".to_string());
                     }
                 },
-            }    }
+            }
+        }
     }
    
 }

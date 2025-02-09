@@ -36,6 +36,7 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                 let p_id = raw.payment_type_id as i32;
                                 let label_name = match get_label_name_where(l_id) {
                                     Ok(labels) => {
+                                        println!("test {:?}", labels);
                                         if labels.is_empty() {
                                             "Unknown".to_string()
                                         } else {
@@ -61,12 +62,12 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                         td { class: "text-right", "{r2}" }
                                         td {
                                             select {
-                                                value: "{label_name}",
                                                 onchange: move |evt| {
                                                     println!("{} - {:?}", i, evt.value());
                                                     let mut data = file_upload.write();
                                                     data[i].label_id = evt.value().parse::<i32>().unwrap() as i64;
                                                 },
+                                                option { value: "0", selected: "{label_name}" == "Unknown", {"Unknown"} }
                                                 {
                                                     get_label_name()
                                                         .unwrap()
@@ -84,7 +85,6 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                             {
                                                 rsx! {
                                                     select {
-                                                        value: "{channel_name}",
                                                         onchange: move |evt| {
                                                             println!("{} - {:?}", i, evt.value());
                                                             let mut data = file_upload.write();
@@ -96,7 +96,7 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                                                 .iter()
                                                                 .map(|x| {
                                                                     rsx! {
-                                                                        option { value: "{x.id}", selected: "{label_name == x.chanel}", "{x.chanel}" }
+                                                                        option { value: "{x.id}", selected: "{channel_name == x.chanel}", "{x.chanel}" }
                                                                     }
                                                                 })
                                                         }

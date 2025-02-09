@@ -39,7 +39,12 @@ VALUES
     ('YOUTUBE', 13, 1),
     ('MASSAGE', 14, 1),
     ('GOOGLE', 15, 1),
-    ('INSTEAD', 16, 1);
+    ('INSURANCE', 16, 1),
+    ('FAMILY', 17, 1),
+    ('BORROW', 18, 1),
+    ('PET',19,1),
+    ('PHONE',20,1),
+    ('BOOK',21,1);
 
 -- Create the table `labels` if it does not exist
 CREATE TABLE

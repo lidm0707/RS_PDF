@@ -15,7 +15,7 @@ pub fn union_installment_credit(
     end: &str,
 ) -> Result<Vec<GroupBySumCredit>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
-    let preriod_now = format_period(&thai_now_string());
+    let period_now = format_period(&thai_now_string());
 
     let credit_table = credits::table
         .filter(credits::period.ge(start).and(credits::period.le(end)))
@@ -32,7 +32,7 @@ pub fn union_installment_credit(
             ))
             .or(installment_items::bank_id
                 .eq(2)
-                .and(installment_items::period.le(preriod_now))),
+                .and(installment_items::period.le(period_now))),
         )
         .group_by((installment_items::period, installment::label_id))
         .select((
@@ -53,7 +53,7 @@ pub fn union_credit_installment_label(
     end: &str,
 ) -> Result<Vec<(i32, Option<f64>)>, anyhow::Error> {
     let mut conn: SqliteConnection = connect_database();
-    let preriod_now = format_period(&thai_now_string());
+    let period_now = format_period(&thai_now_string());
     let real_installment = installment_items::bank_id.eq(1).and(
         installment_items::period
             .ge(start)
@@ -61,7 +61,7 @@ pub fn union_credit_installment_label(
     );
     let future_installment = installment_items::bank_id
         .eq(2)
-        .and(installment_items::period.le(preriod_now));
+        .and(installment_items::period.le(period_now));
 
     // intansaction credit have install ment but I would plan in the futher just type in module installment.
     // It makes to duplicate data.
@@ -113,16 +113,12 @@ pub fn summary_revernue(
 
     let _ = run_migrations(&mut conn);
 
-    let preriod_now = format_period(&thai_now_string());
+    let period_now = format_period(&thai_now_string());
 
     let cash_out = cash_out::table
         .filter(cash_out::period.ge(start).and(cash_out::period.le(end)))
         .group_by((cash_out::period, cash_out::label_id))
-        .select((
-            cash_out::period,
-            cash_out::label_id,
-            sum(cash_out::amount),
-        ));
+        .select((cash_out::period, cash_out::label_id, sum(cash_out::amount)));
 
     let real_installment = installment_items::bank_id.eq(1).and(
         installment_items::period
@@ -133,7 +129,7 @@ pub fn summary_revernue(
     // I think chang filter to period installment not like in credit
     let future_installment = installment_items::bank_id
         .eq(2)
-        .and(installment_items::period.le(preriod_now));
+        .and(installment_items::period.le(period_now));
 
     // intansaction credit have install ment but I would plan in the futher just type in module installment.
     // It makes to duplicate data.
@@ -141,11 +137,7 @@ pub fn summary_revernue(
     let credit_table = credits::table
         .filter(credits::period.ge(start).and(credits::period.le(end)))
         .group_by(credits::period)
-        .select((
-            credits::period,
-            sql::<Integer>("0"),
-            sum(credits::amount),
-        ));
+        .select((credits::period, sql::<Integer>("0"), sum(credits::amount)));
 
     let installment_table = installment_items::table
         .inner_join(installment::table)
@@ -157,10 +149,10 @@ pub fn summary_revernue(
             sum(installment_items::amount), // ใช้ฟังก์ชัน sum
         ));
 
-    let results =
-        cash_out.union(credit_table)
-            .union(installment_table)
-            .load::<(String, i32, Option<f64>)>(&mut conn)?;
+    let results = cash_out
+        .union(credit_table)
+        .union(installment_table)
+        .load::<(String, i32, Option<f64>)>(&mut conn)?;
 
     Ok(results)
 }

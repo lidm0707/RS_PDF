@@ -5,7 +5,7 @@ use crate::{
     backend::{
         controller::{
             con_date_handle::con_now::get_thai_now,
-            con_db::{con_get_label::get_label_name, con_set_credit::set_credit},
+            con_db::{con_get_label::get_label_name, con_set_credit::set_credit_bacth},
         },
         model::model_pdf::TranformLine,
     },
@@ -74,7 +74,9 @@ pub fn content_upload() -> Element {
                 div { class: "summary-items",
                     div { class: "p-3 text-center",
                         "AMOUNT"
-                        div { class: "text-right each-summary-item", {format_with_separator(&sum_amount)} }
+                        div { class: "text-right each-summary-item",
+                            {format_with_separator(&sum_amount)}
+                        }
                     }
                 }
                 {
@@ -86,7 +88,9 @@ pub fn content_upload() -> Element {
                                 div { class: "summary-items",
                                     div { class: "p-3 text-center",
                                         "{x.label}"
-                                        div { class: "text-right each-summary-item", {format_with_separator(&sum_by_gorupby_label(x.id))} }
+                                        div { class: "text-right each-summary-item",
+                                            {format_with_separator(&sum_by_gorupby_label(x.id))}
+                                        }
                                         div { class: "text-right each-summary-item",
                                             {format!("{:.2} %", (sum_by_gorupby_label(x.id) / sum_amount) * 100.0)}
                                         }
@@ -97,7 +101,7 @@ pub fn content_upload() -> Element {
                 }
             }
             div { class: "control",
-                BtnUplaod { file_upload: files_uploaded  }
+                BtnUplaod { file_upload: files_uploaded }
                 select {
                     class: "select",
                     onchange: move |evt| {
@@ -146,25 +150,18 @@ pub fn content_upload() -> Element {
                 button {
                     class: "btn",
                     onclick: move |_| {
-                        {
-                            files_uploaded
-                                .iter()
-                                .for_each(|line| {
-                                    let date = line.date.clone();
-                                    let ctx = line.ctx.clone();
-                                    let amount = line.amount;
-                                    let label_id = line.label_id as i32;
-                                    let period = line.period.clone();
-                                    let payment_type_id = line.payment_type_id as i32;
-                                    set_credit(date, ctx, amount, label_id, period, payment_type_id);
-                                });
+                        
+                        let re = set_credit_bacth(files_uploaded.read().to_vec());
+                        let data_update = &mut files_uploaded;
+                        
+                        if !re.is_empty() {
+                            data_update.set(Vec::<TranformLine>::new())
                         }
-                        files_uploaded.set(Vec::<TranformLine>::new());
                     },
                     {"SAVE"}
                 }
             }
-            UploadTable { file_upload: files_uploaded}
+            UploadTable { file_upload: files_uploaded }
         }
     }
 }

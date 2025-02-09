@@ -87,7 +87,7 @@ pub fn content_installment() -> Element {
                             time.read().parse::<i32>().unwrap(),
                             evt.data.values()["note"].as_value().to_string(),
                             *label_id.read(),
-                            evt.data.values()["amount"].as_value().to_string().parse::<f64>().unwrap(),
+                            evt.data.values()["amount"].as_value().to_string().replace(",", "").parse::<f64>() .unwrap(),
                             *total.read(),
                         );
                         println!("{:?}", master);

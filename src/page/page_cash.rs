@@ -60,7 +60,7 @@ pub fn content_cash() -> Element {
                                 period.read().clone(),
                                 label_id.read().clone(),
                                 Some(evt.values()["note"].as_value()),
-                                match evt.values()["amount"].as_value().to_string().parse::<f64>() {
+                                match evt.values()["amount"].as_value().to_string().replace(",", "").parse::<f64>() {
                                     Ok(amount) => amount,
                                     Err(e) => {
                                         println!("Failed to parse amount: {:?}", e);
