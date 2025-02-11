@@ -44,7 +44,8 @@ VALUES
     ('BORROW', 18, 1),
     ('PET',19,1),
     ('PHONE',20,1),
-    ('BOOK',21,1);
+    ('BOOK',21,1),
+    ('HEALTHY',22,1);
 
 -- Create the table `labels` if it does not exist
 CREATE TABLE

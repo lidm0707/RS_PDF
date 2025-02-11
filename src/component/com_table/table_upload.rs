@@ -21,6 +21,7 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                         th { {"LABEL_ID"} }
                         th { {"PERIOD"} }
                         th { {"CHANEL"} }
+                        th { "OPTION" }
                     }
                 }
                 tbody {
@@ -104,6 +105,16 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                                 }
                                             }
                                         }
+                                        td { class: "w-1/6 ",
+                                        button {
+                                            class: "btnEdit",
+                                            onclick: move |_| {
+                                                file_upload.write().remove(i);
+
+                                            },
+                                            {"DELETE"}
+                                        }
+                                    }
                                     }
                                 }
                             })

@@ -1,10 +1,11 @@
 use crate::{
     backend::controller::con_db::{
-        con_get_label::{get_label_name, get_labels_where},
+        con_get_label::{get_label_name, get_label_name_where, get_labels_where},
         con_set_label::{set_label, set_label_name},
     },
     component::com_table::table_label::LabelTable,
 };
+
 use dioxus::prelude::*;
 #[component]
 pub fn content_label() -> Element {
@@ -14,6 +15,8 @@ pub fn content_label() -> Element {
     let mut table_ctx =
         use_signal(|| get_labels_where(*id_show.read()).expect("Failed to load labels"));
     //impl FnMut(i32)
+
+    
 
     let set_id_show: Callback<i32> = use_callback(move |id: i32| {
         id_show.set(id);
@@ -39,6 +42,7 @@ pub fn content_label() -> Element {
                     }
                 }
                 if *id_show.read() == 0 {
+
                     form {
                         class: "",
                         onsubmit: move |evt| {
@@ -49,6 +53,7 @@ pub fn content_label() -> Element {
                         },
                         div {
                             div { class: "flex justify-center",
+                                label { "LABEL: " }
                                 input {
                                     class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
                                     name: "label", // Add name attribute to capture data
@@ -69,12 +74,7 @@ pub fn content_label() -> Element {
                     form {
                         class: "",
                         onsubmit: move |evt| {
-                            let id_label: i32 = evt
-                                .data
-                                .values()["id_label"]
-                                .as_value()
-                                .parse::<i32>()
-                                .unwrap_or(0i32);
+                            let id_label: i32 = *id_show.read();
                             let abb_ctx: String = evt
                                 .data
                                 .values()["abb_ctx"]
@@ -83,19 +83,15 @@ pub fn content_label() -> Element {
                                 .unwrap_or("".to_string());
                             set_label(id_label, abb_ctx);
                             show_modal.set(false);
-                            table_ctx
-                                .set(get_labels_where(*id_show.read()).expect("Failed to load labels"));
+                            table_ctx.set(get_labels_where(*id_show.read()).expect("Failed to load labels"));
                         },
                         div {
                             div { class: "flex justify-center",
-                                input {
-                                    class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
-                                    name: "id_label", // Add name attribute to capture data
-                                    r#type: "text",
-                                    value: "",
-                                }
+                                label { "ID_LABEL: " }
+                                div { "{id_show}" }
                             }
                             div { class: "flex justify-center",
+                                label { "ABB_CTX: " }
                                 input {
                                     class: "border border-2 w-fit border-black rounded-md mr-2 ml-2 mb-2",
                                     name: "abb_ctx", // Add name attribute to capture data
@@ -127,7 +123,12 @@ pub fn content_label() -> Element {
                     {"button"}
                 }
             }
-            LabelTable { updated_data, id_show, table_ctx ,set_id_show }
+            LabelTable {
+                updated_data,
+                id_show,
+                table_ctx,
+                set_id_show,
+            }
         }
     }
 }
