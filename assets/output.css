@@ -818,6 +818,9 @@
   .bg-gray-100 {
     background-color: var(--color-gray-100);
   }
+  .bg-red-600 {
+    background-color: var(--color-red-600);
+  }
   .bg-violet-500 {
     background-color: var(--color-violet-500);
   }

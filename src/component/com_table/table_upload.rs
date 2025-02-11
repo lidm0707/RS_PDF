@@ -57,7 +57,7 @@ pub fn UploadTable(file_upload: Signal<Vec<TranformLine>>) -> Element {
                                     Err(err) => panic!("{}", err),
                                 };
                                 rsx! {
-                                    tr {
+                                    tr { class : if label_name == "Unknown" {"bg-red-600"}  else {""},
                                         td { "{raw.date}" }
                                         td { "{raw.ctx}" }
                                         td { class: "text-right", "{r2}" }
